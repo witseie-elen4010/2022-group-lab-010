@@ -5,3 +5,4 @@ A multiplayer Wordle clone created by some cool people as part of our ELEN4010 c
 ## Group Members
 
 - Mikaeel Dindar
+- Reza Seedat
