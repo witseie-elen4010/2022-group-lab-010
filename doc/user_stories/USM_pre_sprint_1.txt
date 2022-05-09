@@ -1,0 +1,69 @@
+# user_activities: USER ACTIVITIES
+# user_tasks: USER TASKS
+# user_stories: USER STORIES
+# release1: SPRINT 1
+# release2: SPRINT 2
+# release3: SPRINT 3
+# release4: SPRINT 4
+Single player wordle
+
+    Introduction
+        As a player, I want to see a splashscreen showing me how to play|{"s":10}
+
+    Game-play
+        As a player, I can see a wordle board where I can make guesses on a random word.|{"s":10}
+        As a player, I can see my word guess on the board.|{"s":10}
+        As a player, I can see my colour coded guess on the board.|{"s":10}
+        As a player, I can see and use a keyboard.|{"s":10}
+        As a player, I have a keyboard which keeps track of my guessed letters.|{"s":10}
+        As a player, I want verification that my word entered is real.|{"s":10}
+            As a player, I can see my score per guess.|{"s":10}
+            As a player, I want games to have a time limit.|{"s":10}
+                .|{"s":0}
+                    As a user I want to see ads.|{"s":10}
+                    As a user I want the options to custiomize animation.|{"s":10}
+           
+    End-game
+        As a player, I want to see the correct word|{"s":10}
+        As a player I want to be able to see a new game button with a new word.|{"s":10}
+            .|{"s":0}
+                As a player I want to be able to download a log of my gameplay.|{"s":10}
+
+Multiplayer wordle
+    Lobby
+        .|{"s":0}
+            As a player, I want to see a lobby screen where I can start or join a game.|{"s":10}
+            As a player, I want my game to have a code I can give to friends.|{"s":10}
+            As a player, I want to join a game with a code given by a friend.|{"s":10}
+                As a player, I want to be able to choose the word for the next game.|{"s":10}
+    Game-play
+        .|{"s":0}
+            As a player, I want to see other players’ boards on the screen.|{"s":10}
+            As a player, I only want to see the colours of the other boards.|{"s":10}
+                As a player, I want a competitive scoring system.|{"s":10}
+                    As a player, I want to be able to to hide my opponents keyboard (power up).|{"s":10}
+    End-game|{"s":8}
+        .|{"s":0}
+            As a player, I want to see a winner and both scores.|{"s":10}
+            As a player, I want to be able to request a rematch.|{"s":10}
+
+Profile/Account
+    Log-in
+        .|{"s":0}
+            As a user I want the game to remember my name.|{"s":10}
+                As a user I want to be able to create an account.|{"s":10}
+                As a user I want to be able to log in to my personal account.|{"s":10}
+                    As a user I want to securely access my account (saved securely).|{"s":10}
+                    As a administrator I want to login as admin and see all players and games.|{"s":10}
+    Viewing Game stats
+        .|{"s":0}
+            .|{"s":0}
+                .|{"s":0}
+                    As a user, I want to be able to download historic logs.|{"s":10}
+                    As a user, I want to be able to access my account stats.|{"s":10}
+    Edit account
+        .|{"s":0}
+            .|{"s":0}
+                As a user I want to be able to edit my account details.|{"s":10}
+                As a user I want to be able to delete my account.|{"s":10}
+                    As a user I want my data to be saved securely and to see this through a policy.|{"s":10}
