@@ -3,14 +3,14 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const indexRouter = require('./routes/index')
+const mainRouter = require('./routes/main')
 
 const app = express()
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use('/', indexRouter)
+app.use('/', mainRouter)
 app.use('/cdn', express.static('public'))
 
 module.exports = app
