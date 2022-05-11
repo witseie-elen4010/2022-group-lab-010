@@ -54,4 +54,4 @@ jobs:
           app-name: 'twordledee'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4BE710E6BFFC46748E9E5B7B3075A8E9 }}
-          package: ./src
+          package: .
