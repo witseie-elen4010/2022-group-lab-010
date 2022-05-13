@@ -15,6 +15,7 @@
   "devDependencies": {
     "jest": "^28.1.0",
     "node-mocks-http": "^1.11.0",
+    "standard": "^17.0.0",
     "supertest": "^6.2.3"
   }
 }
