@@ -1,6 +1,8 @@
 'use strict'
 
-const router = require('../routes/main.routes')
+/* eslint-env jest */
+
+const router = require('../routes/main.js')
 const express = require('express')
 const supertest = require('supertest')
 

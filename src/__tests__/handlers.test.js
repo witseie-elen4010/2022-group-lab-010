@@ -1,6 +1,8 @@
 'use strict'
 
-const handlers = require('../controllers/routes.controllers')
+/* eslint-env jest */
+
+const handlers = require('../routes/handlers')
 
 describe('Test Handlers', function () {
   test('hello handler works', () => {
