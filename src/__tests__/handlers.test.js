@@ -1,6 +1,6 @@
 'use strict'
 
-const handlers = require('../routes/handlers')
+const handlers = require('../controllers/routes.controllers')
 
 describe('Test Handlers', function () {
   test('hello handler works', () => {

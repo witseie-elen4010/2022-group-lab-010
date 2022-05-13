@@ -1,6 +1,6 @@
 'use strict'
 
-const handlers = require('./handlers')
+const handlers = require('../controllers/routes.controllers')
 const express = require('express')
 const router = express.Router()
 
