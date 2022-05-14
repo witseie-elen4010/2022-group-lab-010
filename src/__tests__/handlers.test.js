@@ -17,6 +17,6 @@ describe('Test Handlers', function () {
 
     handlers.splash(req, res)
 
-    expect(res.text).toContain('templates/splash.html')
+    expect(res.text.replace(/\\/g, '/')).toContain('templates/splash.html')
   })
 })
