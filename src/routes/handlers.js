@@ -7,3 +7,6 @@ function hello(req, res) { res.sendFile(path.join(__dirname, '..', 'templates', 
 function game(req, res) { res.sendFile(path.join(__dirname, '..', 'templates', 'game.html')) }
 
 module.exports = { hello, guessController, game }
+function splash (req, res) { res.sendFile(path.join(__dirname, '..', 'templates', 'splash.html')) }
+
+module.exports = { hello, splash }
