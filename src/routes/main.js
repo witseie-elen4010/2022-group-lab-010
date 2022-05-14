@@ -5,5 +5,5 @@ const express = require('express')
 const router = express.Router()
 
 router.get('/', handlers.splash)
-
+router.get('/', handlers.hello )
 module.exports = router
