@@ -1,5 +1,7 @@
 'use strict'
 
+/* eslint-env jest */
+
 const handlers = require('../routes/handlers')
 
 describe('Test Handlers', function () {
