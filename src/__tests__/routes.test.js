@@ -1,7 +1,7 @@
 'use strict'
 
 /* eslint-env jest */
-  
+
 const router = require('../routes/main.routes')
 
 const express = require('express')
