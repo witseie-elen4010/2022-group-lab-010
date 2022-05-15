@@ -10,6 +10,7 @@ describe('Test Handlers', function () {
     const res = { sendFile: function (input) { this.text = input } }
 
     handlers.hello(req, res)
+
     expect(res.text.replace(/\\/g, '/')).toContain('templates/hello.html')
   })
 
