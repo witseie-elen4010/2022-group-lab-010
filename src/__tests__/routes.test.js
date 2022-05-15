@@ -3,8 +3,6 @@
 /* eslint-env jest */
 
 const router = require('../routes/main.routes')
-
-const router = require('../routes/main.js')
 const express = require('express')
 const supertest = require('supertest')
 
