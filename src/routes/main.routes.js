@@ -8,6 +8,9 @@ const router = express.Router()
 router.get('/game', handlers.game)
 router.post('/api/guess', handlers.guessController.colourCodeGuess)
 router.get('/api/correct', function (req, res) {
+  res.json(controllers.getCorrectWord()) // Respond with JSON
+})
+router.get('/api/correct', function (req, res) {
   res.json(controllers.getCorrectWord) // Respond with JSON
 })
 router.get('/', handlers.splash)
