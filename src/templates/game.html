@@ -46,7 +46,7 @@
         <div class="input-group mb-3">
             <input id="guess" type="text" class="form-control" placeholder="Guess" autofocus>
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary"  type="button" onclick="makeGuess()">Guess</button>
+                <button class="btn btn-outline-secondary" type="button" onclick="makeGuess()">Guess</button>
             </div>
         </div>
     </div>
@@ -172,7 +172,8 @@
             <button type="button" class="btn btn-secondary" onclick="functionToExecute('j')">j</button>
             <button type="button" class="btn btn-secondary" onclick="functionToExecute('k')">k</button>
             <button type="button" class="btn btn-secondary" onclick="functionToExecute('l')">l</button>
-            <button type="button" class="btn btn-secondary" onclick="removeLetter()"><-</button>
+            <button type="button" class="btn btn-secondary" onclick="removeLetter()">
+                <-< /button>
         </div>
     </div>
 
@@ -191,7 +192,22 @@
 
     <script src="/cdn/scripts/keyboardLogger.js"></script>
 
+    <script>
+        const functionToExecute = function (letter) {
+            console.log(letter)
 
+            if (letter.length > 1) {
+                console.log('error button length is too long ')
+                letter = letter.substring(0, 1) // Take the first element
+            }
+
+            const message = document.getElementById('guess')
+
+            message.value += letter
+
+            return letter
+        }
+    </script>
 
 
 </body>

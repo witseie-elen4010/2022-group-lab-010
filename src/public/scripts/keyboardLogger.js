@@ -12,13 +12,6 @@ const functionToExecute = function (letter) {
 
   message.value += letter
 
-  // console.log(message.value)
-  const keyArr = document.getElementById('buttonQ')
-  for (let i = 0; i < keyArr.length; i++) {
-    keyArr[i].addEventListener('click', function () {
-      document.getElementById('response').value += letter
-    })
-  }
   return letter
 }
 
@@ -26,7 +19,7 @@ const removeLetter = function () {
   const message = document.getElementById('guess')
   message.value = message.value.substring(0, message.value.length - 1)
 }
-module.exports = { functionToExecute }
+module.exports = { functionToExecute, removeLetter }
 
 /*
 const buttonQ = document.getElementById('buttonQ')
