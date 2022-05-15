@@ -25,16 +25,21 @@
     </p>
 
 
-
+   <!--  green  - btn btn-success
+     yellow  - btn btn-warning
+      grey btn btn-secondary
+      clear btn btn-light
+     -->
+     document.createElement
 
     <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group mr-2" role="group" aria-label="First group">
             <button type="button" id="buttonQ" class="btn btn-secondary">q</button>
-            <button type="button" class="btn btn-secondary">w</button>
-            <button type="button" class="btn btn-secondary">e</button>
-            <button type="button" class="btn btn-secondary">r</button>
-            <button type="button" class="btn btn-secondary">t</button>
-            <button type="button" class="btn btn-secondary">y</button>
+            <button type="button" id="buttonW" class="btn btn-success">w</button>
+            <button type="button" id="buttonE" class="btn btn-warning">e</button>
+            <button type="button" id="buttonR" class="btn btn-light">r</button>
+            <button type="button" id="buttonT" class="btn btn-secondary">t</button>
+            <button type="button" id="buttonY" class="btn btn-secondary">y</button>
             <button type="button" class="btn btn-secondary">u</button>
             <button type="button" class="btn btn-secondary">i</button>
             <button type="button" class="btn btn-secondary">o</button>
@@ -56,7 +61,7 @@
   <!--    <div class="text-center"></div>  -->      
             <div class="btn-group" role="group" aria-label="First group">
  
-                <button type="button" class="btn btn-secondary">a</button>
+                <button type="button" id="buttonA" class="btn btn-secondary" onclick="functionToExecute('a')">a</button>
                 <button type="button" class="btn btn-secondary">s</button>
                 <button type="button" class="btn btn-secondary">d</button>
                 <button type="button" class="btn btn-secondary">f</button>

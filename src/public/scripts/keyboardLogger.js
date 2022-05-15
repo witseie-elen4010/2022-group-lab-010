@@ -1,9 +1,50 @@
 'use strict'
-const button2 = document.getElementById('buttonQ')
-button2.addEventListener('click', function () {
+
+ const  functionToExecute = function ( letter) {
+  console.log(letter)
+  return letter;
+
+} 
+module.exports = {functionToExecute}
+
+
+/* 
+const buttonQ = document.getElementById('buttonQ')
+buttonQ.addEventListener('click', function () {
     console.log("q")
-  /*   const paragraph = document.createElement('p') // Create <p> element
-    const text = document.createTextNode('This is a student') // Create text node
-    paragraph.appendChild(text) // Append the text to <p>
-    document.body.appendChild(paragraph) // Append <p> to <body> */
+ 
 }, false)
+
+const buttonW = document.getElementById('buttonW')
+buttonW.addEventListener('click', function () {
+    console.log("W")
+ 
+}, false)
+
+const buttonE = document.getElementById('buttonE')
+buttonE.addEventListener('click', function () {
+    console.log("Y")
+ 
+}, false)
+
+const buttonR = document.getElementById('buttonR')
+buttonR.addEventListener('click', function () {
+    console.log("Y")
+ 
+}, false)
+
+const buttonT = document.getElementById('buttonT')
+buttonT.addEventListener('click', function () {
+    console.log("Y")
+ 
+}, false)
+
+const buttonY = document.getElementById('buttonY')
+buttonT.addEventListener('click', function () {
+    console.log("Y")
+ 
+}, false) */
+
+
+
+
