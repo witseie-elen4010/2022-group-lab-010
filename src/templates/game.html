@@ -80,16 +80,15 @@
             let message = document.getElementById('response')
             sendGuess(guess)
                 .then(data => {
+                    if(data.code === "ok"){
                     message.classList.remove('text-danger')
                     message.innerHTML = ''
                     generateColouredGuess(guess, data.colour)
                     console.log(data)
-                })
-                .catch(error => {
-                    message.classList.add('text-danger')
-                    message.innerHTML = "Invalid Input"
-                })
-
+                    }else{
+                        message.classList.add('text-danger')
+                        message.innerHTML = data.message
+                }})
         }
 
         /*
