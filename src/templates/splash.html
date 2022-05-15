@@ -4,10 +4,10 @@
     <title>Twordle-dee</title>
 
 
-    
+
     <link rel="stylesheet" href="/cdn/stylesheets/bootstrap.css">
 
- 
+
 </head>
 
 
@@ -25,60 +25,59 @@
     </p>
 
 
-   <!--  green  - btn btn-success
+    <!--  green  - btn btn-success
      yellow  - btn btn-warning
       grey btn btn-secondary
       clear btn btn-light
      -->
-     document.createElement
 
-    <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+
+    <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group mr-2" role="group" aria-label="First group">
-            <button type="button" id="buttonQ" class="btn btn-secondary">q</button>
-            <button type="button" id="buttonW" class="btn btn-success">w</button>
-            <button type="button" id="buttonE" class="btn btn-warning">e</button>
-            <button type="button" id="buttonR" class="btn btn-light">r</button>
-            <button type="button" id="buttonT" class="btn btn-secondary">t</button>
-            <button type="button" id="buttonY" class="btn btn-secondary">y</button>
-            <button type="button" class="btn btn-secondary">u</button>
-            <button type="button" class="btn btn-secondary">i</button>
-            <button type="button" class="btn btn-secondary">o</button>
-            <button type="button" class="btn btn-secondary">p</button>
-
+            <button type="button" id="buttonQ" class="btn btn-secondary" onclick="functionToExecute('q')">q</button>
+            <button type="button" id="buttonW" class="btn btn-success"  onclick="functionToExecute('w')">w</button>
+            <button type="button" id="buttonE" class="btn btn-warning"  onclick="functionToExecute('e')">e</button>
+            <button type="button" id="buttonR" class="btn btn-light"  onclick="functionToExecute('r')">r</button>
+            <button type="button" id="buttonT" class="btn btn-secondary"  onclick="functionToExecute('t')">t</button>
+            <button type="button" id="buttonY" class="btn btn-secondary" onclick="functionToExecute('y')">y</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('u')">u</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('i')">i</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('o')">o</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('q')">p</button>
         </div>
 
-        <!--   <div class="input-group">
-            <div class="input-group-prepend">
-                <div class="input-group-text" id="btnGroupAddon">@</div>
-            </div>
-            <input type="text" class="form-control" placeholder="Input group example" aria-label="Input group example"
-                aria-describedby="btnGroupAddon">
-        </div> -->
-    </div>
-   
 
-        <div class="btn-toolbar justify-content-between pagination-centered" role="toolbar" aria-label="Toolbar with button groups">
-  <!--    <div class="text-center"></div>  -->      
-            <div class="btn-group" role="group" aria-label="First group">
- 
-                <button type="button" id="buttonA" class="btn btn-secondary" onclick="functionToExecute('a')">a</button>
-                <button type="button" class="btn btn-secondary">s</button>
-                <button type="button" class="btn btn-secondary">d</button>
-                <button type="button" class="btn btn-secondary">f</button>
-                <button type="button" class="btn btn-secondary">g</button>
-                <button type="button" class="btn btn-secondary">h</button>
-                <button type="button" class="btn btn-secondary">j</button>
-                <button type="button" class="btn btn-secondary">k</button>
-                <button type="button" class="btn btn-secondary">l</button>
-            </div>
-            <!-- <div class="input-group">
-            <div class="input-group-prepend">
-                <div class="input-group-text" id="btnGroupAddon2">@</div>
-            </div>
-            <input type="text" class="form-control" placeholder="Input group example" aria-label="Input group example"
-                aria-describedby="btnGroupAddon2">
-        </div> -->
-       <!--  </div> -->
+    </div>
+
+
+    <div class="btn-toolbar mb-1" role="toolbar" 
+        aria-label="Toolbar with button groups">
+        <div class="btn-group" role="group" aria-label="First group">
+
+            <button type="button" id="buttonA" class="btn btn-secondary" onclick="functionToExecute('a')">a</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('s')">s</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('d')">d</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('f')">f</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('g')">g</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('h')">h</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('j')">j</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('k')">k</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('l')">l</button>
+        </div>
+    </div>
+
+    <div class="btn-toolbar mb-1" role="toolbar"
+        aria-label="Toolbar with button groups">
+        <div class="btn-group" role="group" aria-label="First group">
+
+            <button type="button" id="buttonA" class="btn btn-secondary" onclick="functionToExecute('z')">z</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('x')">x</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('c')">c</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('v')">v</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('b')">b</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('n')">n</button>
+            <button type="button" class="btn btn-secondary" onclick="functionToExecute('m')">m</button>
+        </div>
     </div>
 
 
