@@ -9,6 +9,10 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="/cdn/stylesheets/bootstrap.css">
 
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+
     <style>
         .letter-block {
             width: min(15vw, 100px);
@@ -45,11 +49,34 @@
         <p id="response"></p>
         <div class="input-group mb-3">
             <input id="guess" type="text" class="form-control" placeholder="Guess" autofocus>
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" onclick="makeGuess()">Guess</button>
+            <div class="input-group-append" id="Guess Button Location">
+                <button class="btn btn-outline-secondary" type="button" onclick="makeGuess()" id="submit Guess">Guess</button>
             </div>
         </div>
     </div>
+
+        <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Submit
+    </button>
+  
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Game Over</h5>
+            </div>
+            <div class="modal-body" id = "Game Result">
+            ...
+            </div>
+            <div class="modal-footer">
+            <a href="/" class="btn btn-primary" role="button">Home</a>
+            </div>
+        </div>
+        </div>
+    </div>
+  
 
 
     <script>
@@ -75,6 +102,8 @@
             return response.json()
         }
 
+        let i = 0
+
         let makeGuess = () => {
             let guess = document.getElementById('guess').value
             let message = document.getElementById('response')
@@ -83,12 +112,52 @@
                     message.classList.remove('text-danger')
                     message.innerHTML = ''
                     generateColouredGuess(guess, data.colour)
-                    console.log(data)
+                    let f = 0
+                    data.colour.forEach(function(element){
+                        if (element != 'green') f = 1 
+                    })
+                    
+                    if (f === 0) {
+                        const x = document.getElementById('Game Result')
+                        x.innerHTML = `You Guessed the word correctly`
+                        const y = document.getElementById('submit Guess')
+                        y.setAttribute('class', 'btn btn-primary')
+                        y.setAttribute('data-bs-toggle', 'modal')
+                        y.setAttribute('data-bs-target', '#staticBackdrop')
+                        y.innerHTML = 'complete'
+                        y.click()
+                    }
+
+                    i += 1
                 })
                 .catch(error => {
                     message.classList.add('text-danger')
                     message.innerHTML = "Invalid Input"
                 })
+
+
+                if(i == 4) {
+                    fetch('/api/correct')
+                        .then(function (response) {
+                            if (response.ok) { return response.json() } // Return the response parse as JSON
+                            else { throw 'Failed to load correct word: response code invalid!' }
+                        })
+
+                        .then(function(data){
+                            const x = document.getElementById('Game Result')
+                            x.innerHTML = `The correct word was ${data}`
+                        })
+
+                        .catch(function (e) { // Process error for request
+                            alert(e) // Displays a browser alert with the error message.
+                        })
+                        
+                    const y = document.getElementById('submit Guess')
+                    y.setAttribute('class', 'btn btn-primary')
+                    y.setAttribute('data-bs-toggle', 'modal')
+                    y.setAttribute('data-bs-target', '#staticBackdrop')
+                    y.innerHTML = 'Last Guess'
+                }
 
         }
 
