@@ -10,8 +10,7 @@ describe('Test Handlers', function () {
     const res = { sendFile: function (input) { this.text = input } }
 
     handlers.hello(req, res)
-
-    expect(res.text).toContain('templates/hello.html')
+    expect(res.text.replace(/\\/g, '/')).toContain('templates/hello.html')
   })
 
   test('splash handler works', () => {
@@ -20,6 +19,6 @@ describe('Test Handlers', function () {
 
     handlers.splash(req, res)
 
-    expect(res.text).toContain('templates/splash.html')
+    expect(res.text.replace(/\\/g, '/')).toContain('templates/splash.html')
   })
 })
