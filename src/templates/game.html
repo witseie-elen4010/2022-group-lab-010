@@ -204,10 +204,8 @@
             for(let i = 0; i < colours.length; i ++)
             {
                 letterID = "button" +  guess.charAt(i).toUpperCase()
-                //console.log(letterID, colours[i])
                 let btn = document.getElementById(letterID)
-               // console.log(btn)
-              //  btn.classList.add('bg-' + colours[i])
+                btn.classList.add('bg-' + colours[i])
 
             }
         }
@@ -235,10 +233,10 @@
             <button type="button" id="buttonR" class="btn " onclick="functionToExecute('r')">r</button>
             <button type="button" id="buttonT" class="btn " onclick="functionToExecute('t')">t</button>
             <button type="button" id="buttonY" class="btn " onclick="functionToExecute('y')">y</button>
-            <button type="button" class="btn " onclick="functionToExecute('u')">u</button>
-            <button type="button" class="btn " onclick="functionToExecute('i')">i</button>
-            <button type="button" class="btn " onclick="functionToExecute('o')">o</button>
-            <button type="button" class="btn " onclick="functionToExecute('q')">p</button>
+            <button type="button" id="buttonU" class="btn " onclick="functionToExecute('u')">u</button>
+            <button type="button" id="buttonI" class="btn " onclick="functionToExecute('i')">i</button>
+            <button type="button" id="buttonO" class="btn " onclick="functionToExecute('o')">o</button>
+            <button type="button" id="buttonP"class="btn " onclick="functionToExecute('q')">p</button>
         </div>
     </div>
 
@@ -247,13 +245,13 @@
         <div class="btn-group" role="group" aria-label="First group">
             <button type="button" id="buttonA" class="btn" onclick="functionToExecute('a')">a</button>
             <button type="button" id="buttonS" class="btn " onclick="functionToExecute('s')">s</button>
-            <button type="button" class="btn " onclick="functionToExecute('d')">d</button>
-            <button type="button" class="btn " onclick="functionToExecute('f')">f</button>
-            <button type="button" class="btn" onclick="functionToExecute('g')">g</button>
-            <button type="button" class="btn" onclick="functionToExecute('h')">h</button>
-            <button type="button" class="btn" onclick="functionToExecute('j')">j</button>
-            <button type="button" class="btn" onclick="functionToExecute('k')">k</button>
-            <button type="button" class="btn" onclick="functionToExecute('l')">l</button>
+            <button type="button" id="buttonD"class="btn " onclick="functionToExecute('d')">d</button>
+            <button type="button" id="buttonF"class="btn " onclick="functionToExecute('f')">f</button>
+            <button type="button" id="buttonG"class="btn" onclick="functionToExecute('g')">g</button>
+            <button type="button" id="buttonH"class="btn" onclick="functionToExecute('h')">h</button>
+            <button type="button" id="buttonJ"class="btn" onclick="functionToExecute('j')">j</button>
+            <button type="button" id="buttonK"class="btn" onclick="functionToExecute('k')">k</button>
+            <button type="button" id="buttonL"class="btn" onclick="functionToExecute('l')">l</button>
             <button type="button" class="btn" onclick="removeLetter()">
                 <-< /button>
         </div>
@@ -262,11 +260,11 @@
     <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group" role="group" aria-label="First group">
             <button type="button" id="buttonA" class="btn" onclick="functionToExecute('z')">z</button>
-            <button type="button" class="btn " onclick="functionToExecute('x')">x</button>
-            <button type="button" class="btn " onclick="functionToExecute('c')">c</button>
-            <button type="button" class="btn" onclick="functionToExecute('v')">v</button>
-            <button type="button" class="btn " onclick="functionToExecute('b')">b</button>
-            <button type="button" class="btn " onclick="functionToExecute('n')">n</button>
+            <button type="button" id="buttonX"class="btn " onclick="functionToExecute('x')">x</button>
+            <button type="button" id="buttonC"class="btn " onclick="functionToExecute('c')">c</button>
+            <button type="button" id="buttonV"class="btn" onclick="functionToExecute('v')">v</button>
+            <button type="button" id="buttonB"class="btn " onclick="functionToExecute('b')">b</button>
+            <button type="button" id="buttonN"class="btn " onclick="functionToExecute('n')">n</button>
             <button type="button" id="buttonM" class="btn" onclick="functionToExecute('m')">m</button>
             <button type="button" class="btn" onclick="makeGuess()">Enter</button>
         </div>
