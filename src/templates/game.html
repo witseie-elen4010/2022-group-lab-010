@@ -108,7 +108,8 @@
                     message.classList.remove('text-danger')
                     message.innerHTML = ''
                     generateColouredGuess(guess, data.colour)
-                    updateKeyboardColour(guess, data.colour)
+                   // updateKeyboardColour(guess, data.colour) // this has to come after we generate the colour guesses
+                    updateKeyboardCcolour(guess, data.colour)
                     let f = 0
                     
                     data.colour.forEach(function(element){
@@ -198,9 +199,9 @@
             document.getElementById('guess').value = ''
         }
 
-        let updateKeyboardColour = (guess,colours) => {
-            console.log("data,color is as follows: ", colours)
-            console.log("the guess is as follows: ", guess)
+        /* let updateKeyboardColour = (guess,colours) => {
+           // console.log("data,color is as follows: ", colours)
+           // console.log("the guess is as follows: ", guess)
             for(let i = 0; i < colours.length; i ++)
             {
                 letterID = "button" +  guess.charAt(i).toUpperCase()
@@ -208,7 +209,7 @@
                 btn.classList.add('bg-' + colours[i])
 
             }
-        }
+        } */
 
 
         window.onload = () => {
@@ -252,8 +253,7 @@
             <button type="button" id="buttonJ"class="btn" onclick="functionToExecute('j')">j</button>
             <button type="button" id="buttonK"class="btn" onclick="functionToExecute('k')">k</button>
             <button type="button" id="buttonL"class="btn" onclick="functionToExecute('l')">l</button>
-            <button type="button" class="btn" onclick="removeLetter()">
-                <-< /button>
+            <button type="button" class="btn" onclick="removeLetter()">                 delete </button>
         </div>
     </div>
 
@@ -273,7 +273,7 @@
 
     <script src="/cdn/scripts/keyboardLogger.js"></script>
 
-    <script>
+    <!-- <script>
         const functionToExecute = function (letter) {
             console.log(letter)
 
@@ -288,7 +288,7 @@
 
             return letter
         }
-    </script>
+    </script> -->
 
 
 </body>

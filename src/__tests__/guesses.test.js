@@ -16,6 +16,7 @@ app.use('/', router)
 
 // jest.mock('../controllers/game.controllers')
 const correctWordSpy = jest.spyOn(game, 'getCorrectWord')
+console.log('logging game is : ', game)
 correctWordSpy.mockImplementation(() => 'MOUSE')
 
 afterEach(() => {

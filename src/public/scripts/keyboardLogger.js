@@ -19,41 +19,15 @@ const removeLetter = function () {
   const message = document.getElementById('guess')
   message.value = message.value.substring(0, message.value.length - 1)
 }
-module.exports = { functionToExecute, removeLetter }
 
-/*
-const buttonQ = document.getElementById('buttonQ')
-buttonQ.addEventListener('click', function () {
-    console.log("q")
+const updateKeyboardCcolour = function (guess, colours) {
+  console.log('data,color is as follows: ', colours)
+  console.log('the guess is as follows: ', guess)
+  for (let i = 0; i < colours.length; i++) {
+    const letterID = 'button' + guess.charAt(i).toUpperCase()
+    const btn = document.getElementById(letterID)
+    btn.classList.add('bg-' + colours[i])
+  }
+}
 
-}, false)
-
-const buttonW = document.getElementById('buttonW')
-buttonW.addEventListener('click', function () {
-    console.log("W")
-
-}, false)
-
-const buttonE = document.getElementById('buttonE')
-buttonE.addEventListener('click', function () {
-    console.log("Y")
-
-}, false)
-
-const buttonR = document.getElementById('buttonR')
-buttonR.addEventListener('click', function () {
-    console.log("Y")
-
-}, false)
-
-const buttonT = document.getElementById('buttonT')
-buttonT.addEventListener('click', function () {
-    console.log("Y")
-
-}, false)
-
-const buttonY = document.getElementById('buttonY')
-buttonT.addEventListener('click', function () {
-    console.log("Y")
-
-}, false) */
+module.exports = { functionToExecute, removeLetter, updateKeyboardCcolour }
