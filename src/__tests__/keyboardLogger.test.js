@@ -36,6 +36,25 @@ describe('Test Button component', () => {
     expect(keyboard.functionToExecute('a')).toBe('a')
   })
 
+  it('Test click event', () => {
+    const g = document.createElement('input')
+    g.id = 'guess'
+
+    document.body.appendChild(g)
+
+    expect(keyboard.functionToExecute('ba')).toBe('b')
+  })
+
+  it('Test click event', () => {
+    const g = document.createElement('input')
+    g.id = 'guess'
+    g.value = 'SMART'
+
+    document.body.appendChild(g)
+    keyboard.removeLetter()
+
+    expect(g.value).toBe('SMAR')
+  })
   it('Test keyboard colour updates', async () => {
     const res = await request(app)
       .post('/api/guess')
@@ -43,7 +62,7 @@ describe('Test Button component', () => {
       .expect(200)
       .expect('Content-Type', /json/)
     const colour = res.body.colour
-    console.log('logging res:', res.body.colour)
+    // console.log('logging res:', res.body.colour)
     expect(colour.length).toBe(5)
     expect(colour).toStrictEqual(['yellow', 'gray', 'gray', 'yellow', 'gray'])
     const mockGuess = 'MOUSE'
@@ -62,9 +81,68 @@ describe('Test Button component', () => {
       const letter = document.getElementById(letterID)
       expect(letter.className).toContain('bg-' + colour[i])
     }
-    //  const letter = document.getElementById('buttonM')
-    // expect(letter.className).toContain('bg-' + colour[0])
 
-    expect('a').toBe('a')
+    // expect('a').toBe('a')
+  })
+  it('Test keyboard colour updates of correct word', async () => {
+    const mockGuess = 'SMART' // must be a vaid word
+    const res = await request(app)
+      .post('/api/guess')
+      .send({ guess: mockGuess })
+      .expect(200) // bad request, not a word
+      .expect('Content-Type', /json/)
+    const colour = res.body.colour
+    console.log('logging res:', res.body.colour)
+    expect(colour.length).toBe(5)
+    expect(colour).toStrictEqual(['green', 'green', 'green', 'green', 'green'])
+    // const mockGuess = 'MOUSE'
+
+    for (let i = 0; i < colour.length; i++) {
+      const letterID = 'button' + mockGuess.charAt(i).toUpperCase()
+      const btn = document.createElement('btn')
+      btn.id = letterID
+      document.body.appendChild(btn)
+    //  btn.classList.add('bg-' + colour[i])
+    }
+    keyboard.updateKeyboardCcolour(mockGuess, colour)
+
+    for (let i = 0; i < colour.length; i++) {
+      const letterID = 'button' + mockGuess.charAt(i).toUpperCase()
+      const letter = document.getElementById(letterID)
+      expect(letter.className).toContain('bg-' + colour[i])
+    }
+
+    // expect('a').toBe('a')
+  })
+
+  it('Test keyboard colour updates of correct word', async () => {
+    const mockGuess = 'EBONY' // must be a vaid word
+    const res = await request(app)
+      .post('/api/guess')
+      .send({ guess: mockGuess })
+      .expect(200) // bad request, not a word
+      .expect('Content-Type', /json/)
+    const colour = res.body.colour
+    console.log('logging res:', res.body.colour)
+    expect(colour.length).toBe(5)
+    expect(colour).toStrictEqual(['gray', 'gray', 'gray', 'gray', 'gray'])
+    // const mockGuess = 'MOUSE'
+
+    for (let i = 0; i < colour.length; i++) {
+      const letterID = 'button' + mockGuess.charAt(i).toUpperCase()
+      const btn = document.createElement('btn')
+      btn.id = letterID
+      document.body.appendChild(btn)
+    //  btn.classList.add('bg-' + colour[i])
+    }
+    keyboard.updateKeyboardCcolour(mockGuess, colour)
+
+    for (let i = 0; i < colour.length; i++) {
+      const letterID = 'button' + mockGuess.charAt(i).toUpperCase()
+      const letter = document.getElementById(letterID)
+      expect(letter.className).toContain('bg-' + colour[i])
+    }
+
+  //  expect('a').toBe('a')
   })
 })
