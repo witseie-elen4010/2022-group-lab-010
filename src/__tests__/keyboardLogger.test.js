@@ -4,7 +4,7 @@
 const jsdom = require('jsdom')
 const { JSDOM } = jsdom
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>')
-console.log(dom.window.document.querySelector('p').textContent) // "Hello world"
+// console.log(dom.window.document.querySelector('p').textContent) // "Hello world"
 global.document = dom.window.document
 
 const keyboard = require('../public/scripts/keyboardLogger')
@@ -23,7 +23,7 @@ app.use('/', router)
 
 // mocking the correct word
 const correctWordSpy = jest.spyOn(game, 'getCorrectWord')
-console.log('logging game is : ', game)
+// console.log('logging game is : ', game)
 correctWordSpy.mockImplementation(() => 'SMART')
 
 describe('Test Button component', () => {
@@ -46,14 +46,14 @@ describe('Test Button component', () => {
   })
 
   it('Test click event', () => {
-    const g = document.createElement('input')
-    g.id = 'guess'
-    g.value = 'SMART'
-
-    document.body.appendChild(g)
-    keyboard.removeLetter()
-
-    expect(g.value).toBe('SMAR')
+    const g = document.getElementById('guess')
+    // gg.id = 'guess'
+    // gg.value = 'SMART'
+    // onsole.log(gg.value)
+    // document.body.appendChild(gg)
+    const smallerWord = keyboard.removeLetter()
+    console.log(smallerWord.value)
+    expect(g.value).toBe('a')
   })
   it('Test keyboard colour updates', async () => {
     const res = await request(app)
@@ -92,7 +92,7 @@ describe('Test Button component', () => {
       .expect(200) // bad request, not a word
       .expect('Content-Type', /json/)
     const colour = res.body.colour
-    console.log('logging res:', res.body.colour)
+    // console.log('logging res:', res.body.colour)
     expect(colour.length).toBe(5)
     expect(colour).toStrictEqual(['green', 'green', 'green', 'green', 'green'])
     // const mockGuess = 'MOUSE'
@@ -123,7 +123,7 @@ describe('Test Button component', () => {
       .expect(200) // bad request, not a word
       .expect('Content-Type', /json/)
     const colour = res.body.colour
-    console.log('logging res:', res.body.colour)
+    // console.log('logging res:', res.body.colour)
     expect(colour.length).toBe(5)
     expect(colour).toStrictEqual(['gray', 'gray', 'gray', 'gray', 'gray'])
     // const mockGuess = 'MOUSE'
