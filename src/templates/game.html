@@ -95,7 +95,10 @@
 
 
             const response = await fetch("api/guess", requestOptions)
+             console.log("logging json response",response)
             return response.json()
+           
+
         }
 
         let i = 0
@@ -108,6 +111,8 @@
                     message.classList.remove('text-danger')
                     message.innerHTML = ''
                     generateColouredGuess(guess, data.colour)
+                    console.log(guess)
+                    console.log(data.colour)
                    // updateKeyboardColour(guess, data.colour) // this has to come after we generate the colour guesses
                     updateKeyboardCcolour(guess, data.colour)
                     let f = 0
@@ -228,11 +233,11 @@
 
     <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group mr-2" role="group" aria-label="First group">
-            <button type="button" id="buttonQ" class="btn " onclick="functionToExecute('q')">q</button>
-            <button type="button" id="buttonW" class="btn " onclick="functionToExecute('w')">w</button>
-            <button type="button" id="buttonE" class="btn " onclick="functionToExecute('e')">e</button>
-            <button type="button" id="buttonR" class="btn " onclick="functionToExecute('r')">r</button>
-            <button type="button" id="buttonT" class="btn " onclick="functionToExecute('t')">t</button>
+            <button type="button" id="buttonQ" class="btn" onclick="functionToExecute('q')">q</button>
+            <button type="button" id="buttonW" class="btn" onclick="functionToExecute('w')">w</button>
+            <button type="button" id="buttonE" class="btn" onclick="functionToExecute('e')">e</button>
+            <button type="button" id="buttonR" class="btn" onclick="functionToExecute('r')">r</button>
+            <button type="button" id="buttonT" class="btn" onclick="functionToExecute('t')">t</button>
             <button type="button" id="buttonY" class="btn " onclick="functionToExecute('y')">y</button>
             <button type="button" id="buttonU" class="btn " onclick="functionToExecute('u')">u</button>
             <button type="button" id="buttonI" class="btn " onclick="functionToExecute('i')">i</button>

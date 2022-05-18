@@ -57,6 +57,14 @@ describe('Test Button component', () => {
     }
     keyboard.updateKeyboardCcolour(mockGuess, colour)
 
+    for (let i = 0; i < colour.length; i++) {
+      const letterID = 'button' + mockGuess.charAt(i).toUpperCase()
+      const letter = document.getElementById(letterID)
+      expect(letter.className).toContain('bg-' + colour[i])
+    }
+    //  const letter = document.getElementById('buttonM')
+    // expect(letter.className).toContain('bg-' + colour[0])
+
     expect('a').toBe('a')
   })
 })
