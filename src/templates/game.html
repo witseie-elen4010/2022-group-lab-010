@@ -163,8 +163,8 @@
 
         }
 
-        let gameEnd = function(i) {
-            if (i === 1) {   //When player tuns out of guesses
+           let gameEnd = function(i) {
+            if (i === 1) {   //When player runs out of guesses
                 fetch('/api/correct')
                     .then(function (response) {
                         if (response.ok) { return response.json() } // Return the response parse as JSON
@@ -203,6 +203,7 @@
                 // For time limit
             }
         }
+       // export {gameEnd}
 
         /*
         <div class="pb-1">
@@ -243,17 +244,7 @@
             document.getElementById('guess').value = ''
         }
 
-        /* let updateKeyboardColour = (guess,colours) => {
-           // console.log("data,color is as follows: ", colours)
-           // console.log("the guess is as follows: ", guess)
-            for(let i = 0; i < colours.length; i ++)
-            {
-                letterID = "button" +  guess.charAt(i).toUpperCase()
-                let btn = document.getElementById(letterID)
-                btn.classList.add('bg-' + colours[i])
-
-            }
-        } */
+        
 
 
         window.onload = () => {
