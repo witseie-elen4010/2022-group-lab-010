@@ -123,6 +123,29 @@
         }
 
         let i = 0
+        let score = 0;
+        let calculateScore = (data, wordNumber) =>{
+            let multiplier = 5 - wordNumber
+            let array = data.colour
+            try {
+                console.log("Running here, ", array)
+                for (let index = 0; index < array.length; index++) {
+                    const element = array[index];
+                    if(element == "green")
+                    {
+                        score = score + multiplier*2
+                    }
+                    else if(element == "yellow")
+                    {
+                        score = score + multiplier
+                    }
+                }
+            }catch (error) {
+                console.log(error)
+            }
+
+            console.log("The score is: " + score)
+        }
 
         let makeGuess = () => {
             let guess = document.getElementById('guess').value
@@ -132,9 +155,14 @@
                     message.classList.remove('text-danger')
                     message.innerHTML = ''
                     generateColouredGuess(guess, data.colour)
+<<<<<<< HEAD
                     console.log(guess)
                     console.log(data.colour)
                     // updateKeyboardColour(guess, data.colour) // this has to come after we generate the colour guesses
+=======
+                    calculateScore(data,i)
+                   // updateKeyboardColour(guess, data.colour) // this has to come after we generate the colour guesses
+>>>>>>> origin/main
                     updateKeyboardCcolour(guess, data.colour)
                     let f = 0
 
@@ -173,7 +201,7 @@
 
                     .then(function(data){
                         const x = document.getElementById('Game Result')
-                        x.innerHTML = `The correct word was ${data}`
+                        x.innerHTML = `The correct word was ${data}. You achieved a score of: ` + score
                     })
 
                     .catch(function (e) { // Process error for request
@@ -190,7 +218,7 @@
 
             if (i === 2) {   //When player guesses word correctly
                 const x = document.getElementById('Game Result')
-                x.innerHTML = `You Guessed the word correctly`
+                x.innerHTML = `You Guessed the word correctly. You achieved a score of: ` + score
                 const y = document.getElementById('submit Guess')
                 y.setAttribute('class', 'btn btn-primary')
                 y.setAttribute('data-bs-toggle', 'modal')
