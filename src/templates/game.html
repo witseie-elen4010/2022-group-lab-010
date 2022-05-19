@@ -122,47 +122,65 @@
                     })
                     
                     if (f === 0) {
-                        const x = document.getElementById('Game Result')
-                        x.innerHTML = `You Guessed the word correctly`
-                        const y = document.getElementById('submit Guess')
-                        y.setAttribute('class', 'btn btn-primary')
-                        y.setAttribute('data-bs-toggle', 'modal')
-                        y.setAttribute('data-bs-target', '#staticBackdrop')
-                        y.innerHTML = 'complete'
-                        y.click()
+                        gameEnd(2)
                     }
 
                     i += 1
+                    if(i === 6) {const y = document.getElementById('submit Guess'); y.click()}
                 })
                 .catch(error => {
                     message.classList.add('text-danger')
                     message.innerHTML = "Invalid Input"
+                    const y = document.getElementById('submit Guess')
+                    if (y.innerHTML === 'complete' || i === 6) {message.innerHTML = ''}
                 })
 
 
                 if(i == 4) {
-                    fetch('/api/correct')
-                        .then(function (response) {
-                            if (response.ok) { return response.json() } // Return the response parse as JSON
-                            else { throw 'Failed to load correct word: response code invalid!' }
-                        })
-
-                        .then(function(data){
-                            const x = document.getElementById('Game Result')
-                            x.innerHTML = `The correct word was ${data}`
-                        })
-
-                        .catch(function (e) { // Process error for request
-                            alert(e) // Displays a browser alert with the error message.
-                        })
-                        
-                    const y = document.getElementById('submit Guess')
-                    y.setAttribute('class', 'btn btn-primary')
-                    y.setAttribute('data-bs-toggle', 'modal')
-                    y.setAttribute('data-bs-target', '#staticBackdrop')
-                    y.innerHTML = 'Last Guess'
+                    gameEnd(1)
                 }
 
+        }
+
+        let gameEnd = function(i) {
+            if (i === 1) {   //When player tuns out of guesses
+                fetch('/api/correct')
+                    .then(function (response) {
+                        if (response.ok) { return response.json() } // Return the response parse as JSON
+                        else { throw 'Failed to load correct word: response code invalid!' }
+                    })
+
+                    .then(function(data){
+                        const x = document.getElementById('Game Result')
+                        x.innerHTML = `The correct word was ${data}`
+                    })
+
+                    .catch(function (e) { // Process error for request
+                        alert(e) // Displays a browser alert with the error message.
+                    })
+                        
+                const y = document.getElementById('submit Guess')
+                y.setAttribute('class', 'btn btn-primary')
+                y.setAttribute('data-bs-toggle', 'modal')
+                y.setAttribute('data-bs-target', '#staticBackdrop')
+                y.innerHTML = 'Last Guess'
+
+            }
+
+            if (i === 2) {   //When player guesses word correctly
+                const x = document.getElementById('Game Result')
+                x.innerHTML = `You Guessed the word correctly`
+                const y = document.getElementById('submit Guess')
+                y.setAttribute('class', 'btn btn-primary')
+                y.setAttribute('data-bs-toggle', 'modal')
+                y.setAttribute('data-bs-target', '#staticBackdrop')
+                y.innerHTML = 'complete'
+                y.click()
+            }
+
+            if (i === 3) {
+                // For time limit
+            }
         }
 
         /*
