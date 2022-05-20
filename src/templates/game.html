@@ -144,8 +144,7 @@
                     }
 
                     calculateScore(data, i)
-                    // updateKeyboardColour(guess, data.colour) // this has to come after we generate the colour guesses
-                    updateKeyboardCcolour(guess, data.colour)
+                    updateKeyboardColour(guess, data.colour)
                     let f = 0
 
                     data.colour.forEach(function (element) {
@@ -214,7 +213,7 @@
             }
         }
 
-        /*
+        /*  // Formatting required
         <div class="pb-1">
             <div class="card card-body  letter-block bg-green">
                 <h1>C</h1>
@@ -253,19 +252,6 @@
             document.getElementById('guess').value = ''
         }
 
-        /* let updateKeyboardColour = (guess,colours) => {
-           // console.log("data,color is as follows: ", colours)
-           // console.log("the guess is as follows: ", guess)
-            for(let i = 0; i < colours.length; i ++)
-            {
-                letterID = "button" +  guess.charAt(i).toUpperCase()
-                let btn = document.getElementById(letterID)
-                btn.classList.add('bg-' + colours[i])
-
-            }
-        } */
-
-
         window.onload = () => {
             document.getElementById('guess').addEventListener('keypress', function (event) {
                 if (event.key === 'Enter') {
@@ -291,25 +277,14 @@
             <button type="button" id="buttonU" class="btn " onclick="functionToExecute('u')">u</button>
             <button type="button" id="buttonI" class="btn " onclick="functionToExecute('i')">i</button>
             <button type="button" id="buttonO" class="btn " onclick="functionToExecute('o')">o</button>
-            <button type="button" id="buttonP" class="btn " onclick="functionToExecute('q')">p</button>
+            <button type="button" id="buttonP" class="btn " onclick="functionToExecute('p')">p</button>
         </div>
     </div>
 
 
     <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group" role="group" aria-label="First group">
-            <<<<<<< HEAD <button type="button" id="buttonA" class="btn btn-secondary" onclick="functionToExecute('a')">
-                a</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('s')">s</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('d')">d</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('f')">f</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('g')">g</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('h')">h</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('j')">j</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('k')">k</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('l')">l</button>
-                <button type="button" class="btn btn-secondary" onclick="removeLetter()">&lt-</button>
-                =======
+          
                 <button type="button" id="buttonA" class="btn" onclick="functionToExecute('a')">a</button>
                 <button type="button" id="buttonS" class="btn " onclick="functionToExecute('s')">s</button>
                 <button type="button" id="buttonD" class="btn " onclick="functionToExecute('d')">d</button>
@@ -320,7 +295,6 @@
                 <button type="button" id="buttonK" class="btn" onclick="functionToExecute('k')">k</button>
                 <button type="button" id="buttonL" class="btn" onclick="functionToExecute('l')">l</button>
                 <button type="button" class="btn" onclick="removeLetter()"> delete </button>
-                >>>>>>> main
         </div>
     </div>
 
@@ -339,25 +313,6 @@
 
 
     <script src="/cdn/scripts/keyboardLogger.js"></script>
-
-    <!-- <script>
-        const functionToExecute = function (letter) {
-            console.log(letter)
-
-            if (letter.length > 1) {
-                console.log('error button length is too long ')
-                letter = letter.substring(0, 1) // Take the first element
-            }
-
-            const message = document.getElementById('guess')
-
-            message.value += letter
-
-            return letter
-        }
-    </script> -->
-
-
 </body>
 
 </html>
