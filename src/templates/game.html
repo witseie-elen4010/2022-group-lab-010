@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="/cdn/stylesheets/bootstrap.css">
 
     <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
 
 
     <style>
@@ -50,29 +52,31 @@
         <div class="input-group mb-3">
             <input id="guess" type="text" class="form-control" placeholder="Guess" autofocus>
             <div class="input-group-append" id="Guess Button Location">
-                <button class="btn btn-outline-secondary" type="button" onclick="makeGuess()" id="submit Guess">Guess</button>
+                <button class="btn btn-outline-secondary" type="button" onclick="makeGuess()"
+                    id="submit Guess">Guess</button>
             </div>
         </div>
     </div>
-  
+
     <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">Game Over</h5>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Game Over</h5>
+                </div>
+                <div class="modal-body" id="Game Result">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <a href="game" class="btn btn-primary" role="button">Play Another Game</a>
+                    <a href="/" class="btn btn-primary" role="button">Home</a>
+                </div>
             </div>
-            <div class="modal-body" id = "Game Result">
-            ...
-            </div>
-            <div class="modal-footer">
-            <a href="game" class="btn btn-primary" role="button">Play Another Game</a>
-            <a href="/" class="btn btn-primary" role="button">Home</a>
-            </div>
-        </div>
         </div>
     </div>
-  
+
 
 
     <script>
@@ -95,31 +99,29 @@
 
 
             const response = await fetch("api/guess", requestOptions)
-             console.log("logging json response",response)
+            console.log("logging json response", response)
             return response.json()
-           
+
 
         }
 
         let i = 0
         let score = 0;
-        let calculateScore = (data, wordNumber) =>{
+        let calculateScore = (data, wordNumber) => {
             let multiplier = 5 - wordNumber
             let array = data.colour
             try {
                 console.log("Running here, ", array)
                 for (let index = 0; index < array.length; index++) {
                     const element = array[index];
-                    if(element == "green")
-                    {
-                        score = score + multiplier*2
+                    if (element == "green") {
+                        score = score + multiplier * 2
                     }
-                    else if(element == "yellow")
-                    {
+                    else if (element == "yellow") {
                         score = score + multiplier
                     }
                 }
-            }catch (error) {
+            } catch (error) {
                 console.log(error)
             }
 
@@ -131,40 +133,47 @@
             let message = document.getElementById('response')
             sendGuess(guess)
                 .then(data => {
-                    message.classList.remove('text-danger')
-                    message.innerHTML = ''
-                    generateColouredGuess(guess, data.colour)
-                    calculateScore(data,i)
-                   // updateKeyboardColour(guess, data.colour) // this has to come after we generate the colour guesses
+                    if (data.code === "ok") {
+                        message.classList.remove('text-danger')
+                        message.innerHTML = ''
+                        generateColouredGuess(guess, data.colour)
+                        console.log(data)
+                    } else {
+                        message.classList.add('text-danger')
+                        message.innerHTML = data.message
+                    }
+
+                    calculateScore(data, i)
+                    // updateKeyboardColour(guess, data.colour) // this has to come after we generate the colour guesses
                     updateKeyboardCcolour(guess, data.colour)
                     let f = 0
-                    
-                    data.colour.forEach(function(element){
-                        if (element != 'green') f = 1 
+
+                    data.colour.forEach(function (element) {
+                        if (element != 'green') f = 1
                     })
-                    
+
                     if (f === 0) {
                         gameEnd(2)
                     }
 
                     i += 1
-                    if(i === 6) {const y = document.getElementById('submit Guess'); y.click()}
+                    if (i === 6) { const y = document.getElementById('submit Guess'); y.click() }
                 })
                 .catch(error => {
                     message.classList.add('text-danger')
                     message.innerHTML = "Invalid Input"
                     const y = document.getElementById('submit Guess')
-                    if (y.innerHTML === 'complete' || i === 6) {message.innerHTML = ''}
+                    if (y.innerHTML === 'complete' || i === 6) { message.innerHTML = '' }
                 })
 
 
-                if(i == 4) {
-                    gameEnd(1)
-                }
+            if (i == 4) {
+                gameEnd(1)
+            }
 
         }
 
-        let gameEnd = function(i) {
+        let gameEnd = function (i) {
             if (i === 1) {   //When player tuns out of guesses
                 fetch('/api/correct')
                     .then(function (response) {
@@ -172,7 +181,7 @@
                         else { throw 'Failed to load correct word: response code invalid!' }
                     })
 
-                    .then(function(data){
+                    .then(function (data) {
                         const x = document.getElementById('Game Result')
                         x.innerHTML = `The correct word was ${data}. You achieved a score of: ` + score
                     })
@@ -180,7 +189,7 @@
                     .catch(function (e) { // Process error for request
                         alert(e) // Displays a browser alert with the error message.
                     })
-                        
+
                 const y = document.getElementById('submit Guess')
                 y.setAttribute('class', 'btn btn-primary')
                 y.setAttribute('data-bs-toggle', 'modal')
@@ -231,7 +240,7 @@
 
             for (let i = 0; i < colours.length; i++) {
                 let block = document.createElement("div")
-               // console.log(out)
+                // console.log(out)
                 block.classList.add('card', 'card-body', 'letter-block', 'bg-' + colours[i])
                 let letter = document.createElement("h1")
                 letter.innerHTML = guess.charAt(i)
@@ -282,34 +291,47 @@
             <button type="button" id="buttonU" class="btn " onclick="functionToExecute('u')">u</button>
             <button type="button" id="buttonI" class="btn " onclick="functionToExecute('i')">i</button>
             <button type="button" id="buttonO" class="btn " onclick="functionToExecute('o')">o</button>
-            <button type="button" id="buttonP"class="btn " onclick="functionToExecute('q')">p</button>
+            <button type="button" id="buttonP" class="btn " onclick="functionToExecute('q')">p</button>
         </div>
     </div>
 
 
     <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group" role="group" aria-label="First group">
-            <button type="button" id="buttonA" class="btn" onclick="functionToExecute('a')">a</button>
-            <button type="button" id="buttonS" class="btn " onclick="functionToExecute('s')">s</button>
-            <button type="button" id="buttonD"class="btn " onclick="functionToExecute('d')">d</button>
-            <button type="button" id="buttonF"class="btn " onclick="functionToExecute('f')">f</button>
-            <button type="button" id="buttonG"class="btn" onclick="functionToExecute('g')">g</button>
-            <button type="button" id="buttonH"class="btn" onclick="functionToExecute('h')">h</button>
-            <button type="button" id="buttonJ"class="btn" onclick="functionToExecute('j')">j</button>
-            <button type="button" id="buttonK"class="btn" onclick="functionToExecute('k')">k</button>
-            <button type="button" id="buttonL"class="btn" onclick="functionToExecute('l')">l</button>
-            <button type="button" class="btn" onclick="removeLetter()">                 delete </button>
+            <<<<<<< HEAD <button type="button" id="buttonA" class="btn btn-secondary" onclick="functionToExecute('a')">
+                a</button>
+                <button type="button" class="btn btn-secondary" onclick="functionToExecute('s')">s</button>
+                <button type="button" class="btn btn-secondary" onclick="functionToExecute('d')">d</button>
+                <button type="button" class="btn btn-secondary" onclick="functionToExecute('f')">f</button>
+                <button type="button" class="btn btn-secondary" onclick="functionToExecute('g')">g</button>
+                <button type="button" class="btn btn-secondary" onclick="functionToExecute('h')">h</button>
+                <button type="button" class="btn btn-secondary" onclick="functionToExecute('j')">j</button>
+                <button type="button" class="btn btn-secondary" onclick="functionToExecute('k')">k</button>
+                <button type="button" class="btn btn-secondary" onclick="functionToExecute('l')">l</button>
+                <button type="button" class="btn btn-secondary" onclick="removeLetter()">&lt-</button>
+                =======
+                <button type="button" id="buttonA" class="btn" onclick="functionToExecute('a')">a</button>
+                <button type="button" id="buttonS" class="btn " onclick="functionToExecute('s')">s</button>
+                <button type="button" id="buttonD" class="btn " onclick="functionToExecute('d')">d</button>
+                <button type="button" id="buttonF" class="btn " onclick="functionToExecute('f')">f</button>
+                <button type="button" id="buttonG" class="btn" onclick="functionToExecute('g')">g</button>
+                <button type="button" id="buttonH" class="btn" onclick="functionToExecute('h')">h</button>
+                <button type="button" id="buttonJ" class="btn" onclick="functionToExecute('j')">j</button>
+                <button type="button" id="buttonK" class="btn" onclick="functionToExecute('k')">k</button>
+                <button type="button" id="buttonL" class="btn" onclick="functionToExecute('l')">l</button>
+                <button type="button" class="btn" onclick="removeLetter()"> delete </button>
+                >>>>>>> main
         </div>
     </div>
 
     <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group" role="group" aria-label="First group">
             <button type="button" id="buttonA" class="btn" onclick="functionToExecute('z')">z</button>
-            <button type="button" id="buttonX"class="btn " onclick="functionToExecute('x')">x</button>
-            <button type="button" id="buttonC"class="btn " onclick="functionToExecute('c')">c</button>
-            <button type="button" id="buttonV"class="btn" onclick="functionToExecute('v')">v</button>
-            <button type="button" id="buttonB"class="btn " onclick="functionToExecute('b')">b</button>
-            <button type="button" id="buttonN"class="btn " onclick="functionToExecute('n')">n</button>
+            <button type="button" id="buttonX" class="btn " onclick="functionToExecute('x')">x</button>
+            <button type="button" id="buttonC" class="btn " onclick="functionToExecute('c')">c</button>
+            <button type="button" id="buttonV" class="btn" onclick="functionToExecute('v')">v</button>
+            <button type="button" id="buttonB" class="btn " onclick="functionToExecute('b')">b</button>
+            <button type="button" id="buttonN" class="btn " onclick="functionToExecute('n')">n</button>
             <button type="button" id="buttonM" class="btn" onclick="functionToExecute('m')">m</button>
             <button type="button" class="btn" onclick="makeGuess()">Enter</button>
         </div>

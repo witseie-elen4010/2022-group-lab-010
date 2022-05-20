@@ -82,28 +82,31 @@ describe('Test Guesses Controller', function () {
 
   it('tests /api/guess endpoint - Too Long Word', async () => {
     expect(correctWordSpy).toHaveBeenCalledTimes(0)
-    await request(app)
+    const res = await request(app)
       .post('/api/guess')
       .send({ guess: 'MOUSES' })
       .expect(400)
       .expect('Content-Type', /json/)
+    expect(res.body.code).toBe('error')
   })
 
   it('tests /api/guess endpoint - Too Short Word', async () => {
     expect(correctWordSpy).toHaveBeenCalledTimes(0)
-    await request(app)
+    const res = await request(app)
       .post('/api/guess')
       .send({ guess: 'MICE' })
       .expect(400)
       .expect('Content-Type', /json/)
+    expect(res.body.code).toBe('error')
   })
 
   it('tests /api/guess endpoint - Invalid word', async () => {
     expect(correctWordSpy).toHaveBeenCalledTimes(0)
-    await request(app)
+    const res = await request(app)
       .post('/api/guess')
       .send({ guess: 'ASDFS' })
       .expect(400)
       .expect('Content-Type', /json/)
+    expect(res.body.code).toBe('error')
   })
 })
