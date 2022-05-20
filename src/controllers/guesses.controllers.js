@@ -7,16 +7,23 @@ const colourCodeGuess = (req, res) => {
   const post = req.body
   const correctWord = game.getCorrectWord()
 
-  if (!post || !post.guess || post.guess.length !== 5 || !game.wordIsValid(post.guess)) {
+  if (!post || !post.guess || post.guess.length !== 5) {
     res.status(400).send({
-      message: "The 'guess' parameter is invalid."
+      message: "The 'guess' parameter is invalid.",
+      code: 'error'
+    })
+    return
+  } else if (!game.wordIsValid(post.guess)) {
+    res.status(400).send({
+      message: "The 'guess' parameter was not found in the dictionary.",
+      code: 'error'
     })
     return
   }
 
   const guess = post.guess.toUpperCase()
 
-  const out = { colour: [] } // output array
+  const out = { code: 'ok', colour: [] } // output array
 
   for (let i = 0; i < post.guess.length; i++) {
     const letter = guess.charAt(i)
