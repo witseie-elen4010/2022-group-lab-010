@@ -4,7 +4,7 @@ const functionToExecute = function (letter) {
 //  console.log(letter)
 
   if (letter.length > 1) {
-    console.log('error button length is too long ')
+    // console.log('error button length is too long ')
     letter = letter.substring(0, 1) // Take the first element
   }
 
@@ -22,7 +22,7 @@ const removeLetter = function () {
   return message
 }
 
-const updateKeyboardCcolour = function (guess, colours) {
+const updateKeyboardColour = function (guess, colours) {
   // console.log('data,color is as follows: ', colours)
   // console.log('the guess is as follows: ', guess)
   for (let i = 0; i < 5; i++) {
@@ -43,4 +43,4 @@ const updateKeyboardCcolour = function (guess, colours) {
   }
 }
 
-module.exports = { functionToExecute, removeLetter, updateKeyboardCcolour }
+module.exports = { functionToExecute, removeLetter, updateKeyboardColour }
