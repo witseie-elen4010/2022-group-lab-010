@@ -47,6 +47,7 @@
             text-shadow: 0 1px 0 white;
             /* //border-radius: 10%; */
         }
+
         .pausebutton {
             color: #ffffff;
             background-color: #335;
@@ -54,6 +55,23 @@
             /* padding: 10px 20px; */
             text-shadow: 0 1px 0 white;
             /* //border-radius: 10%; */
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .myDIV:hover+.hide {
+            display: block;
+            color: red;
+        }
+
+        #mouse_over {
+            opacity: 0;
+        }
+
+        #mouse_over:hover {
+            opacity: 1;
         }
     </style>
 </head>
@@ -116,7 +134,7 @@
 
 
             const response = await fetch("api/guess", requestOptions)
-            console.log("logging json response", response)
+            // console.log("logging json response", response)
             return response.json()
 
 
@@ -124,23 +142,21 @@
 
         let i = 0
         let score = 0;
-        let calculateScore = (data, wordNumber) =>{
+        let calculateScore = (data, wordNumber) => {
             let multiplier = 5 - wordNumber
             let array = data.colour
             try {
-                console.log("Running here, ", array)
+                // console.log("Running here, ", array)
                 for (let index = 0; index < array.length; index++) {
                     const element = array[index];
-                    if(element == "green")
-                    {
-                        score = score + multiplier*2
+                    if (element == "green") {
+                        score = score + multiplier * 2
                     }
-                    else if(element == "yellow")
-                    {
+                    else if (element == "yellow") {
                         score = score + multiplier
                     }
                 }
-            }catch (error) {
+            } catch (error) {
                 console.log(error)
             }
 
@@ -155,14 +171,8 @@
                     message.classList.remove('text-danger')
                     message.innerHTML = ''
                     generateColouredGuess(guess, data.colour)
-<<<<<<< HEAD
-                    console.log(guess)
-                    console.log(data.colour)
+                    calculateScore(data, i)
                     // updateKeyboardColour(guess, data.colour) // this has to come after we generate the colour guesses
-=======
-                    calculateScore(data,i)
-                   // updateKeyboardColour(guess, data.colour) // this has to come after we generate the colour guesses
->>>>>>> origin/main
                     updateKeyboardCcolour(guess, data.colour)
                     let f = 0
 
@@ -175,23 +185,23 @@
                     }
 
                     i += 1
-                    if(i === 6) {const y = document.getElementById('submit Guess'); y.click()}
+                    if (i === 6) { const y = document.getElementById('submit Guess'); y.click() }
                 })
                 .catch(error => {
                     message.classList.add('text-danger')
                     message.innerHTML = "Invalid Input"
                     const y = document.getElementById('submit Guess')
-                    if (y.innerHTML === 'complete' || i === 6) {message.innerHTML = ''}
+                    if (y.innerHTML === 'complete' || i === 6) { message.innerHTML = '' }
                 })
 
 
-                if(i == 4) {
-                    gameEnd(1)
-                }
+            if (i == 4) {
+                gameEnd(1)
+            }
 
         }
 
-           let gameEnd = function(i) {
+        let gameEnd = function (i) {
             if (i === 1) {   //When player runs out of guesses
                 fetch('/api/correct')
                     .then(function (response) {
@@ -199,7 +209,7 @@
                         else { throw 'Failed to load correct word: response code invalid!' }
                     })
 
-                    .then(function(data){
+                    .then(function (data) {
                         const x = document.getElementById('Game Result')
                         x.innerHTML = `The correct word was ${data}. You achieved a score of: ` + score
                     })
@@ -207,7 +217,7 @@
                     .catch(function (e) { // Process error for request
                         alert(e) // Displays a browser alert with the error message.
                     })
-                        
+
                 const y = document.getElementById('submit Guess')
                 y.setAttribute('class', 'btn btn-primary')
                 y.setAttribute('data-bs-toggle', 'modal')
@@ -231,7 +241,7 @@
                 // For time limit
             }
         }
-       // export {gameEnd}
+        // export {gameEnd}
 
         /*
         <div class="pb-1">
@@ -272,7 +282,7 @@
             document.getElementById('guess').value = ''
         }
 
-        
+
 
 
         window.onload = () => {
@@ -332,15 +342,16 @@
             <button type="button" class="btn" onclick="makeGuess()">Enter</button>
         </div>
     </div>
-  <!--  // <div class="container"> -->
-        <div class="row">
-            <div class="col-sm">
-                <div class="timer">Time remaining: <span id="timer"></span>
-                <button type="button" id="pauseTimer" class="pausebutton"onclick="pauseTimer()" >Pause</button></div>
+    <!--  // <div class="container"> -->
+    <div class="row">
+        <div class="col-sm">
+            <div class="timer">Time remaining: <span id="timer"></span>
+                <button type="button" id="pauseTimer" class="pausebutton" onclick="pauseTimer()">Pause</button>
             </div>
-           
         </div>
-   <!--  </div> -->
+
+    </div>
+    <!--  </div> -->
     <script src="/cdn/scripts/keyboardLogger.js"></script>
     <script src="/cdn/scripts/timer.js"></script>
 

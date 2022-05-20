@@ -17,7 +17,7 @@ const functionToExecute = function (letter) {
 
 const removeLetter = function () {
   const message = document.getElementById('guess')
-  console.log('the guess words iss ', message.value)
+  // console.log('the guess words iss ', message.value)
   message.value = message.value.substring(0, message.value.length - 1)
   return message
 }
@@ -32,13 +32,13 @@ const updateKeyboardCcolour = function (guess, colours) {
     const letterID = 'button' + guess.charAt(i).toUpperCase()
     // console.log('after getting letter ID : ', letterID)
     const btn = document.getElementById(letterID)
-    console.log('BEFORE', btn.classList.value)
+    // console.log('BEFORE', btn.classList.value)
     if (btn.classList.length === 1) {
-      console.log(btn.classList)
+      // console.log(btn.classList)
     }
 
     // btn.classList.add('bg-' + colours[i])
-    console.log('AFTER class list ', btn.classList.value)
+    // console.log('AFTER class list ', btn.classList.value)
     btn.classList.value = 'btn ' + 'bg-' + colours[i]
   }
 }
