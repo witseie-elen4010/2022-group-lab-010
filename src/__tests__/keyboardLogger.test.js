@@ -23,7 +23,6 @@ app.use('/', router)
 
 // mocking the correct word
 const correctWordSpy = jest.spyOn(game, 'getCorrectWord')
-// console.log('logging game is : ', game)
 correctWordSpy.mockImplementation(() => 'SMART')
 
 describe('Test Button component', () => {
@@ -47,12 +46,7 @@ describe('Test Button component', () => {
 
   it('Test click event', () => {
     const g = document.getElementById('guess')
-    // gg.id = 'guess'
-    // gg.value = 'SMART'
-    // onsole.log(gg.value)
-    // document.body.appendChild(gg)
-    const smallerWord = keyboard.removeLetter()
-    console.log(smallerWord.value)
+    keyboard.removeLetter()
     expect(g.value).toBe('a')
   })
   it('Test keyboard colour updates', async () => {
@@ -62,7 +56,6 @@ describe('Test Button component', () => {
       .expect(200)
       .expect('Content-Type', /json/)
     const colour = res.body.colour
-    // console.log('logging res:', res.body.colour)
     expect(colour.length).toBe(5)
     expect(colour).toStrictEqual(['yellow', 'gray', 'gray', 'yellow', 'gray'])
     const mockGuess = 'MOUSE'
@@ -72,17 +65,14 @@ describe('Test Button component', () => {
       const btn = document.createElement('btn')
       btn.id = letterID
       document.body.appendChild(btn)
-    //  btn.classList.add('bg-' + colour[i])
     }
-    keyboard.updateKeyboardCcolour(mockGuess, colour)
+    keyboard.updateKeyboardColour(mockGuess, colour)
 
     for (let i = 0; i < colour.length; i++) {
       const letterID = 'button' + mockGuess.charAt(i).toUpperCase()
       const letter = document.getElementById(letterID)
       expect(letter.className).toContain('bg-' + colour[i])
     }
-
-    // expect('a').toBe('a')
   })
   it('Test keyboard colour updates of correct word', async () => {
     const mockGuess = 'SMART' // must be a vaid word
@@ -104,7 +94,7 @@ describe('Test Button component', () => {
       document.body.appendChild(btn)
     //  btn.classList.add('bg-' + colour[i])
     }
-    keyboard.updateKeyboardCcolour(mockGuess, colour)
+    keyboard.updateKeyboardColour(mockGuess, colour)
 
     for (let i = 0; i < colour.length; i++) {
       const letterID = 'button' + mockGuess.charAt(i).toUpperCase()
@@ -135,7 +125,7 @@ describe('Test Button component', () => {
       document.body.appendChild(btn)
     //  btn.classList.add('bg-' + colour[i])
     }
-    keyboard.updateKeyboardCcolour(mockGuess, colour)
+    keyboard.updateKeyboardColour(mockGuess, colour)
 
     for (let i = 0; i < colour.length; i++) {
       const letterID = 'button' + mockGuess.charAt(i).toUpperCase()

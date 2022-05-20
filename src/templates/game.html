@@ -135,8 +135,7 @@
                     message.innerHTML = ''
                     generateColouredGuess(guess, data.colour)
                     calculateScore(data,i)
-                   // updateKeyboardColour(guess, data.colour) // this has to come after we generate the colour guesses
-                    updateKeyboardCcolour(guess, data.colour)
+                    updateKeyboardColour(guess, data.colour)
                     let f = 0
                     
                     data.colour.forEach(function(element){
@@ -205,7 +204,7 @@
             }
         }
 
-        /*
+        /*  // Formatting required
         <div class="pb-1">
             <div class="card card-body  letter-block bg-green">
                 <h1>C</h1>
@@ -243,19 +242,6 @@
             document.getElementById('guess-holder').appendChild(out)
             document.getElementById('guess').value = ''
         }
-
-        /* let updateKeyboardColour = (guess,colours) => {
-           // console.log("data,color is as follows: ", colours)
-           // console.log("the guess is as follows: ", guess)
-            for(let i = 0; i < colours.length; i ++)
-            {
-                letterID = "button" +  guess.charAt(i).toUpperCase()
-                let btn = document.getElementById(letterID)
-                btn.classList.add('bg-' + colours[i])
-
-            }
-        } */
-
 
         window.onload = () => {
             document.getElementById('guess').addEventListener('keypress', function (event) {
