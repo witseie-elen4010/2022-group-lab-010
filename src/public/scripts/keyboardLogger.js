@@ -23,12 +23,7 @@ const removeLetter = function () {
 }
 
 const updateKeyboardColour = function (guess, colours) {
-  // console.log('data,color is as follows: ', colours)
-  // console.log('the guess is as follows: ', guess)
   for (let i = 0; i < 5; i++) {
-    // console.log('data,color is as followssssssssssss: ', colours)
-    // console.log('guess at will be displayed below: ')
-    // console.log(guess.charAt(i))
     const letterID = 'button' + guess.charAt(i).toUpperCase()
     // console.log('after getting letter ID : ', letterID)
     const btn = document.getElementById(letterID)
@@ -39,7 +34,14 @@ const updateKeyboardColour = function (guess, colours) {
 
     // btn.classList.add('bg-' + colours[i])
     // console.log('AFTER class list ', btn.classList.value)
-    btn.classList.value = 'btn ' + 'bg-' + colours[i]
+
+    if (btn.classList.value === 'btn bg-green') {
+      // console.log(btn.classList.value)
+    } else {
+      btn.classList.value = 'btn ' + 'bg-' + colours[i]
+    }
+
+    // console.log(btn.classList.value)
   }
 }
 
