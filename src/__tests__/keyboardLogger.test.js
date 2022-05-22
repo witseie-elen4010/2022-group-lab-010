@@ -50,7 +50,7 @@ describe('Test Button component', () => {
       btn.id = letterID
       document.body.appendChild(btn)
     }
-    keyboard.updateKeyboardCcolour(mockGuess, colour)
+    keyboard.updateKeyboardColour(mockGuess, colour)
 
     for (let i = 0; i < colour.length; i++) {
       const letterID = 'button' + mockGuess.charAt(i).toUpperCase()
@@ -68,7 +68,7 @@ describe('Test Button component', () => {
       btn.id = letterID
       document.body.appendChild(btn)
     }
-    keyboard.updateKeyboardCcolour(mockGuess, colour)
+    keyboard.updateKeyboardColour(mockGuess, colour)
 
     for (let i = 0; i < colour.length; i++) {
       const letterID = 'button' + mockGuess.charAt(i).toUpperCase()
@@ -87,7 +87,7 @@ describe('Test Button component', () => {
       btn.id = letterID
       document.body.appendChild(btn)
     }
-    keyboard.updateKeyboardCcolour(mockGuess, colour)
+    keyboard.updateKeyboardColour(mockGuess, colour)
 
     for (let i = 0; i < colour.length; i++) {
       const letterID = 'button' + mockGuess.charAt(i).toUpperCase()

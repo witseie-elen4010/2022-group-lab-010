@@ -38,6 +38,41 @@
             background-color: rgb(207, 207, 55);
             color: white;
         }
+
+        .timer {
+            color: #ffffff;
+            background-color: #333;
+            font-size: 36px;
+            /* padding: 10px 20px; */
+            text-shadow: 0 1px 0 white;
+            /* //border-radius: 10%; */
+        }
+
+        .pausebutton {
+            color: #ffffff;
+            background-color: #335;
+            font-size: 36px;
+            /* padding: 10px 20px; */
+            text-shadow: 0 1px 0 white;
+            /* //border-radius: 10%; */
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .myDIV:hover+.hide {
+            display: block;
+            color: red;
+        }
+
+        #mouse_over {
+            opacity: 0;
+        }
+
+        #mouse_over:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -215,6 +250,7 @@
                 // For time limit
             }
         }
+        // export {gameEnd}
 
         let generateColouredGuess = (guess, colours) => {
             let out = document.createElement("div")
@@ -284,23 +320,24 @@
             <button type="button" id="buttonU" class="btn " onclick="functionToExecute('u')">u</button>
             <button type="button" id="buttonI" class="btn " onclick="functionToExecute('i')">i</button>
             <button type="button" id="buttonO" class="btn " onclick="functionToExecute('o')">o</button>
-            <button type="button" id="buttonP" class="btn " onclick="functionToExecute('q')">p</button>
+            <button type="button" id="buttonP" class="btn " onclick="functionToExecute('p')">p</button>
         </div>
     </div>
 
 
     <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group" role="group" aria-label="First group">
-            <button type="button" id="buttonA" class="btn" onclick="functionToExecute('a')">a</button>
-            <button type="button" id="buttonS" class="btn " onclick="functionToExecute('s')">s</button>
-            <button type="button" id="buttonD" class="btn " onclick="functionToExecute('d')">d</button>
-            <button type="button" id="buttonF" class="btn " onclick="functionToExecute('f')">f</button>
-            <button type="button" id="buttonG" class="btn" onclick="functionToExecute('g')">g</button>
-            <button type="button" id="buttonH" class="btn" onclick="functionToExecute('h')">h</button>
-            <button type="button" id="buttonJ" class="btn" onclick="functionToExecute('j')">j</button>
-            <button type="button" id="buttonK" class="btn" onclick="functionToExecute('k')">k</button>
-            <button type="button" id="buttonL" class="btn" onclick="functionToExecute('l')">l</button>
-            <button type="button" class="btn" onclick="removeLetter()"> delete </button>
+          
+                <button type="button" id="buttonA" class="btn" onclick="functionToExecute('a')">a</button>
+                <button type="button" id="buttonS" class="btn " onclick="functionToExecute('s')">s</button>
+                <button type="button" id="buttonD" class="btn " onclick="functionToExecute('d')">d</button>
+                <button type="button" id="buttonF" class="btn " onclick="functionToExecute('f')">f</button>
+                <button type="button" id="buttonG" class="btn" onclick="functionToExecute('g')">g</button>
+                <button type="button" id="buttonH" class="btn" onclick="functionToExecute('h')">h</button>
+                <button type="button" id="buttonJ" class="btn" onclick="functionToExecute('j')">j</button>
+                <button type="button" id="buttonK" class="btn" onclick="functionToExecute('k')">k</button>
+                <button type="button" id="buttonL" class="btn" onclick="functionToExecute('l')">l</button>
+                <button type="button" class="btn" onclick="removeLetter()"> delete </button>
         </div>
     </div>
 
@@ -316,8 +353,16 @@
             <button type="button" class="btn" onclick="makeGuess()">Enter</button>
         </div>
     </div>
+    <!--  // <div class="container"> -->
+    <div class="row">
+        <div class="col-sm">
+            <div class="timer">Time remaining: <span id="timer"></span>
+                <button type="button" id="pauseTimer" class="pausebutton" onclick="pauseTimer()">Pause</button>
+            </div>
+        </div>
 
-
+    </div>
+    <!--  </div> -->
     <script src="/cdn/scripts/keyboardLogger.js"></script>
 </body>
 
