@@ -14,9 +14,14 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', router)
 
-// jest.mock('../controllers/game.controllers')
-const correctWordSpy = jest.spyOn(game, 'getCorrectWord')
-correctWordSpy.mockImplementation(() => 'MOUSE')
+const correctWordSpy = jest.spyOn(game, 'getGame')
+correctWordSpy.mockImplementation(() => ({ word: 'MOUSE' }))
+
+const vaildWordSpy = jest.spyOn(game, 'wordIsValid')
+vaildWordSpy.mockImplementation((word) => {
+  const sampleDict = ['mouse', 'house', 'smart', 'pizza']
+  return sampleDict.indexOf(word.toLowerCase()) > -1
+})
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -27,7 +32,7 @@ describe('Test Guesses Controller', function () {
     expect(correctWordSpy).toHaveBeenCalledTimes(0)
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'MOUSE' })
+      .send({ guess: 'MOUSE', game: '1234' })
       .expect(200)
       .expect('Content-Type', /json/)
 
@@ -41,7 +46,7 @@ describe('Test Guesses Controller', function () {
     expect(correctWordSpy).toHaveBeenCalledTimes(0)
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'HOUSE' })
+      .send({ guess: 'HOUSE', game: '1234' })
       .expect(200)
       .expect('Content-Type', /json/)
 
@@ -55,7 +60,7 @@ describe('Test Guesses Controller', function () {
     expect(correctWordSpy).toHaveBeenCalledTimes(0)
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'SMART' })
+      .send({ guess: 'SMART', game: '1234' })
       .expect(200)
       .expect('Content-Type', /json/)
 
@@ -69,7 +74,7 @@ describe('Test Guesses Controller', function () {
     expect(correctWordSpy).toHaveBeenCalledTimes(0)
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'PIZZA' })
+      .send({ guess: 'PIZZA', game: '1234' })
       .expect(200)
       .expect('Content-Type', /json/)
 
@@ -83,7 +88,7 @@ describe('Test Guesses Controller', function () {
     expect(correctWordSpy).toHaveBeenCalledTimes(0)
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'MOUSES' })
+      .send({ guess: 'MOUSES', game: '1234' })
       .expect(400)
       .expect('Content-Type', /json/)
     expect(res.body.code).toBe('error')
@@ -93,7 +98,7 @@ describe('Test Guesses Controller', function () {
     expect(correctWordSpy).toHaveBeenCalledTimes(0)
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'MICE' })
+      .send({ guess: 'MICE', game: '1234' })
       .expect(400)
       .expect('Content-Type', /json/)
     expect(res.body.code).toBe('error')
@@ -103,7 +108,7 @@ describe('Test Guesses Controller', function () {
     expect(correctWordSpy).toHaveBeenCalledTimes(0)
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'ASDFS' })
+      .send({ guess: 'ASDFS', game: '1234' })
       .expect(400)
       .expect('Content-Type', /json/)
     expect(res.body.code).toBe('error')

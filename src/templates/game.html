@@ -115,13 +115,15 @@
 
 
     <script>
+        let game = 0;
 
         let sendGuess = async (guess) => {
             let headers = new Headers();
             headers.append("Content-Type", "application/json");
 
             let raw = JSON.stringify({
-                "guess": guess
+                "guess": guess,
+                "game": game
             });
 
             let requestOptions = {
@@ -130,14 +132,8 @@
                 body: raw,
                 redirect: 'follow'
             };
-
-
-
             const response = await fetch("api/guess", requestOptions)
-            //console.log("logging json response", response)
             return response.json()
-
-
         }
 
         let i = 0
@@ -146,7 +142,6 @@
             let multiplier = 5 - wordNumber
             let array = data.colour
             try {
-                // console.log("Running here, ", array)
                 for (let index = 0; index < array.length; index++) {
                     const element = array[index];
                     if (element == "green") {
@@ -159,8 +154,6 @@
             } catch (error) {
                 console.log(error)
             }
-
-            console.log("The score is: " + score)
         }
 
         let makeGuess = () => {
@@ -172,28 +165,28 @@
                         message.classList.remove('text-danger')
                         message.innerHTML = ''
                         generateColouredGuess(guess, data.colour)
-                        console.log(data)
+
+                        calculateScore(data, i)
+                        updateKeyboardColour(guess, data.colour)
+                        let f = 0
+
+                        data.colour.forEach(function (element) {
+                            if (element != 'green') f = 1
+                        })
+
+                        if (f === 0) {
+                            gameEnd(2)
+                        }
+
+                        i += 1
+                        if (i === 6) { const y = document.getElementById('submit Guess'); y.click() }
                     } else {
                         message.classList.add('text-danger')
                         message.innerHTML = data.message
                     }
-
-                    calculateScore(data, i)
-                    updateKeyboardColour(guess, data.colour)
-                    let f = 0
-
-                    data.colour.forEach(function (element) {
-                        if (element != 'green') f = 1
-                    })
-
-                    if (f === 0) {
-                        gameEnd(2)
-                    }
-
-                    i += 1
-                    if (i === 6) { const y = document.getElementById('submit Guess'); y.click() }
                 })
                 .catch(error => {
+                    console.error(error)
                     message.classList.add('text-danger')
                     message.innerHTML = "Invalid Input"
                     const y = document.getElementById('submit Guess')
@@ -209,7 +202,18 @@
 
         let gameEnd = function (i) {
             if (i === 1) {   //When player tuns out of guesses
-                fetch('/api/correct')
+                let headers = new Headers();
+                headers.append("Content-Type", "application/json");
+                let raw = JSON.stringify({
+                    "game": game
+                });
+                let requestOptions = {
+                    method: 'POST',
+                    headers: headers,
+                    body: raw,
+                    redirect: 'follow'
+                };
+                fetch('api/correct', requestOptions)
                     .then(function (response) {
                         if (response.ok) { return response.json() } // Return the response parse as JSON
                         else { throw 'Failed to load correct word: response code invalid!' }
@@ -217,7 +221,7 @@
 
                     .then(function (data) {
                         const x = document.getElementById('Game Result')
-                        x.innerHTML = `The correct word was ${data}. You achieved a score of: ` + score
+                        x.innerHTML = `The correct word was ${data.word}. You achieved a score of: ` + score
                     })
 
                     .catch(function (e) { // Process error for request
@@ -249,24 +253,6 @@
         }
         // export {gameEnd}
 
-        /*  // Formatting required
-        <div class="pb-1">
-            <div class="card card-body  letter-block bg-green">
-                <h1>C</h1>
-            </div>
-            <div class="card card-body letter-block bg-yellow">
-                <h1>A</h1>
-            </div>
-            <div class="card card-body letter-block bg-gray">
-                <h1>A</h1>
-            </div>
-            <div class="card card-body letter-block bg-gray">
-                <h1>A</h1>
-            </div>
-            <div class="card card-body letter-block bg-gray">
-                <h1>A</h1>
-        </div>
-        */
         let generateColouredGuess = (guess, colours) => {
             let out = document.createElement("div")
             out.classList.add(['pb-1'])
@@ -275,7 +261,6 @@
 
             for (let i = 0; i < colours.length; i++) {
                 let block = document.createElement("div")
-                // console.log(out)
                 block.classList.add('card', 'card-body', 'letter-block', 'bg-' + colours[i])
                 let letter = document.createElement("h1")
                 letter.innerHTML = guess.charAt(i)
@@ -288,13 +273,36 @@
             document.getElementById('guess').value = ''
         }
 
+        let newGame = () => {
+            fetch('api/game')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 'ok') {
+                        game = data.game
+                    }
+                    else {
+
+                        console.log('Cannot create new game')
+                    }
+                })
+
+        }
+
+        let gameIsValid = () => {
+            return i <= 5
+        }
+
         window.onload = () => {
             document.getElementById('guess').addEventListener('keypress', function (event) {
                 if (event.key === 'Enter') {
-                    makeGuess()
+
+                    if (gameIsValid()) makeGuess()
                     document.getElementById('guess').focus()
                 }
             })
+
+            // request a new game ID 
+            newGame()
         }
 
 
@@ -357,26 +365,6 @@
     </div>
     <!--  </div> -->
     <script src="/cdn/scripts/keyboardLogger.js"></script>
-    <script src="/cdn/scripts/timer.js"></script>
-
-    <!-- <script>
-        const functionToExecute = function (letter) {
-            console.log(letter)
-
-            if (letter.length > 1) {
-                console.log('error button length is too long ')
-                letter = letter.substring(0, 1) // Take the first element
-            }
-
-            const message = document.getElementById('guess')
-
-            message.value += letter
-
-            return letter
-        }
-    </script> -->
-
-
 </body>
 
 </html>

@@ -7,12 +7,15 @@ const router = express.Router()
 
 router.get('/game', handlers.game)
 router.post('/api/guess', handlers.guessController.colourCodeGuess)
-router.get('/api/correct', function (req, res) {
-  res.json(controllers.getCorrectWord()) // Respond with JSON
+router.post('/api/correct', handlers.guessController.revealWord)
+
+router.get('/api/game', async function (req, res) {
+  res.json({
+    game: await controllers.generateGame(),
+    code: 'ok'
+  })
 })
-router.get('/api/correct', function (req, res) {
-  res.json(controllers.getCorrectWord) // Respond with JSON
-})
+
 router.get('/', handlers.splash)
 
 module.exports = router
