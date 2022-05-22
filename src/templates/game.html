@@ -20,6 +20,7 @@
             width: min(15vw, 100px);
             height: min(15vw, 100px);
             display: inline-block;
+            vertical-align: middle;
         }
 
         .bg-green {
@@ -35,7 +36,7 @@
         }
 
         .bg-yellow {
-            background-color: rgb(207, 207, 55);
+            background-color: rgb(227, 227, 16);
             color: white;
         }
 
@@ -279,8 +280,11 @@
                 block.classList.add('card', 'card-body', 'letter-block', 'bg-' + colours[i])
                 let letter = document.createElement("h1")
                 letter.innerHTML = guess.charAt(i)
+                let letterContainer = document.createElement("div")
+                letterContainer.classList.add('d-inline-flex', 'h-100', 'w-100', 'align-items-center', 'justify-content-center')
 
-                block.appendChild(letter)
+                letterContainer.appendChild(letter)
+                block.appendChild(letterContainer)
                 out.appendChild(block)
             }
 
@@ -320,17 +324,17 @@
 
     <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group" role="group" aria-label="First group">
-          
-                <button type="button" id="buttonA" class="btn" onclick="functionToExecute('a')">a</button>
-                <button type="button" id="buttonS" class="btn " onclick="functionToExecute('s')">s</button>
-                <button type="button" id="buttonD" class="btn " onclick="functionToExecute('d')">d</button>
-                <button type="button" id="buttonF" class="btn " onclick="functionToExecute('f')">f</button>
-                <button type="button" id="buttonG" class="btn" onclick="functionToExecute('g')">g</button>
-                <button type="button" id="buttonH" class="btn" onclick="functionToExecute('h')">h</button>
-                <button type="button" id="buttonJ" class="btn" onclick="functionToExecute('j')">j</button>
-                <button type="button" id="buttonK" class="btn" onclick="functionToExecute('k')">k</button>
-                <button type="button" id="buttonL" class="btn" onclick="functionToExecute('l')">l</button>
-                <button type="button" class="btn" onclick="removeLetter()"> delete </button>
+
+            <button type="button" id="buttonA" class="btn" onclick="functionToExecute('a')">a</button>
+            <button type="button" id="buttonS" class="btn " onclick="functionToExecute('s')">s</button>
+            <button type="button" id="buttonD" class="btn " onclick="functionToExecute('d')">d</button>
+            <button type="button" id="buttonF" class="btn " onclick="functionToExecute('f')">f</button>
+            <button type="button" id="buttonG" class="btn" onclick="functionToExecute('g')">g</button>
+            <button type="button" id="buttonH" class="btn" onclick="functionToExecute('h')">h</button>
+            <button type="button" id="buttonJ" class="btn" onclick="functionToExecute('j')">j</button>
+            <button type="button" id="buttonK" class="btn" onclick="functionToExecute('k')">k</button>
+            <button type="button" id="buttonL" class="btn" onclick="functionToExecute('l')">l</button>
+            <button type="button" class="btn" onclick="removeLetter()"> delete </button>
         </div>
     </div>
 
