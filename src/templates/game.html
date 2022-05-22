@@ -20,6 +20,7 @@
             width: min(15vw, 100px);
             height: min(15vw, 100px);
             display: inline-block;
+            vertical-align: middle;
         }
 
         .bg-green {
@@ -35,7 +36,7 @@
         }
 
         .bg-yellow {
-            background-color: rgb(207, 207, 55);
+            background-color: rgb(227, 227, 16);
             color: white;
         }
 
@@ -78,9 +79,11 @@
 
 <body>
 
-    <div class="border text-center container-fluid" id="guess-holder">
-    </div>
+    <div class="container-fluid text-center">
+        <div class="row" id="boards">
 
+        </div>
+    </div>
 
     <div>
         <p id="response"></p>
@@ -136,6 +139,7 @@
             return response.json()
         }
 
+        guesses = 0
         let i = 0
         let score = 0;
         let calculateScore = (data, wordNumber) => {
@@ -259,17 +263,12 @@
 
             guess = guess.toUpperCase()
 
-            for (let i = 0; i < colours.length; i++) {
-                let block = document.createElement("div")
-                block.classList.add('card', 'card-body', 'letter-block', 'bg-' + colours[i])
-                let letter = document.createElement("h1")
-                letter.innerHTML = guess.charAt(i)
-
-                block.appendChild(letter)
-                out.appendChild(block)
+            for (let character = 0; character < colours.length; character++) {
+                document.getElementById('blockrow' + guesses + 'character' + character).classList.add('bg-' + colours[character], 'm-1')
+                document.getElementById('row' + guesses + 'character' + character).innerHTML = guess.charAt(character)
             }
 
-            document.getElementById('guess-holder').appendChild(out)
+            guesses++
             document.getElementById('guess').value = ''
         }
 
@@ -300,11 +299,37 @@
                     document.getElementById('guess').focus()
                 }
             })
+            initBoards(2)
 
             // request a new game ID 
             newGame()
         }
 
+        let initBoards = function (count) {
+            for (let i = 0; i < count; i++) {
+                let board = document.createElement("div")
+                board.classList.add('col-xl', 'pb-5')
+                board.id = 'board' + i
+                for (let row = 0; row < 5; row++) {
+                    let line = document.createElement("div")
+                    line.classList.add(['pb-1'])
+                    for (let character = 0; character < 5; character++) {
+                        let block = document.createElement("div")
+                        block.classList.add('card', 'card-body', 'letter-block', 'm-1')
+                        let letter = document.createElement("h1")
+                        letter.id = 'row' + row + 'character' + character
+                        block.id = 'blockrow' + row + 'character' + character
+                        let letterContainer = document.createElement("div")
+                        letterContainer.classList.add('d-inline-flex', 'h-100', 'w-100', 'align-items-center', 'justify-content-center')
+                        letterContainer.appendChild(letter)
+                        block.appendChild(letterContainer)
+                        line.appendChild(block)
+                    }
+                    board.appendChild(line)
+                }
+                document.getElementById("boards").appendChild(board)
+            }
+        }
 
 
     </script>
@@ -328,17 +353,17 @@
 
     <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group" role="group" aria-label="First group">
-          
-                <button type="button" id="buttonA" class="btn" onclick="functionToExecute('a')">a</button>
-                <button type="button" id="buttonS" class="btn " onclick="functionToExecute('s')">s</button>
-                <button type="button" id="buttonD" class="btn " onclick="functionToExecute('d')">d</button>
-                <button type="button" id="buttonF" class="btn " onclick="functionToExecute('f')">f</button>
-                <button type="button" id="buttonG" class="btn" onclick="functionToExecute('g')">g</button>
-                <button type="button" id="buttonH" class="btn" onclick="functionToExecute('h')">h</button>
-                <button type="button" id="buttonJ" class="btn" onclick="functionToExecute('j')">j</button>
-                <button type="button" id="buttonK" class="btn" onclick="functionToExecute('k')">k</button>
-                <button type="button" id="buttonL" class="btn" onclick="functionToExecute('l')">l</button>
-                <button type="button" class="btn" onclick="removeLetter()"> delete </button>
+
+            <button type="button" id="buttonA" class="btn" onclick="functionToExecute('a')">a</button>
+            <button type="button" id="buttonS" class="btn " onclick="functionToExecute('s')">s</button>
+            <button type="button" id="buttonD" class="btn " onclick="functionToExecute('d')">d</button>
+            <button type="button" id="buttonF" class="btn " onclick="functionToExecute('f')">f</button>
+            <button type="button" id="buttonG" class="btn" onclick="functionToExecute('g')">g</button>
+            <button type="button" id="buttonH" class="btn" onclick="functionToExecute('h')">h</button>
+            <button type="button" id="buttonJ" class="btn" onclick="functionToExecute('j')">j</button>
+            <button type="button" id="buttonK" class="btn" onclick="functionToExecute('k')">k</button>
+            <button type="button" id="buttonL" class="btn" onclick="functionToExecute('l')">l</button>
+            <button type="button" class="btn" onclick="removeLetter()"> delete </button>
         </div>
     </div>
 
