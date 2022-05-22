@@ -38,6 +38,41 @@
             background-color: rgb(207, 207, 55);
             color: white;
         }
+
+        .timer {
+            color: #ffffff;
+            background-color: #333;
+            font-size: 36px;
+            /* padding: 10px 20px; */
+            text-shadow: 0 1px 0 white;
+            /* //border-radius: 10%; */
+        }
+
+        .pausebutton {
+            color: #ffffff;
+            background-color: #335;
+            font-size: 36px;
+            /* padding: 10px 20px; */
+            text-shadow: 0 1px 0 white;
+            /* //border-radius: 10%; */
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .myDIV:hover+.hide {
+            display: block;
+            color: red;
+        }
+
+        #mouse_over {
+            opacity: 0;
+        }
+
+        #mouse_over:hover {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -99,7 +134,7 @@
 
 
             const response = await fetch("api/guess", requestOptions)
-            console.log("logging json response", response)
+            //console.log("logging json response", response)
             return response.json()
 
 
@@ -111,7 +146,7 @@
             let multiplier = 5 - wordNumber
             let array = data.colour
             try {
-                console.log("Running here, ", array)
+                // console.log("Running here, ", array)
                 for (let index = 0; index < array.length; index++) {
                     const element = array[index];
                     if (element == "green") {
@@ -212,6 +247,7 @@
                 // For time limit
             }
         }
+        // export {gameEnd}
 
         /*  // Formatting required
         <div class="pb-1">
@@ -310,9 +346,37 @@
             <button type="button" class="btn" onclick="makeGuess()">Enter</button>
         </div>
     </div>
+    <!--  // <div class="container"> -->
+    <div class="row">
+        <div class="col-sm">
+            <div class="timer">Time remaining: <span id="timer"></span>
+                <button type="button" id="pauseTimer" class="pausebutton" onclick="pauseTimer()">Pause</button>
+            </div>
+        </div>
 
-
+    </div>
+    <!--  </div> -->
     <script src="/cdn/scripts/keyboardLogger.js"></script>
+    <script src="/cdn/scripts/timer.js"></script>
+
+    <!-- <script>
+        const functionToExecute = function (letter) {
+            console.log(letter)
+
+            if (letter.length > 1) {
+                console.log('error button length is too long ')
+                letter = letter.substring(0, 1) // Take the first element
+            }
+
+            const message = document.getElementById('guess')
+
+            message.value += letter
+
+            return letter
+        }
+    </script> -->
+
+
 </body>
 
 </html>
