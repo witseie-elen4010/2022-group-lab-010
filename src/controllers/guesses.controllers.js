@@ -6,7 +6,7 @@ const revealWord = async (req, res) => {
   const post = req.body
   if (!post) {
     res.status(400).send({
-      message: "Invalid Request Body",
+      message: 'Invalid Request Body',
       code: 'error'
     })
     res.end()
@@ -25,16 +25,14 @@ const revealWord = async (req, res) => {
   res.json({
     word: playerGame.word.toUpperCase()
   })
-
 }
-
 
 const colourCodeGuess = async (req, res) => {
   // load request parameters from JSON body
-   const post = req.body
-  if(!post){
+  const post = req.body
+  if (!post) {
     res.status(400).send({
-      message: "Invalid Request Body",
+      message: 'Invalid Request Body',
       code: 'error'
     })
     res.end()
@@ -43,7 +41,7 @@ const colourCodeGuess = async (req, res) => {
 
   let playerGame
 
-  if (!post.game ||!(playerGame = await game.getGame(post.game))) {
+  if (!post.game || !(playerGame = await game.getGame(post.game))) {
     res.status(400).send({
       message: "The 'game' parameter is invalid.",
       code: 'error'
@@ -60,9 +58,9 @@ const colourCodeGuess = async (req, res) => {
     })
     return
   }
-  if (! await game.wordIsValid(post.guess)) {
+  if (!await game.wordIsValid(post.guess)) {
     res.status(400).send({
-      message: "The guess was not found in the dictionary.",
+      message: 'The guess was not found in the dictionary.',
       code: 'error'
     })
     return
@@ -70,7 +68,7 @@ const colourCodeGuess = async (req, res) => {
 
   const guess = post.guess.toUpperCase()
 
-  const out = { code: 'ok', colour: [], guess: guess } // output array
+  const out = { code: 'ok', colour: [], guess } // output array
 
   for (let i = 0; i < post.guess.length; i++) {
     const letter = guess.charAt(i)

@@ -1,34 +1,16 @@
 'use strict'
 const Game = require('../models/Game')
 const Word = require('../models/Word')
-const fs = require('fs')
-const path = require('path')
-const { Model, default: mongoose } = require('mongoose')
-const { resolve } = require('path')
-
-
-// const getCorrectWord = async (gameId) => {
-//   return 'SMART'
-//   const game = await Game.findById(gameId)
-//   if(game){
-//     return game.word
-//   }
-  
-//   throw new Error("Invalid Game")
-// }
 
 const getGame = async (gameId) => {
   const game = await Game.findById(gameId)
-  if(game){
+  if (game) {
     return game
   }
-  
   return false
 }
 
-
-const generateGame =  async() => {
-
+const generateGame = async () => {
   // Get a random word from the database
   const word = await Word.count().exec()
     .then(async count => {
@@ -40,7 +22,7 @@ const generateGame =  async() => {
     })
 
   const game = {
-    word: word,
+    word,
     guesses: []
   }
 
@@ -51,15 +33,15 @@ const generateGame =  async() => {
 const wordIsValid = async (word) => {
   word = word.toLowerCase()
   if (word.length !== 5) return false
-  return await Word.exists({word: word})
+  return await Word.exists({ word })
 }
 
-const pushGuess = async (gameId, guess) => {
+// const pushGuess = async (gameId, guess) => {
 
-}
+// }
 
 module.exports = {
   wordIsValid,
-  generateGame, 
+  generateGame,
   getGame
 }

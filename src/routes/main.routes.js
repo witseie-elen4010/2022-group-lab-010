@@ -9,8 +9,7 @@ router.get('/game', handlers.game)
 router.post('/api/guess', handlers.guessController.colourCodeGuess)
 router.post('/api/correct', handlers.guessController.revealWord)
 
-
-router.get('/api/game', async function(req, res){
+router.get('/api/game', async function (req, res) {
   res.json({
     game: await controllers.generateGame(),
     code: 'ok'
