@@ -167,7 +167,7 @@
                         generateColouredGuess(guess, data.colour)
 
                         calculateScore(data, i)
-                        updateKeyboardCcolour(guess, data.colour)
+                        updateKeyboardColour(guess, data.colour)
                         let f = 0
 
                         data.colour.forEach(function (element) {
@@ -186,6 +186,7 @@
                     }
                 })
                 .catch(error => {
+                    console.error(error)
                     message.classList.add('text-danger')
                     message.innerHTML = "Invalid Input"
                     const y = document.getElementById('submit Guess')
