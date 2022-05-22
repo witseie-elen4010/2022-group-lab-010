@@ -80,13 +80,15 @@
 
 
     <script>
+        let game = 0;
 
         let sendGuess = async (guess) => {
             let headers = new Headers();
             headers.append("Content-Type", "application/json");
 
             let raw = JSON.stringify({
-                "guess": guess
+                "guess": guess,
+                "game": game
             });
 
             let requestOptions = {
@@ -95,14 +97,8 @@
                 body: raw,
                 redirect: 'follow'
             };
-
-
-
             const response = await fetch("api/guess", requestOptions)
-            console.log("logging json response", response)
             return response.json()
-
-
         }
 
         let i = 0
@@ -111,7 +107,6 @@
             let multiplier = 5 - wordNumber
             let array = data.colour
             try {
-                console.log("Running here, ", array)
                 for (let index = 0; index < array.length; index++) {
                     const element = array[index];
                     if (element == "green") {
@@ -124,8 +119,6 @@
             } catch (error) {
                 console.log(error)
             }
-
-            console.log("The score is: " + score)
         }
 
         let makeGuess = () => {
@@ -137,27 +130,25 @@
                         message.classList.remove('text-danger')
                         message.innerHTML = ''
                         generateColouredGuess(guess, data.colour)
-                        console.log(data)
+
+                        calculateScore(data, i)
+                        updateKeyboardCcolour(guess, data.colour)
+                        let f = 0
+
+                        data.colour.forEach(function (element) {
+                            if (element != 'green') f = 1
+                        })
+
+                        if (f === 0) {
+                            gameEnd(2)
+                        }
+
+                        i += 1
+                        if (i === 6) { const y = document.getElementById('submit Guess'); y.click() }
                     } else {
                         message.classList.add('text-danger')
                         message.innerHTML = data.message
                     }
-
-                    calculateScore(data, i)
-                    // updateKeyboardColour(guess, data.colour) // this has to come after we generate the colour guesses
-                    updateKeyboardCcolour(guess, data.colour)
-                    let f = 0
-
-                    data.colour.forEach(function (element) {
-                        if (element != 'green') f = 1
-                    })
-
-                    if (f === 0) {
-                        gameEnd(2)
-                    }
-
-                    i += 1
-                    if (i === 6) { const y = document.getElementById('submit Guess'); y.click() }
                 })
                 .catch(error => {
                     message.classList.add('text-danger')
@@ -175,7 +166,18 @@
 
         let gameEnd = function (i) {
             if (i === 1) {   //When player tuns out of guesses
-                fetch('/api/correct')
+                let headers = new Headers();
+                headers.append("Content-Type", "application/json");
+                let raw = JSON.stringify({
+                    "game": game
+                });
+                let requestOptions = {
+                    method: 'POST',
+                    headers: headers,
+                    body: raw,
+                    redirect: 'follow'
+                };
+                fetch('api/correct', requestOptions)
                     .then(function (response) {
                         if (response.ok) { return response.json() } // Return the response parse as JSON
                         else { throw 'Failed to load correct word: response code invalid!' }
@@ -183,7 +185,7 @@
 
                     .then(function (data) {
                         const x = document.getElementById('Game Result')
-                        x.innerHTML = `The correct word was ${data}. You achieved a score of: ` + score
+                        x.innerHTML = `The correct word was ${data.word}. You achieved a score of: ` + score
                     })
 
                     .catch(function (e) { // Process error for request
@@ -214,24 +216,6 @@
             }
         }
 
-        /*
-        <div class="pb-1">
-            <div class="card card-body  letter-block bg-green">
-                <h1>C</h1>
-            </div>
-            <div class="card card-body letter-block bg-yellow">
-                <h1>A</h1>
-            </div>
-            <div class="card card-body letter-block bg-gray">
-                <h1>A</h1>
-            </div>
-            <div class="card card-body letter-block bg-gray">
-                <h1>A</h1>
-            </div>
-            <div class="card card-body letter-block bg-gray">
-                <h1>A</h1>
-        </div>
-        */
         let generateColouredGuess = (guess, colours) => {
             let out = document.createElement("div")
             out.classList.add(['pb-1'])
@@ -240,7 +224,6 @@
 
             for (let i = 0; i < colours.length; i++) {
                 let block = document.createElement("div")
-                // console.log(out)
                 block.classList.add('card', 'card-body', 'letter-block', 'bg-' + colours[i])
                 let letter = document.createElement("h1")
                 letter.innerHTML = guess.charAt(i)
@@ -253,26 +236,36 @@
             document.getElementById('guess').value = ''
         }
 
-        /* let updateKeyboardColour = (guess,colours) => {
-           // console.log("data,color is as follows: ", colours)
-           // console.log("the guess is as follows: ", guess)
-            for(let i = 0; i < colours.length; i ++)
-            {
-                letterID = "button" +  guess.charAt(i).toUpperCase()
-                let btn = document.getElementById(letterID)
-                btn.classList.add('bg-' + colours[i])
+        let newGame = () => {
+            fetch('api/game')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 'ok') {
+                        game = data.game
+                    }
+                    else {
 
-            }
-        } */
+                        console.log('Cannot create new game')
+                    }
+                })
 
+        }
+
+        let gameIsValid = () => {
+            return i <= 5
+        }
 
         window.onload = () => {
             document.getElementById('guess').addEventListener('keypress', function (event) {
                 if (event.key === 'Enter') {
-                    makeGuess()
+
+                    if (gameIsValid()) makeGuess()
                     document.getElementById('guess').focus()
                 }
             })
+
+            // request a new game ID 
+            newGame()
         }
 
 
@@ -298,29 +291,16 @@
 
     <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group" role="group" aria-label="First group">
-            <<<<<<< HEAD <button type="button" id="buttonA" class="btn btn-secondary" onclick="functionToExecute('a')">
-                a</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('s')">s</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('d')">d</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('f')">f</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('g')">g</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('h')">h</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('j')">j</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('k')">k</button>
-                <button type="button" class="btn btn-secondary" onclick="functionToExecute('l')">l</button>
-                <button type="button" class="btn btn-secondary" onclick="removeLetter()">&lt-</button>
-                =======
-                <button type="button" id="buttonA" class="btn" onclick="functionToExecute('a')">a</button>
-                <button type="button" id="buttonS" class="btn " onclick="functionToExecute('s')">s</button>
-                <button type="button" id="buttonD" class="btn " onclick="functionToExecute('d')">d</button>
-                <button type="button" id="buttonF" class="btn " onclick="functionToExecute('f')">f</button>
-                <button type="button" id="buttonG" class="btn" onclick="functionToExecute('g')">g</button>
-                <button type="button" id="buttonH" class="btn" onclick="functionToExecute('h')">h</button>
-                <button type="button" id="buttonJ" class="btn" onclick="functionToExecute('j')">j</button>
-                <button type="button" id="buttonK" class="btn" onclick="functionToExecute('k')">k</button>
-                <button type="button" id="buttonL" class="btn" onclick="functionToExecute('l')">l</button>
-                <button type="button" class="btn" onclick="removeLetter()"> delete </button>
-                >>>>>>> main
+            <button type="button" id="buttonA" class="btn" onclick="functionToExecute('a')">a</button>
+            <button type="button" id="buttonS" class="btn " onclick="functionToExecute('s')">s</button>
+            <button type="button" id="buttonD" class="btn " onclick="functionToExecute('d')">d</button>
+            <button type="button" id="buttonF" class="btn " onclick="functionToExecute('f')">f</button>
+            <button type="button" id="buttonG" class="btn" onclick="functionToExecute('g')">g</button>
+            <button type="button" id="buttonH" class="btn" onclick="functionToExecute('h')">h</button>
+            <button type="button" id="buttonJ" class="btn" onclick="functionToExecute('j')">j</button>
+            <button type="button" id="buttonK" class="btn" onclick="functionToExecute('k')">k</button>
+            <button type="button" id="buttonL" class="btn" onclick="functionToExecute('l')">l</button>
+            <button type="button" class="btn" onclick="removeLetter()"> delete </button>
         </div>
     </div>
 
@@ -339,25 +319,6 @@
 
 
     <script src="/cdn/scripts/keyboardLogger.js"></script>
-
-    <!-- <script>
-        const functionToExecute = function (letter) {
-            console.log(letter)
-
-            if (letter.length > 1) {
-                console.log('error button length is too long ')
-                letter = letter.substring(0, 1) // Take the first element
-            }
-
-            const message = document.getElementById('guess')
-
-            message.value += letter
-
-            return letter
-        }
-    </script> -->
-
-
 </body>
 
 </html>

@@ -2,20 +2,67 @@
 
 const game = require('./game.controllers')
 
-const colourCodeGuess = (req, res) => {
-  // load request parameters from JSON body
+const revealWord = async (req, res) => {
   const post = req.body
-  const correctWord = game.getCorrectWord()
+  if (!post) {
+    res.status(400).send({
+      message: "Invalid Request Body",
+      code: 'error'
+    })
+    res.end()
+    return
+  }
 
-  if (!post || !post.guess || post.guess.length !== 5) {
+  let playerGame
+  if (!(playerGame = await game.getGame(post.game))) {
+    res.status(400).send({
+      message: "The 'game' parameter is invalid.",
+      code: 'error'
+    })
+    return
+  }
+
+  res.json({
+    word: playerGame.word.toUpperCase()
+  })
+
+}
+
+
+const colourCodeGuess = async (req, res) => {
+  // load request parameters from JSON body
+   const post = req.body
+  if(!post){
+    res.status(400).send({
+      message: "Invalid Request Body",
+      code: 'error'
+    })
+    res.end()
+    return
+  }
+
+  let playerGame
+
+  if (!post.game ||!(playerGame = await game.getGame(post.game))) {
+    res.status(400).send({
+      message: "The 'game' parameter is invalid.",
+      code: 'error'
+    })
+    return
+  }
+
+  const correctWord = playerGame.word.toUpperCase()
+
+  if (!post.guess || post.guess.length !== 5) {
     res.status(400).send({
       message: "The 'guess' parameter is invalid.",
       code: 'error'
     })
     return
-  } else if (!game.wordIsValid(post.guess)) {
+  }
+  if (! await game.wordIsValid(post.guess)) {
     res.status(400).send({
-      message: "The 'guess' parameter was not found in the dictionary.",
+      message: "The guess was not found in the dictionary.",
       code: 'error'
     })
     return
@@ -23,7 +70,7 @@ const colourCodeGuess = (req, res) => {
 
   const guess = post.guess.toUpperCase()
 
-  const out = { code: 'ok', colour: [] } // output array
+  const out = { code: 'ok', colour: [], guess: guess } // output array
 
   for (let i = 0; i < post.guess.length; i++) {
     const letter = guess.charAt(i)
@@ -38,8 +85,7 @@ const colourCodeGuess = (req, res) => {
     }
   }
 
-  res.setHeader('Content-Type', 'application/json')
-  res.send(out)
+  res.json(out)
 }
 
-module.exports = { colourCodeGuess }
+module.exports = { colourCodeGuess, revealWord }
