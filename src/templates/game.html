@@ -277,7 +277,7 @@
             guess = guess.toUpperCase()
 
             for (let character = 0; character < colours.length; character++) {
-                document.getElementById('blockrow' + guesses + 'character' + character).classList.add('bg-' + colours[character])
+                document.getElementById('blockrow' + guesses + 'character' + character).classList.add('bg-' + colours[character], 'm-1')
                 document.getElementById('row' + guesses + 'character' + character).innerHTML = guess.charAt(character)
             }
 
@@ -305,7 +305,7 @@
                     line.classList.add(['pb-1'])
                     for (let character = 0; character < 5; character++) {
                         let block = document.createElement("div")
-                        block.classList.add('card', 'card-body', 'letter-block')
+                        block.classList.add('card', 'card-body', 'letter-block', 'm-1')
                         let letter = document.createElement("h1")
                         letter.id = 'row' + row + 'character' + character
                         block.id = 'blockrow' + row + 'character' + character
