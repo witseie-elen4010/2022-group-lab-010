@@ -79,6 +79,12 @@
 
 <body>
 
+    <div class="container-fluid">
+        <div class="timer">Time remaining: <span id="timer"></span>
+            <button type="button" id="pauseTimer" class="pausebutton" onclick="pauseTimer()">Pause</button>
+        </div>
+    </div>
+
     <div>
         <p id="response"></p>
         <div class="input-group">
@@ -186,7 +192,7 @@
                         }
 
                         i += 1
-                        if (i === 6) { const y = document.getElementById('submit Guess'); y.click() }
+                        if (i === 6) { const y = document.getElementById('buttonEnter'); y.click() }
                     } else {
                         message.classList.add('text-danger')
                         message.innerHTML = data.message
@@ -235,22 +241,18 @@
                         alert(e) // Displays a browser alert with the error message.
                     })
 
-                const y = document.getElementById('submit Guess')
-                y.setAttribute('class', 'btn btn-primary')
+                const y = document.getElementById('buttonEnter')
                 y.setAttribute('data-bs-toggle', 'modal')
                 y.setAttribute('data-bs-target', '#staticBackdrop')
-                y.innerHTML = 'Last Guess'
 
             }
 
             if (i === 2) {   //When player guesses word correctly
                 const x = document.getElementById('Game Result')
                 x.innerHTML = `You Guessed the word correctly. You achieved a score of: ` + score
-                const y = document.getElementById('submit Guess')
-                y.setAttribute('class', 'btn btn-primary')
+                const y = document.getElementById('buttonEnter')
                 y.setAttribute('data-bs-toggle', 'modal')
                 y.setAttribute('data-bs-target', '#staticBackdrop')
-                y.innerHTML = 'complete'
                 y.click()
             }
 
@@ -353,10 +355,10 @@
             if ((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)) {
                 functionToExecute(String.fromCharCode(charCode))
             }
-            else if(charCode === 13) {
+            else if (charCode === 13) {
                 makeGuess()
             }
-            else if(charCode === 8){
+            else if (charCode === 8) {
                 removeLetter()
             }
         }
@@ -418,7 +420,8 @@
 
         <div class="btn-toolbar mb-1 justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group" role="group" aria-label="First group">
-                <button type="button" class="btn btn-secondary rounded me-1" onclick="makeGuess()">&#8594;</button>
+                <button type="button" id="buttonEnter" class="btn btn-secondary rounded me-1"
+                    onclick="makeGuess()">&#8594;</button>
                 <button type="button" id="buttonA" class="btn btn-secondary rounded me-1"
                     onclick="functionToExecute('z')">Z</button>
                 <button type="button" id="buttonX" class="btn btn-secondary rounded me-1 "
@@ -437,16 +440,7 @@
             </div>
         </div>
     </div>
-    <!--  // <div class="container"> -->
-    <div class="row">
-        <div class="col-sm">
-            <div class="timer">Time remaining: <span id="timer"></span>
-                <button type="button" id="pauseTimer" class="pausebutton" onclick="pauseTimer()">Pause</button>
-            </div>
-        </div>
 
-    </div>
-    <!--  </div> -->
     <script src="/cdn/scripts/keyboardLogger.js"></script>
     <script src="/cdn/scripts/timer.js"></script>
 </body>
