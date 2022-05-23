@@ -12,6 +12,7 @@ const connect = () => {
     const mongoDB = 'mongodb+srv://' +
             process.env.DB_USER + ':' + process.env.DB_PASSWORD + '@' +
             process.env.DB_HOST + '/' + process.env.DB_NAME
+    console.log(mongoDB)
     mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
   }
 
