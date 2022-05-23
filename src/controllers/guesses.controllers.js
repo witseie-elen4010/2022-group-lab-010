@@ -43,7 +43,7 @@ const colourCodeGuess = async (req, res) => {
 
   if (!post.game || !(playerGame = await game.getGame(post.game))) {
     res.status(400).send({
-      message: "The 'game' parameter is invalid.",
+      message: 'Error: Invalid Game',
       code: 'error'
     })
     return
@@ -53,14 +53,14 @@ const colourCodeGuess = async (req, res) => {
 
   if (!post.guess || post.guess.length !== 5) {
     res.status(400).send({
-      message: "The 'guess' parameter is invalid.",
+      message: 'Invalid Guess',
       code: 'error'
     })
     return
   }
   if (!await game.wordIsValid(post.guess)) {
     res.status(400).send({
-      message: 'The guess was not found in the dictionary.',
+      message: post.guess + ' is not a valid word',
       code: 'error'
     })
     return
