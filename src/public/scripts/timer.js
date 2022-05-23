@@ -77,8 +77,12 @@ function checkSecond (sec) {
 const pauseTimer = function () {
   if (pause === false) {
     pause = true
+    document.getElementById('pauseTimer').classList.remove('btn-light')
+    document.getElementById('pauseTimer').classList.add('btn-dark')
   } else {
     pause = false
+    document.getElementById('pauseTimer').classList.remove('btn-dark')
+    document.getElementById('pauseTimer').classList.add('btn-light')
   }
   // console.log(pause)
   startTimer()
