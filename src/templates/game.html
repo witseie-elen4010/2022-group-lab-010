@@ -24,13 +24,13 @@
         }
 
         .bg-green {
-            background-color: rgb(31, 105, 31);
+            background-color: #198754;
             color: white;
 
         }
 
         .bg-gray {
-            background-color: rgb(55, 55, 55);
+            background-color: #212529;
             color: white;
 
         }
@@ -79,20 +79,15 @@
 
 <body>
 
-    <div class="container-fluid text-center">
-        <div class="row" id="boards">
-
-        </div>
-    </div>
-
     <div>
         <p id="response"></p>
-        <div class="input-group mb-3">
-            <input id="guess" type="text" class="form-control" placeholder="Guess" autofocus>
-            <div class="input-group-append" id="Guess Button Location">
+        <div class="input-group">
+            <input id="guess" type="hidden" class="form-control" placeholder="Guess" autofocus
+                oninput="syncRow(document.getElementById('guess').value)">
+            <!-- <div class="input-group-append" id="Guess Button Location">
                 <button class="btn btn-outline-secondary" type="button" onclick="makeGuess()"
                     id="submit Guess">Guess</button>
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -114,6 +109,14 @@
             </div>
         </div>
     </div>
+
+    <div class="container-fluid text-center">
+        <div class="row" id="boards">
+
+        </div>
+    </div>
+
+
 
 
 
@@ -308,7 +311,7 @@
         let initBoards = function (count) {
             for (let i = 0; i < count; i++) {
                 let board = document.createElement("div")
-                board.classList.add('col-xl', 'pb-5')
+                board.classList.add('col-xl', 'pb-2')
                 board.id = 'board' + i
                 for (let row = 0; row < 6; row++) {
                     let line = document.createElement("div")
@@ -331,6 +334,33 @@
             }
         }
 
+        let syncRow = function (guess) {
+            if (guess.length > 5) {
+                guess = guess.substring(0, 5)
+                document.getElementById('guess').value = guess
+            }
+            for (let character = 0; character < guess.length; character++) {
+                document.getElementById('row' + guesses + 'character' + character).innerHTML = guess.charAt(character).toUpperCase()
+            }
+            for (let character = guess.length; character < 5; character++) {
+                document.getElementById('row' + guesses + 'character' + character).innerHTML = ''
+            }
+        }
+
+        document.onkeypress = function (e) {
+            e = e || window.event;
+            var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+            if ((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)) {
+                functionToExecute(String.fromCharCode(charCode))
+            }
+            else if(charCode === 13) {
+                makeGuess()
+            }
+            else if(charCode === 8){
+                removeLetter()
+            }
+        }
+
 
     </script>
 
@@ -339,7 +369,7 @@
 
         <div class="btn-toolbar mb-1 justify-content-center" role="toolbar">
             <div class="btn-group" role="group" aria-label="First group">
-                <button type="button" id="buttonQ" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonQ" class="btn btn-secondary rounded me-1 keyboard-block"
                     onclick="functionToExecute('q')">Q</button>
                 <button type="button" id="buttonW" class="btn btn-secondary rounded me-1"
                     onclick="functionToExecute('w')">W</button>

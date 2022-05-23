@@ -10,7 +10,12 @@ const functionToExecute = function (letter) {
 
   const message = document.getElementById('guess')
 
-  message.value += letter
+  if (message.value.length < 5) {
+    message.value += letter
+  }
+
+  const event = new Event('input')
+  message.dispatchEvent(event)
 
   return letter
 }
@@ -19,6 +24,8 @@ const removeLetter = function () {
   const message = document.getElementById('guess')
   // console.log('the guess words iss ', message.value)
   message.value = message.value.substring(0, message.value.length - 1)
+  const event = new Event('input')
+  message.dispatchEvent(event)
   return message
 }
 
