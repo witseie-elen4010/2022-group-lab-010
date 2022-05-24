@@ -30,15 +30,33 @@
 
         }
 
+        .btn.bg-green:hover {
+            color: #fff;
+            background-color: #157347;
+            border-color: #146c43;
+        }
+
         .bg-gray {
             background-color: #212529;
             color: white;
 
         }
 
+        .btn.bg-gray {
+            color: #fff;
+            background-color: #1c1f23;
+            border-color: #1a1e21;
+        }
+
         .bg-yellow {
             background-color: #ffc107;
             color: black;
+        }
+
+        .btn.bg-yellow:hover {
+            color: #000;
+            background-color: #ffca2c;
+            border-color: #ffc720;
         }
 
         .timer {
@@ -88,7 +106,8 @@
     </div>
 
     <div class="d-flex justify-content-center mt-1">
-        <p class="fw-bold" id="response"></p>
+        <!-- Use non-break space to ensure element takes up space -->
+        <p class="fw-bold" id="response">&nbsp;</p>
     </div>
 
     <div class="input-group">
@@ -244,7 +263,7 @@
                 .then(data => {
                     if (data.code === "ok") {
                         message.classList.remove('text-danger')
-                        message.innerHTML = ''
+                        message.innerHTML = '&nbsp;' // to prevent height changes
                         generateColouredGuess(guess, data.colour)
 
                         calculateScore(data, i)
@@ -365,20 +384,13 @@
         }
 
         window.onload = () => {
-            document.getElementById('guess').addEventListener('keypress', function (event) {
-                if (event.key === 'Enter') {
-
-                    if (gameIsValid()) makeGuess()
-                    document.getElementById('guess').focus()
-                }
-            })
-            initBoards(1)
+            initBoards(1, 'boards')
 
             // request a new game ID 
             newGame()
         }
 
-        let initBoards = function (count) {
+        let initBoards = function (count, elementToAttach) {
             for (let i = 0; i < count; i++) {
                 let board = document.createElement("div")
                 board.classList.add('col-xl', 'pb-2')
@@ -400,7 +412,7 @@
                     }
                     board.appendChild(line)
                 }
-                document.getElementById("boards").appendChild(board)
+                document.getElementById(elementToAttach).appendChild(board)
             }
         }
 
@@ -417,16 +429,17 @@
             }
         }
 
-        document.onkeypress = function (e) {
+        document.onkeydown = function (e) {
             e = e || window.event;
             var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
             if ((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)) {
                 functionToExecute(String.fromCharCode(charCode))
             }
-            else if (charCode === 13) {
+            else if (charCode === 13) { // check for Enter key
+                document.activeElement.blur() // deselect any buttons
                 makeGuess()
             }
-            else if (charCode === 8) {
+            else if (charCode === 8 || charCode === 46) { // check for Backspace or Delete
                 removeLetter()
             }
         }
