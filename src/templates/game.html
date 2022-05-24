@@ -8,6 +8,7 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="/cdn/stylesheets/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
 
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
@@ -17,27 +18,45 @@
 
     <style>
         .letter-block {
-            width: min(15vw, 100px);
-            height: min(15vw, 100px);
+            width: min(15vw, 75px);
+            height: min(15vw, 75px);
             display: inline-block;
             vertical-align: middle;
         }
 
         .bg-green {
-            background-color: rgb(31, 105, 31);
+            background-color: #198754;
             color: white;
 
+        }
+
+        .btn.bg-green:hover {
+            color: #fff;
+            background-color: #157347;
+            border-color: #146c43;
         }
 
         .bg-gray {
-            background-color: rgb(55, 55, 55);
+            background-color: #212529;
             color: white;
 
         }
 
+        .btn.bg-gray {
+            color: #fff;
+            background-color: #1c1f23;
+            border-color: #1a1e21;
+        }
+
         .bg-yellow {
-            background-color: rgb(227, 227, 16);
-            color: white;
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .btn.bg-yellow:hover {
+            color: #000;
+            background-color: #ffca2c;
+            border-color: #ffc720;
         }
 
         .timer {
@@ -79,21 +98,21 @@
 
 <body>
 
-    <div class="container-fluid text-center">
-        <div class="row" id="boards">
-
+    <div class="d-flex justify-content-center mt-1">
+        <div>
+            <button type="button" id="pauseTimer" class="btn btn-light mt-1" onclick="pauseTimer()"><i id="clockIcon"
+                    class="bi bi-clock"> </i><span id="timer"></span></button>
         </div>
     </div>
 
-    <div>
-        <p id="response"></p>
-        <div class="input-group mb-3">
-            <input id="guess" type="text" class="form-control" placeholder="Guess" autofocus>
-            <div class="input-group-append" id="Guess Button Location">
-                <button class="btn btn-outline-secondary" type="button" onclick="makeGuess()"
-                    id="submit Guess">Guess</button>
-            </div>
-        </div>
+    <div class="d-flex justify-content-center mt-1">
+        <!-- Use non-break space to ensure element takes up space -->
+        <p class="fw-bold" id="response">&nbsp;</p>
+    </div>
+
+    <div class="input-group">
+        <input id="guess" type="hidden" class="form-control" placeholder="Guess" autofocus
+            oninput="syncRow(document.getElementById('guess').value)">
     </div>
 
     <!-- Modal -->
@@ -115,7 +134,84 @@
         </div>
     </div>
 
+    <div class="container-fluid text-center">
+        <div class="row" id="boards">
+        </div>
+    </div>
 
+    <div class="container-sm">
+
+        <div class="btn-toolbar mb-1 justify-content-center" role="toolbar">
+            <div class="btn-group" role="group" aria-label="First group">
+                <button type="button" id="buttonQ" class="btn btn-secondary rounded me-1 keyboard-block"
+                    onclick="functionToExecute('q')">Q</button>
+                <button type="button" id="buttonW" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('w')">W</button>
+                <button type="button" id="buttonE" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('e')">E</button>
+                <button type="button" id="buttonR" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('r')">R</button>
+                <button type="button" id="buttonT" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('t')">T</button>
+                <button type="button" id="buttonY" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('y')">Y</button>
+                <button type="button" id="buttonU" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('u')">U</button>
+                <button type="button" id="buttonI" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('i')">I</button>
+                <button type="button" id="buttonO" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('o')">O</button>
+                <button type="button" id="buttonP" class="btn btn-secondary rounded"
+                    onclick="functionToExecute('p')">P</button>
+            </div>
+        </div>
+
+        <div class="btn-toolbar mb-1 justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group" role="group" aria-label="First group">
+                <button type="button" id="buttonA" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('a')">A</button>
+                <button type="button" id="buttonS" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('s')">S</button>
+                <button type="button" id="buttonD" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('d')">D</button>
+                <button type="button" id="buttonF" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('f')">F</button>
+                <button type="button" id="buttonG" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('g')">G</button>
+                <button type="button" id="buttonH" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('h')">H</button>
+                <button type="button" id="buttonJ" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('j')">J</button>
+                <button type="button" id="buttonK" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('k')">K</button>
+                <button type="button" id="buttonL" class="btn btn-secondary rounded"
+                    onclick="functionToExecute('l')">L</button>
+            </div>
+        </div>
+
+        <div class="btn-toolbar mb-1 justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group" role="group" aria-label="First group">
+                <button type="button" id="buttonEnter" class="btn btn-secondary rounded me-1" onclick="makeGuess()"><i
+                        class="bi bi-arrow-return-left"></i></button>
+                <button type="button" id="buttonA" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('z')">Z</button>
+                <button type="button" id="buttonX" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('x')">X</button>
+                <button type="button" id="buttonC" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('c')">C</button>
+                <button type="button" id="buttonV" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('v')">V</button>
+                <button type="button" id="buttonB" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('b')">B</button>
+                <button type="button" id="buttonN" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('n')">N</button>
+                <button type="button" id="buttonM" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('m')">M</button>
+                <button type="button" class="btn btn-secondary rounded" onclick="removeLetter()"><i
+                        class="bi bi-backspace"></i></button>
+            </div>
+        </div>
+    </div>
 
     <script>
         let game = 0;
@@ -167,7 +263,7 @@
                 .then(data => {
                     if (data.code === "ok") {
                         message.classList.remove('text-danger')
-                        message.innerHTML = ''
+                        message.innerHTML = '&nbsp;' // to prevent height changes
                         generateColouredGuess(guess, data.colour)
 
                         calculateScore(data, i)
@@ -183,7 +279,7 @@
                         }
 
                         i += 1
-                        if (i === 6) { const y = document.getElementById('submit Guess'); y.click() }
+                        if (i === 6) { const y = document.getElementById('buttonEnter'); y.click() }
                     } else {
                         message.classList.add('text-danger')
                         message.innerHTML = data.message
@@ -232,22 +328,18 @@
                         alert(e) // Displays a browser alert with the error message.
                     })
 
-                const y = document.getElementById('submit Guess')
-                y.setAttribute('class', 'btn btn-primary')
+                const y = document.getElementById('buttonEnter')
                 y.setAttribute('data-bs-toggle', 'modal')
                 y.setAttribute('data-bs-target', '#staticBackdrop')
-                y.innerHTML = 'Last Guess'
 
             }
 
             if (i === 2) {   //When player guesses word correctly
                 const x = document.getElementById('Game Result')
                 x.innerHTML = `You Guessed the word correctly. You achieved a score of: ` + score
-                const y = document.getElementById('submit Guess')
-                y.setAttribute('class', 'btn btn-primary')
+                const y = document.getElementById('buttonEnter')
                 y.setAttribute('data-bs-toggle', 'modal')
                 y.setAttribute('data-bs-target', '#staticBackdrop')
-                y.innerHTML = 'complete'
                 y.click()
             }
 
@@ -292,25 +384,18 @@
         }
 
         window.onload = () => {
-            document.getElementById('guess').addEventListener('keypress', function (event) {
-                if (event.key === 'Enter') {
-
-                    if (gameIsValid()) makeGuess()
-                    document.getElementById('guess').focus()
-                }
-            })
-            initBoards(2)
+            initBoards(1, 'boards')
 
             // request a new game ID 
             newGame()
         }
 
-        let initBoards = function (count) {
+        let initBoards = function (count, elementToAttach) {
             for (let i = 0; i < count; i++) {
                 let board = document.createElement("div")
-                board.classList.add('col-xl', 'pb-5')
+                board.classList.add('col-xl', 'pb-2')
                 board.id = 'board' + i
-                for (let row = 0; row < 5; row++) {
+                for (let row = 0; row < 6; row++) {
                     let line = document.createElement("div")
                     line.classList.add(['pb-1'])
                     for (let character = 0; character < 5; character++) {
@@ -327,68 +412,41 @@
                     }
                     board.appendChild(line)
                 }
-                document.getElementById("boards").appendChild(board)
+                document.getElementById(elementToAttach).appendChild(board)
+            }
+        }
+
+        let syncRow = function (guess) {
+            if (guess.length > 5) {
+                guess = guess.substring(0, 5)
+                document.getElementById('guess').value = guess
+            }
+            for (let character = 0; character < guess.length; character++) {
+                document.getElementById('row' + guesses + 'character' + character).innerHTML = guess.charAt(character).toUpperCase()
+            }
+            for (let character = guess.length; character < 5; character++) {
+                document.getElementById('row' + guesses + 'character' + character).innerHTML = ''
+            }
+        }
+
+        document.onkeydown = function (e) {
+            e = e || window.event;
+            var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+            if ((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)) {
+                functionToExecute(String.fromCharCode(charCode))
+            }
+            else if (charCode === 13) { // check for Enter key
+                document.activeElement.blur() // deselect any buttons
+                makeGuess()
+            }
+            else if (charCode === 8 || charCode === 46) { // check for Backspace or Delete
+                removeLetter()
             }
         }
 
 
     </script>
 
-
-    <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
-        <div class="btn-group mr-2" role="group" aria-label="First group">
-            <button type="button" id="buttonQ" class="btn" onclick="functionToExecute('q')">q</button>
-            <button type="button" id="buttonW" class="btn" onclick="functionToExecute('w')">w</button>
-            <button type="button" id="buttonE" class="btn" onclick="functionToExecute('e')">e</button>
-            <button type="button" id="buttonR" class="btn" onclick="functionToExecute('r')">r</button>
-            <button type="button" id="buttonT" class="btn" onclick="functionToExecute('t')">t</button>
-            <button type="button" id="buttonY" class="btn " onclick="functionToExecute('y')">y</button>
-            <button type="button" id="buttonU" class="btn " onclick="functionToExecute('u')">u</button>
-            <button type="button" id="buttonI" class="btn " onclick="functionToExecute('i')">i</button>
-            <button type="button" id="buttonO" class="btn " onclick="functionToExecute('o')">o</button>
-            <button type="button" id="buttonP" class="btn " onclick="functionToExecute('p')">p</button>
-        </div>
-    </div>
-
-
-    <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
-        <div class="btn-group" role="group" aria-label="First group">
-
-            <button type="button" id="buttonA" class="btn" onclick="functionToExecute('a')">a</button>
-            <button type="button" id="buttonS" class="btn " onclick="functionToExecute('s')">s</button>
-            <button type="button" id="buttonD" class="btn " onclick="functionToExecute('d')">d</button>
-            <button type="button" id="buttonF" class="btn " onclick="functionToExecute('f')">f</button>
-            <button type="button" id="buttonG" class="btn" onclick="functionToExecute('g')">g</button>
-            <button type="button" id="buttonH" class="btn" onclick="functionToExecute('h')">h</button>
-            <button type="button" id="buttonJ" class="btn" onclick="functionToExecute('j')">j</button>
-            <button type="button" id="buttonK" class="btn" onclick="functionToExecute('k')">k</button>
-            <button type="button" id="buttonL" class="btn" onclick="functionToExecute('l')">l</button>
-            <button type="button" class="btn" onclick="removeLetter()"> delete </button>
-        </div>
-    </div>
-
-    <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
-        <div class="btn-group" role="group" aria-label="First group">
-            <button type="button" id="buttonA" class="btn" onclick="functionToExecute('z')">z</button>
-            <button type="button" id="buttonX" class="btn " onclick="functionToExecute('x')">x</button>
-            <button type="button" id="buttonC" class="btn " onclick="functionToExecute('c')">c</button>
-            <button type="button" id="buttonV" class="btn" onclick="functionToExecute('v')">v</button>
-            <button type="button" id="buttonB" class="btn " onclick="functionToExecute('b')">b</button>
-            <button type="button" id="buttonN" class="btn " onclick="functionToExecute('n')">n</button>
-            <button type="button" id="buttonM" class="btn" onclick="functionToExecute('m')">m</button>
-            <button type="button" class="btn" onclick="makeGuess()">Enter</button>
-        </div>
-    </div>
-    <!--  // <div class="container"> -->
-    <div class="row">
-        <div class="col-sm">
-            <div class="timer">Time remaining: <span id="timer"></span>
-                <button type="button" id="pauseTimer" class="pausebutton" onclick="pauseTimer()">Pause</button>
-            </div>
-        </div>
-
-    </div>
-    <!--  </div> -->
     <script src="/cdn/scripts/keyboardLogger.js"></script>
     <script src="/cdn/scripts/timer.js"></script>
 </body>
