@@ -8,6 +8,7 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="/cdn/stylesheets/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
 
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
@@ -81,8 +82,8 @@
 
     <div class="d-flex justify-content-center mt-1">
         <div>
-            <button type="button" id="pauseTimer" class="btn btn-light mt-1" onclick="pauseTimer()"><span
-                    id="timer"></span></button>
+            <button type="button" id="pauseTimer" class="btn btn-light mt-1" onclick="pauseTimer()"><i id="clockIcon"
+                    class="bi bi-clock"> </i><span id="timer"></span></button>
         </div>
     </div>
 
@@ -93,10 +94,6 @@
     <div class="input-group">
         <input id="guess" type="hidden" class="form-control" placeholder="Guess" autofocus
             oninput="syncRow(document.getElementById('guess').value)">
-        <!-- <div class="input-group-append" id="Guess Button Location">
-                <button class="btn btn-outline-secondary" type="button" onclick="makeGuess()"
-                    id="submit Guess">Guess</button>
-            </div> -->
     </div>
 
     <!-- Modal -->
@@ -120,13 +117,82 @@
 
     <div class="container-fluid text-center">
         <div class="row" id="boards">
-
         </div>
     </div>
 
+    <div class="container-sm">
 
+        <div class="btn-toolbar mb-1 justify-content-center" role="toolbar">
+            <div class="btn-group" role="group" aria-label="First group">
+                <button type="button" id="buttonQ" class="btn btn-secondary rounded me-1 keyboard-block"
+                    onclick="functionToExecute('q')">Q</button>
+                <button type="button" id="buttonW" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('w')">W</button>
+                <button type="button" id="buttonE" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('e')">E</button>
+                <button type="button" id="buttonR" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('r')">R</button>
+                <button type="button" id="buttonT" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('t')">T</button>
+                <button type="button" id="buttonY" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('y')">Y</button>
+                <button type="button" id="buttonU" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('u')">U</button>
+                <button type="button" id="buttonI" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('i')">I</button>
+                <button type="button" id="buttonO" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('o')">O</button>
+                <button type="button" id="buttonP" class="btn btn-secondary rounded"
+                    onclick="functionToExecute('p')">P</button>
+            </div>
+        </div>
 
+        <div class="btn-toolbar mb-1 justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group" role="group" aria-label="First group">
+                <button type="button" id="buttonA" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('a')">A</button>
+                <button type="button" id="buttonS" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('s')">S</button>
+                <button type="button" id="buttonD" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('d')">D</button>
+                <button type="button" id="buttonF" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('f')">F</button>
+                <button type="button" id="buttonG" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('g')">G</button>
+                <button type="button" id="buttonH" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('h')">H</button>
+                <button type="button" id="buttonJ" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('j')">J</button>
+                <button type="button" id="buttonK" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('k')">K</button>
+                <button type="button" id="buttonL" class="btn btn-secondary rounded"
+                    onclick="functionToExecute('l')">L</button>
+            </div>
+        </div>
 
+        <div class="btn-toolbar mb-1 justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group" role="group" aria-label="First group">
+                <button type="button" id="buttonEnter" class="btn btn-secondary rounded me-1" onclick="makeGuess()"><i
+                        class="bi bi-arrow-return-left"></i></button>
+                <button type="button" id="buttonA" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('z')">Z</button>
+                <button type="button" id="buttonX" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('x')">X</button>
+                <button type="button" id="buttonC" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('c')">C</button>
+                <button type="button" id="buttonV" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('v')">V</button>
+                <button type="button" id="buttonB" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('b')">B</button>
+                <button type="button" id="buttonN" class="btn btn-secondary rounded me-1 "
+                    onclick="functionToExecute('n')">N</button>
+                <button type="button" id="buttonM" class="btn btn-secondary rounded me-1"
+                    onclick="functionToExecute('m')">M</button>
+                <button type="button" class="btn btn-secondary rounded" onclick="removeLetter()"><i
+                        class="bi bi-backspace"></i></button>
+            </div>
+        </div>
+    </div>
 
     <script>
         let game = 0;
@@ -367,81 +433,6 @@
 
 
     </script>
-
-    <div class="container-sm">
-
-
-        <div class="btn-toolbar mb-1 justify-content-center" role="toolbar">
-            <div class="btn-group" role="group" aria-label="First group">
-                <button type="button" id="buttonQ" class="btn btn-secondary rounded me-1 keyboard-block"
-                    onclick="functionToExecute('q')">Q</button>
-                <button type="button" id="buttonW" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('w')">W</button>
-                <button type="button" id="buttonE" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('e')">E</button>
-                <button type="button" id="buttonR" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('r')">R</button>
-                <button type="button" id="buttonT" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('t')">T</button>
-                <button type="button" id="buttonY" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('y')">Y</button>
-                <button type="button" id="buttonU" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('u')">U</button>
-                <button type="button" id="buttonI" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('i')">I</button>
-                <button type="button" id="buttonO" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('o')">O</button>
-                <button type="button" id="buttonP" class="btn btn-secondary rounded"
-                    onclick="functionToExecute('p')">P</button>
-            </div>
-        </div>
-
-
-        <div class="btn-toolbar mb-1 justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group" role="group" aria-label="First group">
-                <button type="button" id="buttonA" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('a')">A</button>
-                <button type="button" id="buttonS" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('s')">S</button>
-                <button type="button" id="buttonD" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('d')">D</button>
-                <button type="button" id="buttonF" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('f')">F</button>
-                <button type="button" id="buttonG" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('g')">G</button>
-                <button type="button" id="buttonH" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('h')">H</button>
-                <button type="button" id="buttonJ" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('j')">J</button>
-                <button type="button" id="buttonK" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('k')">K</button>
-                <button type="button" id="buttonL" class="btn btn-secondary rounded"
-                    onclick="functionToExecute('l')">L</button>
-            </div>
-        </div>
-
-        <div class="btn-toolbar mb-1 justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
-            <div class="btn-group" role="group" aria-label="First group">
-                <button type="button" id="buttonEnter" class="btn btn-secondary rounded me-1"
-                    onclick="makeGuess()">&#8594;</button>
-                <button type="button" id="buttonA" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('z')">Z</button>
-                <button type="button" id="buttonX" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('x')">X</button>
-                <button type="button" id="buttonC" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('c')">C</button>
-                <button type="button" id="buttonV" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('v')">V</button>
-                <button type="button" id="buttonB" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('b')">B</button>
-                <button type="button" id="buttonN" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('n')">N</button>
-                <button type="button" id="buttonM" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('m')">M</button>
-                <button type="button" class="btn btn-secondary rounded" onclick="removeLetter()"> &#60;- </button>
-            </div>
-        </div>
-    </div>
 
     <script src="/cdn/scripts/keyboardLogger.js"></script>
     <script src="/cdn/scripts/timer.js"></script>
