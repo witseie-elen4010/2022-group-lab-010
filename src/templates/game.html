@@ -111,8 +111,8 @@
     </div>
 
     <div class="input-group">
-        <input id="guess" type="hidden" class="form-control" placeholder="Guess" autofocus
-            oninput="syncRow(document.getElementById('guess').value)">
+        <input id="guess" type="hidden" class="form-control"
+            oninput="syncRowToInput(document.getElementById('guess').value, guessesMade)">
     </div>
 
     <!-- Modal -->
@@ -144,69 +144,67 @@
         <div class="btn-toolbar mb-1 justify-content-center" role="toolbar">
             <div class="btn-group" role="group" aria-label="First group">
                 <button type="button" id="buttonQ" class="btn btn-secondary rounded me-1 keyboard-block"
-                    onclick="functionToExecute('q')">Q</button>
+                    onclick="addLetter('q')">Q</button>
                 <button type="button" id="buttonW" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('w')">W</button>
+                    onclick="addLetter('w')">W</button>
                 <button type="button" id="buttonE" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('e')">E</button>
+                    onclick="addLetter('e')">E</button>
                 <button type="button" id="buttonR" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('r')">R</button>
+                    onclick="addLetter('r')">R</button>
                 <button type="button" id="buttonT" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('t')">T</button>
+                    onclick="addLetter('t')">T</button>
                 <button type="button" id="buttonY" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('y')">Y</button>
+                    onclick="addLetter('y')">Y</button>
                 <button type="button" id="buttonU" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('u')">U</button>
+                    onclick="addLetter('u')">U</button>
                 <button type="button" id="buttonI" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('i')">I</button>
+                    onclick="addLetter('i')">I</button>
                 <button type="button" id="buttonO" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('o')">O</button>
-                <button type="button" id="buttonP" class="btn btn-secondary rounded"
-                    onclick="functionToExecute('p')">P</button>
+                    onclick="addLetter('o')">O</button>
+                <button type="button" id="buttonP" class="btn btn-secondary rounded" onclick="addLetter('p')">P</button>
             </div>
         </div>
 
         <div class="btn-toolbar mb-1 justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group" role="group" aria-label="First group">
                 <button type="button" id="buttonA" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('a')">A</button>
+                    onclick="addLetter('a')">A</button>
                 <button type="button" id="buttonS" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('s')">S</button>
+                    onclick="addLetter('s')">S</button>
                 <button type="button" id="buttonD" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('d')">D</button>
+                    onclick="addLetter('d')">D</button>
                 <button type="button" id="buttonF" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('f')">F</button>
+                    onclick="addLetter('f')">F</button>
                 <button type="button" id="buttonG" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('g')">G</button>
+                    onclick="addLetter('g')">G</button>
                 <button type="button" id="buttonH" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('h')">H</button>
+                    onclick="addLetter('h')">H</button>
                 <button type="button" id="buttonJ" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('j')">J</button>
+                    onclick="addLetter('j')">J</button>
                 <button type="button" id="buttonK" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('k')">K</button>
-                <button type="button" id="buttonL" class="btn btn-secondary rounded"
-                    onclick="functionToExecute('l')">L</button>
+                    onclick="addLetter('k')">K</button>
+                <button type="button" id="buttonL" class="btn btn-secondary rounded" onclick="addLetter('l')">L</button>
             </div>
         </div>
 
         <div class="btn-toolbar mb-1 justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group" role="group" aria-label="First group">
-                <button type="button" id="buttonEnter" class="btn btn-secondary rounded me-1" onclick="makeGuess()"><i
-                        class="bi bi-arrow-return-left"></i></button>
+                <button type="button" id="buttonEnter" class="btn btn-secondary rounded me-1"
+                    onclick="if(gameIsValid()){makeGuess()}"><i class="bi bi-arrow-return-left"></i></button>
                 <button type="button" id="buttonA" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('z')">Z</button>
+                    onclick="addLetter('z')">Z</button>
                 <button type="button" id="buttonX" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('x')">X</button>
+                    onclick="addLetter('x')">X</button>
                 <button type="button" id="buttonC" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('c')">C</button>
+                    onclick="addLetter('c')">C</button>
                 <button type="button" id="buttonV" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('v')">V</button>
+                    onclick="addLetter('v')">V</button>
                 <button type="button" id="buttonB" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('b')">B</button>
+                    onclick="addLetter('b')">B</button>
                 <button type="button" id="buttonN" class="btn btn-secondary rounded me-1 "
-                    onclick="functionToExecute('n')">N</button>
+                    onclick="addLetter('n')">N</button>
                 <button type="button" id="buttonM" class="btn btn-secondary rounded me-1"
-                    onclick="functionToExecute('m')">M</button>
+                    onclick="addLetter('m')">M</button>
                 <button type="button" class="btn btn-secondary rounded" onclick="removeLetter()"><i
                         class="bi bi-backspace"></i></button>
             </div>
@@ -215,6 +213,9 @@
 
     <script>
         let game = 0;
+        let guessesMade = 0
+        let i = 0
+        let score = 0;
 
         let sendGuess = async (guess) => {
             let headers = new Headers();
@@ -235,9 +236,7 @@
             return response.json()
         }
 
-        guesses = 0
-        let i = 0
-        let score = 0;
+
         let calculateScore = (data, wordNumber) => {
             let multiplier = 5 - wordNumber
             let array = data.colour
@@ -263,8 +262,9 @@
                 .then(data => {
                     if (data.code === "ok") {
                         message.classList.remove('text-danger')
-                        message.innerHTML = '&nbsp;' // to prevent height changes
-                        generateColouredGuess(guess, data.colour)
+                        message.innerHTML = ''
+                        colorBoardToGuess(guess, data.colour, guessesMade)
+                        guessesMade++
 
                         calculateScore(data, i)
                         updateKeyboardColour(guess, data.colour)
@@ -349,21 +349,6 @@
         }
         // export {gameEnd}
 
-        let generateColouredGuess = (guess, colours) => {
-            let out = document.createElement("div")
-            out.classList.add(['pb-1'])
-
-            guess = guess.toUpperCase()
-
-            for (let character = 0; character < colours.length; character++) {
-                document.getElementById('blockrow' + guesses + 'character' + character).classList.add('bg-' + colours[character], 'm-1')
-                document.getElementById('row' + guesses + 'character' + character).innerHTML = guess.charAt(character)
-            }
-
-            guesses++
-            document.getElementById('guess').value = ''
-        }
-
         let newGame = () => {
             fetch('api/game')
                 .then(response => response.json())
@@ -384,60 +369,30 @@
         }
 
         window.onload = () => {
-            initBoards(1, 'boards')
+            // document.getElementById('guess').addEventListener('keypress', function (event) {
+            //     if (event.key === 'Enter') {
+
+            //         if (gameIsValid()) makeGuess()
+            //         document.getElementById('guess').focus()
+            //     }
+            // })
+
+            initBoards(1)
 
             // request a new game ID 
             newGame()
         }
 
-        let initBoards = function (count, elementToAttach) {
-            for (let i = 0; i < count; i++) {
-                let board = document.createElement("div")
-                board.classList.add('col-xl', 'pb-2')
-                board.id = 'board' + i
-                for (let row = 0; row < 6; row++) {
-                    let line = document.createElement("div")
-                    line.classList.add(['pb-1'])
-                    for (let character = 0; character < 5; character++) {
-                        let block = document.createElement("div")
-                        block.classList.add('card', 'card-body', 'letter-block', 'm-1')
-                        let letter = document.createElement("h1")
-                        letter.id = 'row' + row + 'character' + character
-                        block.id = 'blockrow' + row + 'character' + character
-                        let letterContainer = document.createElement("div")
-                        letterContainer.classList.add('d-inline-flex', 'h-100', 'w-100', 'align-items-center', 'justify-content-center')
-                        letterContainer.appendChild(letter)
-                        block.appendChild(letterContainer)
-                        line.appendChild(block)
-                    }
-                    board.appendChild(line)
-                }
-                document.getElementById(elementToAttach).appendChild(board)
-            }
-        }
 
-        let syncRow = function (guess) {
-            if (guess.length > 5) {
-                guess = guess.substring(0, 5)
-                document.getElementById('guess').value = guess
-            }
-            for (let character = 0; character < guess.length; character++) {
-                document.getElementById('row' + guesses + 'character' + character).innerHTML = guess.charAt(character).toUpperCase()
-            }
-            for (let character = guess.length; character < 5; character++) {
-                document.getElementById('row' + guesses + 'character' + character).innerHTML = ''
-            }
-        }
 
         document.onkeydown = function (e) {
             e = e || window.event;
             var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
             if ((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)) {
-                functionToExecute(String.fromCharCode(charCode))
+                addLetter(String.fromCharCode(charCode))
             }
-            else if (charCode === 13) { // check for Enter key
-                document.activeElement.blur() // deselect any buttons
-                makeGuess()
+            else if (charCode === 13) {
+                if (gameIsValid()) { makeGuess() }
             }
             else if (charCode === 8 || charCode === 46) { // check for Backspace or Delete
                 removeLetter()
@@ -447,8 +402,9 @@
 
     </script>
 
-    <script src="/cdn/scripts/keyboardLogger.js"></script>
+    <script src="/cdn/scripts/keyboard.js"></script>
     <script src="/cdn/scripts/timer.js"></script>
+    <script src="/cdn/scripts/board.js"></script>
 </body>
 
 </html>

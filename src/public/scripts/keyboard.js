@@ -1,6 +1,8 @@
 'use strict'
 
-const functionToExecute = function (letter) {
+const addLetter = function (letter) {
+  //  console.log(letter)
+
   if (letter.length > 1) {
     letter = letter.substring(0, 1) // Take the first element
   }
@@ -56,4 +58,4 @@ const updateKeyboardColour = function (guess, colours) {
   }
 }
 
-module.exports = { functionToExecute, removeLetter, updateKeyboardColour }
+module.exports = { addLetter, removeLetter, updateKeyboardColour }
