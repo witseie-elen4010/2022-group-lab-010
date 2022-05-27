@@ -238,23 +238,6 @@
         guesses = 0
         let i = 0
         let score = 0;
-        let calculateScore = (data, wordNumber) => {
-            let multiplier = 5 - wordNumber
-            let array = data.colour
-            try {
-                for (let index = 0; index < array.length; index++) {
-                    const element = array[index];
-                    if (element == "green") {
-                        score = score + multiplier * 2
-                    }
-                    else if (element == "yellow") {
-                        score = score + multiplier
-                    }
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
 
         let makeGuess = () => {
             let guess = document.getElementById('guess').value
@@ -266,7 +249,7 @@
                         message.innerHTML = '&nbsp;' // to prevent height changes
                         generateColouredGuess(guess, data.colour)
 
-                        calculateScore(data, i)
+                        score = score + data.score
                         updateKeyboardColour(guess, data.colour)
                         let f = 0
 
