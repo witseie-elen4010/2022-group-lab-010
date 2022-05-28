@@ -31,7 +31,7 @@ const makeNewUser = async (req, res) => {
   }
   let user
   if ((user = await findUserByUsername(post.username))) {
-    res.json({ code: 'ok', message: 'Welcome back ' + user.username, status: 1 })
+    res.json({ code: 'ok', message: 'Welcome back ' + user.username, status: 1, usernamee: post.username })
   } else {
     user = await generateUser(post.username)
     if (user) {
