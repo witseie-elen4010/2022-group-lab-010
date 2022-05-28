@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="/cdn/stylesheets/bootstrap.css">
 
     <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
 
@@ -16,8 +18,8 @@
         .card-custom {
             background-color: black;
         }
-     </style>
-     
+    </style>
+
 
 
 </head>
@@ -34,9 +36,20 @@
     </div>
 
     <section class="p-5">
-        <div class="div container text-center">
+        <div class="div container text-center" >
             <p>We're so glad you're here, why don't you go watch this video to learn more about
                 <a href="https://www.youtube.com/watch?v=lv4Zg-209MY">it over here</a>
+
+            <div class="input-group mb-3">
+                <input id="name" type="text" class="form-control" placeholder="Enter your name" autofocus>
+                <div class="input-group-append" id="name button">
+                    <button class="btn btn-outline-secondary" type="button" onclick="checkName()"
+                        id="submit name">Enter</button>
+                </div>
+                
+            </div>
+            <div class="div container text-center" id = "rememberUser"></div>
+        </div>
             </p>
         </div>
     </section>
@@ -48,13 +61,13 @@
       clear btn btn-light
      -->
 
-     <!-- Game Modes -->
-     <section class="p-10">
-         <div class="container">
-             <div class="row text-center">
-                 <div class="col-md text-center">
-                     <div class="card-custom text-light" style=" height: 18rem;">
-                         <section class="py-5">
+    <!-- Game Modes -->
+    <section class="p-10">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md text-center">
+                    <div class="card-custom text-light" style=" height: 18rem;">
+                        <section class="py-5">
                             <div class="card-body text-center">
                                 <div class="h1"><i class="bi bi-person"></i></div>
                                 <h4 class="card-title">
@@ -62,83 +75,133 @@
                                 </h4>
                                 <p class="card-text">Click the button to play single player wordle</p>
                                 <div class="container text-center">
-                                   <a href="game" class="btn btn-primary" role="button">Launch Game!</a>
-                               </div>
+                                    <a href="game" class="btn btn-primary" role="button">Launch Game!</a>
+                                </div>
                             </div>
-                         </section>
-                     </div>
-                 </div>
-                 <div class="col-md">
-                    <div class="card-custom text-light" style=" height: 18rem;">
-                        <section class="py-5">
-                           <div class="card-body text-center">
-                               <div class="h1"><i class="bi bi-people"></i></div>
-                               <h4 class="card-title">
-                                   Multiplayer
-                               </h4>
-                               <p class="card-text">Click the button to create or join a game</p>
-                               <div class="row text-center">
-                                   <div class="col-4 text-center offset-2">
-                                        <button type="button" class="btn btn-primary px-6" data-bs-toggle="modal" data-bs-target="#Generator">
-                                            Generate Code
-                                        </button>
-                                   </div>
-                                   <div class="col-4 text-center">
-                                       <button type="button" class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#Loader">
-                                            Enter Code
-                                      </button>
-                                   </div>
-                               </div>
-                               <!-- <a href="game" class="btn btn-primary" role="button">Launch Game!</a> -->
-                           </div>
                         </section>
                     </div>
                 </div>
-             </div>
-         </div>
-     </section>
+                <div class="col-md">
+                    <div class="card-custom text-light" style=" height: 18rem;">
+                        <section class="py-5">
+                            <div class="card-body text-center">
+                                <div class="h1"><i class="bi bi-people"></i></div>
+                                <h4 class="card-title">
+                                    Multiplayer
+                                </h4>
+                                <p class="card-text">Click the button to create or join a game</p>
+                                <div class="row text-center">
+                                    <div class="col-4 text-center offset-2">
+                                        <button type="button" class="btn btn-primary px-6" data-bs-toggle="modal"
+                                            data-bs-target="#Generator">
+                                            Generate Code
+                                        </button>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <button type="button" class="btn btn-primary px-4" data-bs-toggle="modal"
+                                            data-bs-target="#Loader">
+                                            Enter Code
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- <a href="game" class="btn btn-primary" role="button">Launch Game!</a> -->
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
 
     <!-- Modal -->
     <div class="modal fade" id="Generator" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Share this code with your friend</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x"></i></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Share this code with your friend</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                            class="bi bi-x"></i></button>
+                </div>
+                <div class="modal-body">
+                    [Code]
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="#" class="btn btn-primary" role="button">Join Game</a>
+                </div>
             </div>
-            <div class="modal-body">
-            [Code]
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <a href="#" class="btn btn-primary" role="button">Join Game</a>
-            </div>
-        </div>
         </div>
     </div>
 
     <!-- Modal -->
     <div class="modal fade" id="Loader" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Enter code to join game</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x"></i></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Enter code to join game</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                            class="bi bi-x"></i></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="recipient-name" placeholder="Enter Code">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <div class="input-group-append">
+                        <a href="#" class="btn btn-primary" role="button">Join Game</a>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <input type="text" class="form-control" id="recipient-name" placeholder="Enter Code">
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <div class="input-group-append">
-                <a href="#" class="btn btn-primary" role="button">Join Game</a>
-            </div>
-            </div>
-        </div>
         </div>
     </div>
-  
+
+
+
+    <script>
+        let checkName = async () => {
+            let name = document.getElementById('name').value
+            console.log(name)
+
+            let headers = new Headers();
+            headers.append("Content-Type", "application/json");
+            let raw = JSON.stringify({
+                "username": name
+            });
+            let requestOptions = {
+                method: 'POST',
+                headers: headers,
+                body: raw,
+                redirect: 'follow'
+            };
+            fetch('api/user', requestOptions)
+                .then(function (response) {
+                    if (response.ok) { return response.json() } // Return the response parse as JSON
+                    else { throw 'Failed to load correct word: response code invalid!' }
+                })
+                .then(function (data) {
+                    console.log(data )
+
+                    if(data.status === 1)
+                    {
+                        console.log('Welcome back ')
+                        document.getElementById("rememberUser").innerHTML = 
+              "Welcome back ";
+                    }
+                    else{
+                        console.log('Welcome  newcomer ')
+                        document.getElementById("rememberUser").innerHTML = 
+              "Welcome newcomer " + data.username;
+                    }
+                }
+                )
+                .catch(function (error){
+                    console.log(error)
+                })
+
+
+        }
+    </script>
 
 </body>
 

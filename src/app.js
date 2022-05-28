@@ -24,6 +24,16 @@ const db = mongoose.connection
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
+/* const mongoDBUsers = process.env.DB_URI
+mongoose.connect(mongoDBUsers, { useUnifiedTopology: true, useNewUrlParser: true })
+const dbUser = mongoose.connection
+
+dbUser.once('open', () => {
+  console.log('connected to mongo user database')
+})
+
+dbUser.on('error', console.error.bind(console, 'MongoDB connection error to User:')) */
+
 const port = process.env.PORT || 3000
 app.listen(port)
 console.log('Express server running on port', port)
