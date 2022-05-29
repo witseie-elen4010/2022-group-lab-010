@@ -1,6 +1,6 @@
 'use strict'
 const User = require('../models/user')
-
+// connected the database
 const generateUser = async (username) => {
   // Get a random word from the database
   const word = await User.count().exec()
