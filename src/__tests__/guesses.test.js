@@ -15,7 +15,11 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', router)
 
 const correctWordSpy = jest.spyOn(game, 'getGame')
-correctWordSpy.mockImplementation(() => ({ word: 'MOUSE' }))
+correctWordSpy.mockImplementation(() => ({
+  word: { word: 'MOUSE' },
+  guesses: [],
+  save: () => {}
+}))
 
 const vaildWordSpy = jest.spyOn(game, 'wordIsValid')
 vaildWordSpy.mockImplementation((word) => {
