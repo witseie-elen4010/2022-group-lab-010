@@ -31,7 +31,7 @@ afterEach(() => {
 describe('Testing user loggin in ', function () {
   it('tests /api/user testing if the function was called', async () => {
     expect(correctWordSpy).toHaveBeenCalledTimes(0)
-    const res = await request(app)
+    // const res = await request(app)
     // console.log(res.post)
     /* .post('/api/user')
       .send({ username: 'MOUSE' })
