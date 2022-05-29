@@ -88,8 +88,7 @@ const colourCodeGuess = async (req, res) => {
   for (let i = 0; i < out.colour.length; i++) {
     if (out.colour[i] === 'green') {
       score = score + 4 * (5 - turn) ** 2
-    }
-    else if (out.colour[i] === 'yellow') {
+    } else if (out.colour[i] === 'yellow') {
       score = score + (5 - turn) ** 2
     }
   }
