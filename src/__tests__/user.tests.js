@@ -5,7 +5,6 @@
 const game = require('../controllers/game.controllers')
 const user = require('../controllers/user.controllers')
 // import * as guesses from '../controllers/guesses.controllers'
-const request = require('supertest')
 const express = require('express')
 const router = require('../routes/main.routes')
 const bodyParser = require('body-parser')
