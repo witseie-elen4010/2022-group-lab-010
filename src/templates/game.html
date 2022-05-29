@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="/cdn/stylesheets/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
 
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+        integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
@@ -93,6 +96,20 @@
         #mouse_over:hover {
             opacity: 1;
         }
+
+        .disable-dbl-tap-zoom {
+            touch-action: manipulation;
+        }
+
+        .keyboard-container {
+            transform: scale(0.90);
+        }
+
+        @media screen and (min-width: 400px) {
+            .keyboard-container {
+                transform: scale(1);
+            }
+        }
     </style>
 </head>
 
@@ -140,27 +157,29 @@
         </div>
     </div>
 
-    <div class="container-sm">
+    <div class="keyboard-container container-sm">
 
         <div class="btn-toolbar mb-1 justify-content-center" role="toolbar">
             <div class="btn-group" role="group" aria-label="First group">
-                <button type="button" id="buttonQ" class="btn btn-secondary rounded me-1 keyboard-block"
+                <button type="button" id="buttonQ"
+                    class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom keyboard-block"
                     onclick="functionToExecute('q')">Q</button>
-                <button type="button" id="buttonW" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonW" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('w')">W</button>
-                <button type="button" id="buttonE" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonE" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('e')">E</button>
-                <button type="button" id="buttonR" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonR" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('r')">R</button>
-                <button type="button" id="buttonT" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonT" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('t')">T</button>
-                <button type="button" id="buttonY" class="btn btn-secondary rounded me-1 "
+                <button type="button" id="buttonY" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom "
                     onclick="functionToExecute('y')">Y</button>
-                <button type="button" id="buttonU" class="btn btn-secondary rounded me-1 "
+                <button type="button" id="buttonU" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom "
                     onclick="functionToExecute('u')">U</button>
-                <button type="button" id="buttonI" class="btn btn-secondary rounded me-1 "
+                <!-- px-3 adds padding to 'i' character as it is thin -->
+                <button type="button" id="buttonI" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom px-3"
                     onclick="functionToExecute('i')">I</button>
-                <button type="button" id="buttonO" class="btn btn-secondary rounded me-1 "
+                <button type="button" id="buttonO" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom "
                     onclick="functionToExecute('o')">O</button>
                 <button type="button" id="buttonP" class="btn btn-secondary rounded"
                     onclick="functionToExecute('p')">P</button>
@@ -169,53 +188,55 @@
 
         <div class="btn-toolbar mb-1 justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group" role="group" aria-label="First group">
-                <button type="button" id="buttonA" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonA" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('a')">A</button>
-                <button type="button" id="buttonS" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonS" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('s')">S</button>
-                <button type="button" id="buttonD" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonD" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('d')">D</button>
-                <button type="button" id="buttonF" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonF" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('f')">F</button>
-                <button type="button" id="buttonG" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonG" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('g')">G</button>
-                <button type="button" id="buttonH" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonH" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('h')">H</button>
-                <button type="button" id="buttonJ" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonJ" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('j')">J</button>
-                <button type="button" id="buttonK" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonK" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('k')">K</button>
-                <button type="button" id="buttonL" class="btn btn-secondary rounded"
+                <button type="button" id="buttonL" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('l')">L</button>
+                
             </div>
         </div>
 
         <div class="btn-toolbar mb-1 justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group" role="group" aria-label="First group">
-                <button type="button" id="buttonEnter" class="btn btn-secondary rounded me-1" onclick="makeGuess()"><i
-                        class="bi bi-arrow-return-left"></i></button>
-                <button type="button" id="buttonA" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonEnter" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
+                    onclick="makeGuess()"><i class="bi bi-arrow-return-left"></i></button>
+                <button type="button" id="buttonA" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('z')">Z</button>
-                <button type="button" id="buttonX" class="btn btn-secondary rounded me-1 "
+                <button type="button" id="buttonX" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom "
                     onclick="functionToExecute('x')">X</button>
-                <button type="button" id="buttonC" class="btn btn-secondary rounded me-1 "
+                <button type="button" id="buttonC" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom "
                     onclick="functionToExecute('c')">C</button>
-                <button type="button" id="buttonV" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonV" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('v')">V</button>
-                <button type="button" id="buttonB" class="btn btn-secondary rounded me-1 "
+                <button type="button" id="buttonB" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom "
                     onclick="functionToExecute('b')">B</button>
-                <button type="button" id="buttonN" class="btn btn-secondary rounded me-1 "
+                <button type="button" id="buttonN" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom "
                     onclick="functionToExecute('n')">N</button>
-                <button type="button" id="buttonM" class="btn btn-secondary rounded me-1"
+                <button type="button" id="buttonM" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('m')">M</button>
-                <button type="button" class="btn btn-secondary rounded" onclick="removeLetter()"><i
-                        class="bi bi-backspace"></i></button>
+                    <button type="button" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
+                    onclick="removeLetter()"><i class="bi bi-backspace"></i></button>
             </div>
         </div>
     </div>
 
     <script>
         let game = 0;
+        let gameDone = false;
 
         let sendGuess = async (guess) => {
             let headers = new Headers();
@@ -241,10 +262,16 @@
         let i = 0
         let score = 0;
 
-        let makeGuess = () => {
+        // Define End Conditions
+        const END_CORRECT_WORD = Symbol('correct')
+        const END_NO_GUESSES = Symbol('no_guess')
+        const END_TIME_LIMIT = Symbol('time_limit')
+
+
+        let makeGuess = async () => {
             let guess = document.getElementById('guess').value
             let message = document.getElementById('response')
-            sendGuess(guess)
+            await sendGuess(guess)
                 .then(data => {
                     if (data.code === "ok") {
                         message.classList.remove('text-danger')
@@ -253,18 +280,19 @@
 
                         score = score + data.score
                         updateKeyboardColour(guess, data.colour)
-                        let f = 0
-
-                        data.colour.forEach(function (element) {
-                            if (element != 'green') f = 1
-                        })
-
-                        if (f === 0) {
-                            gameEnd(2)
+                        let allGreen = true
+                        for (let index = 0; index < data.colour.length; index++) {
+                            if (data.colour[index] != 'green') {
+                                allGreen = false
+                                break;
+                            }
                         }
 
-                        i += 1
-                        if (i === 6) { const y = document.getElementById('buttonEnter'); y.click() }
+                        if (allGreen) {
+                            gameEnd(END_CORRECT_WORD)
+                        }
+
+                        guesses++;
                     } else {
                         message.classList.add('text-danger')
                         message.innerHTML = data.message
@@ -272,60 +300,64 @@
                 })
                 .catch(error => {
                     console.error(error)
-                    message.classList.add('text-danger')
-                    message.innerHTML = "Invalid Input"
-                    const y = document.getElementById('submit Guess')
-                    if (y.innerHTML === 'complete' || i === 6) { message.innerHTML = '' }
+                    // message.classList.add('text-danger')
+                    // message.innerHTML = "Invalid Input"
+                    // const y = document.getElementById('submit Guess')
+                    // if (y.innerHTML === 'complete' || i === 6) { message.innerHTML = '' }
                 })
 
 
-            if (i == 4) {
-                gameEnd(1)
+            if (guesses == 6) {
+                await gameEnd(END_NO_GUESSES)
             }
 
         }
 
-        let gameEnd = function (i) {
-            if (i === 1) {   //When player tuns out of guesses
-                let headers = new Headers();
-                headers.append("Content-Type", "application/json");
-                let raw = JSON.stringify({
-                    "game": game
-                });
-                let requestOptions = {
-                    method: 'POST',
-                    headers: headers,
-                    body: raw,
-                    redirect: 'follow'
-                };
-                fetch('api/correct', requestOptions)
-                    .then(function (response) {
-                        if (response.ok) { return response.json() } // Return the response parse as JSON
-                        else { throw 'Failed to load correct word: response code invalid!' }
-                    })
+        let gameEnd = function (endCondition) {
+            gameDone = true
+            const x = document.getElementById('Game Result')
 
-                    .then(function (data) {
-                        const x = document.getElementById('Game Result')
-                        x.innerHTML = `The correct word was ${data.word}. You achieved a score of: ` + score
-                    })
+            switch (endCondition) {
+                case END_NO_GUESSES:
+                    let headers = new Headers();
+                    headers.append("Content-Type", "application/json");
+                    let raw = JSON.stringify({
+                        "game": game
+                    });
+                    let requestOptions = {
+                        method: 'POST',
+                        headers: headers,
+                        body: raw,
+                        redirect: 'follow'
+                    };
+                    fetch('api/correct', requestOptions)
+                        .then(function (response) {
+                            if (response.ok) { return response.json() } // Return the response parse as JSON
+                            else { throw 'Failed to load correct word: response code invalid!' }
+                        })
+                        .then(function (data) {
+                            console.log('results:', score, data.word)
+                            x.innerHTML = 'The correct word was ${data.word}. You achieved a score of: ' + score
+                            $('#staticBackdrop').modal('show')
+                        })
+                        .catch(function (e) { // Process error for request
+                            alert(e) // Displays a browser alert with the error message.
+                        })
+                    break
 
-                    .catch(function (e) { // Process error for request
-                        alert(e) // Displays a browser alert with the error message.
-                    })
+                case END_CORRECT_WORD:
+                    x.innerHTML = 'You Guessed the word correctly. You achieved a score of: ' + score
+                    $('#staticBackdrop').modal('show')
+                    break
 
-                const y = document.getElementById('buttonEnter')
-                y.setAttribute('data-bs-toggle', 'modal')
-                y.setAttribute('data-bs-target', '#staticBackdrop')
+                case END_TIME_LIMIT:
+                    x.innerHTML = 'You ran out of time. You achieved a score of: ' + score
+                    $('#staticBackdrop').modal('show')
+                    break
+                    break
 
-            }
-
-            if (i === 2) {   //When player guesses word correctly
-                const x = document.getElementById('Game Result')
-                x.innerHTML = `You Guessed the word correctly. You achieved a score of: ` + score
-                const y = document.getElementById('buttonEnter')
-                y.setAttribute('data-bs-toggle', 'modal')
-                y.setAttribute('data-bs-target', '#staticBackdrop')
-                y.click()
+                default:
+                // nothing
             }
 
             if (i === 3) { // To request rematch
@@ -335,31 +367,32 @@
                     elem.append(messageElem);
                 }
 
-                async function rematch () {
+                async function rematch() {
                     const response = await fetch('api/rematch')
 
                     if (response.status == 502) {
-                    // Status 502 is a connection timeout error,
-                    // may happen when the connection was pending for too long,
-                    await rematch()
+                        // Status 502 is a connection timeout error,
+                        // may happen when the connection was pending for too long,
+                        await rematch()
                     } else if (response.status != 200) {
-                    // An error occured
-                    console.log(response.statusText)
-                    alert(response.statusText)
-                    // Reconnect in one second
-                    await new Promise(resolve => setTimeout(resolve, 1000))
-                    await rematch()
+                        // An error occured
+                        console.log(response.statusText)
+                        alert(response.statusText)
+                        // Reconnect in one second
+                        await new Promise(resolve => setTimeout(resolve, 1000))
+                        await rematch()
                     } else {
-                    // Get and show whether rematch was accepted or not
-                    const message = await response.text()
-                    showMessage(message)
-                    const y = document.getElementById('rematch')
-                    y.click()
+                        // Get and show whether rematch was accepted or not
+                        const message = await response.text()
+                        showMessage(message)
+                        const y = document.getElementById('rematch')
+                        y.click()
                     }
                 }
 
                 rematch()
             }
+
         }
         // export {gameEnd}
 
@@ -374,7 +407,6 @@
                 document.getElementById('row' + guesses + 'character' + character).innerHTML = guess.charAt(character)
             }
 
-            guesses++
             document.getElementById('guess').value = ''
         }
 
@@ -394,7 +426,7 @@
         }
 
         let gameIsValid = () => {
-            return i <= 5
+            return !gameDone
         }
 
         window.onload = () => {
@@ -446,23 +478,36 @@
         document.onkeydown = function (e) {
             e = e || window.event;
             var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
-            if ((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)) {
-                functionToExecute(String.fromCharCode(charCode))
+            if (e.ctrlKey) {
+                if (charCode === 8) { // ctrl backspace remove all letters
+                    e.preventDefault()
+                    removeLetter()
+                    removeLetter()
+                    removeLetter()
+                    removeLetter()
+                    removeLetter()
+                }
             }
-            else if (charCode === 13) { // check for Enter key
-                document.activeElement.blur() // deselect any buttons
-                makeGuess()
-            }
-            else if (charCode === 8 || charCode === 46) { // check for Backspace or Delete
-                removeLetter()
+            else {
+                if ((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)) {
+                    functionToExecute(String.fromCharCode(charCode))
+                }
+                else if (charCode === 13 && gameIsValid()) { // check for Enter key
+                    document.activeElement.blur() // deselect any buttons
+                    makeGuess()
+                }
+
+                else if (charCode === 8 || charCode === 46) { // check for Backspace or Delete
+                    removeLetter()
+                }
             }
         }
 
 
     </script>
 
-    <script src="/cdn/scripts/keyboardLogger.js"></script>
-    <script src="/cdn/scripts/timer .js"></script>
+    <script src="cdn/scripts/keyboardLogger.js"></script>
+    <script src="cdn/scripts/timer.js"></script>
 
 </body>
 

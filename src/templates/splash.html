@@ -1,33 +1,26 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <title>Twordle-dee</title>
-
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twordle-Dee</title>
 
     <link rel="stylesheet" href="/cdn/stylesheets/bootstrap.css">
-
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+        integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
         crossorigin="anonymous"></script>
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
-
     <style>
         .card-custom {
             background-color: black;
         }
     </style>
-
-
-
 </head>
-
-
-
-
-
 
 
 <body>
@@ -54,12 +47,6 @@
         </div>
     </section>
 
-
-    <!--  green  - btn btn-success
-     yellow  - btn btn-warning
-      grey btn btn-secondary
-      clear btn btn-light
-     -->
 
     <!-- Game Modes -->
     <section class="p-10">
@@ -92,9 +79,9 @@
                                 <p class="card-text">Click the button to create or join a game</p>
                                 <div class="row text-center">
                                     <div class="col-4 text-center offset-2">
-                                        <button type="button" class="btn btn-primary px-6" data-bs-toggle="modal"
-                                            data-bs-target="#Generator">
-                                            Generate Code
+                                        <button onclick="generateCode()" type="button" class="btn btn-primary px-6">
+                                            Generate Code <div id="generate-code-spinner" hidden="true"
+                                                class="spinner-border spinner-border-sm"></div>
                                         </button>
                                     </div>
                                     <div class="col-4 text-center">
@@ -104,7 +91,6 @@
                                         </button>
                                     </div>
                                 </div>
-                                <!-- <a href="game" class="btn btn-primary" role="button">Launch Game!</a> -->
                             </div>
                         </section>
                     </div>
@@ -124,11 +110,13 @@
                             class="bi bi-x"></i></button>
                 </div>
                 <div class="modal-body">
-                    [Code]
+                    <div class="alert alert-info" id="game-code">
+
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a href="#" class="btn btn-primary" role="button">Join Game</a>
+                    <button onclick="joinGame()" class="btn btn-primary" role="button">Join Game</button>
                 </div>
             </div>
         </div>
@@ -149,7 +137,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <div class="input-group-append">
-                        <a href="#" class="btn btn-primary" role="button">Join Game</a>
+                        <button onclick="joinGame()" class="btn btn-primary" role="button">Join Game</button>
                     </div>
                 </div>
             </div>
@@ -157,8 +145,33 @@
     </div>
 
 
-
     <script>
+        // data-bs-toggle="modal" data-bs-target="#Generator"
+        let gameCode = ''
+
+        const joinGame = () => {
+            window.location.href = 'game?code='+gameCode
+        }
+
+        const generateCode = async () => {
+            document.getElementById('generate-code-spinner').removeAttribute('hidden')
+            let headers = new Headers()
+            let requestOptions = {
+                method: 'GET',
+                headers: headers,
+                redirect: 'follow'
+            };
+            fetch("api/multiplayer", requestOptions)
+                .then(res => res.json())
+                .then(data => {
+                    gameCode = data.game
+                    document.getElementById('game-code').innerHTML = gameCode
+                    $('#Generator').modal('show')
+                    document.getElementById('generate-code-spinner').setAttribute('hidden', true)
+                })
+        }
+
+
         let checkName = async () => {
             let name = document.getElementById('name').value
             console.log(name)
@@ -199,10 +212,6 @@
                     console.log(error)
                 })
 
-
-
-
-                
 
         }
     </script>

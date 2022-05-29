@@ -56,4 +56,4 @@ const updateKeyboardColour = function (guess, colours) {
   }
 }
 
-module.exports = { functionToExecute, removeLetter, updateKeyboardColour }
+if (typeof module !== 'undefined') module.exports = { functionToExecute, removeLetter, updateKeyboardColour }

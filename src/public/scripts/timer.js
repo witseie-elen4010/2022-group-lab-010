@@ -119,4 +119,4 @@ function revWord (data) {
   x.appendChild(out)
 }
 
-module.exports = { pauseTimer }
+if (typeof module !== 'undefined') module.exports = { pauseTimer }
