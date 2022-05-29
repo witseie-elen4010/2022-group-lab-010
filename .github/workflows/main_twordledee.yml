@@ -33,6 +33,15 @@ jobs:
         with:
           name: node-app
           path: ./src
+      
+      - name: Make environment file
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_APP_ENV: 'production'
+          envkey_DB_HOST: ${{ secrets.mongo-host }}
+          envkey_DB_USER: ${{ secrets.mongo-user }}
+          envkey_DB_PASSWORD: ${{ secrets.mongo-password }}
+          envkey_DB_NAME: 'twordledee'
 
   deploy:
     runs-on: ubuntu-latest

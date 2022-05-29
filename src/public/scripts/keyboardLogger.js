@@ -1,16 +1,18 @@
 'use strict'
 
 const functionToExecute = function (letter) {
-//  console.log(letter)
-
   if (letter.length > 1) {
-    // console.log('error button length is too long ')
     letter = letter.substring(0, 1) // Take the first element
   }
 
   const message = document.getElementById('guess')
 
-  message.value += letter
+  if (message.value.length < 5) {
+    message.value += letter
+  }
+
+  const event = new window.Event('input')
+  message.dispatchEvent(event)
 
   return letter
 }
@@ -19,6 +21,8 @@ const removeLetter = function () {
   const message = document.getElementById('guess')
   // console.log('the guess words iss ', message.value)
   message.value = message.value.substring(0, message.value.length - 1)
+  const event = new window.Event('input')
+  message.dispatchEvent(event)
   return message
 }
 
@@ -35,10 +39,17 @@ const updateKeyboardColour = function (guess, colours) {
     // btn.classList.add('bg-' + colours[i])
     // console.log('AFTER class list ', btn.classList.value)
 
-    if (btn.classList.value === 'btn bg-green') {
-      // console.log(btn.classList.value)
-    } else {
-      btn.classList.value = 'btn ' + 'bg-' + colours[i]
+    switch (colours[i]) {
+      case 'yellow': btn.classList.remove('btn-secondary')
+        if (!btn.classList.contains('bg-green')) { btn.classList.add('bg-yellow') }
+        break
+      case 'gray': btn.classList.add('bg-gray')
+        btn.classList.remove('btn-secondary')
+        break
+      case 'green': btn.classList.add('bg-green')
+        btn.classList.remove('bg-yellow')
+        btn.classList.remove('btn-secondary')
+        break
     }
 
     // console.log(btn.classList.value)

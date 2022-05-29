@@ -4,7 +4,8 @@
 const jsdom = require('jsdom')
 const { JSDOM } = jsdom
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>')
-global.document = dom.window.document
+global.window = dom.window
+global.document = window.document
 const keyboard = require('../public/scripts/keyboardLogger')
 const express = require('express')
 const router = require('../routes/main.routes')
@@ -17,7 +18,7 @@ app.use('/', router)
 
 describe('Test Button component', () => {
   it('Test click event', () => {
-    const g = document.createElement('input')
+    const g = document.createElement('button')
     g.id = 'guess'
 
     document.body.appendChild(g)
@@ -36,8 +37,7 @@ describe('Test Button component', () => {
 
   it('Test click event', () => {
     const g = document.getElementById('guess')
-    const smallerWord = keyboard.removeLetter()
-    console.log(smallerWord.value)
+    keyboard.removeLetter()
     expect(g.value).toBe('a')
   })
   it('Test keyboard colour updates', async () => {

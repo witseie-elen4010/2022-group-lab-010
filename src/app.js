@@ -3,9 +3,9 @@
 const express = require('express')
 require('dotenv').config({ path: '../.env' })
 const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
-
 const mainRouter = require('./routes/main.routes')
+const db = require('./db')
+const { default: mongoose } = require('mongoose')
 
 const app = express()
 
@@ -15,14 +15,15 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', mainRouter)
 app.use('/cdn', express.static('public'))
 
+console.log('Connecting to database...')
+db.connect()
+
+mongoose.connection.on('error', () => {
+  console.error.bind(console, 'MongoDB connection error:')
+  process.exit(1)
+})
+
 module.exports = app
-
-// Configure Database connection
-const mongoDB = 'mongodb://' + process.env.DB_HOST + ':' + process.env.DB_PORT + '/' + process.env.DB_NAME
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
-const db = mongoose.connection
-
-db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 /* const mongoDBUsers = process.env.DB_URI
 mongoose.connect(mongoDBUsers, { useUnifiedTopology: true, useNewUrlParser: true })

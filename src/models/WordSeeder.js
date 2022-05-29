@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const cliProgress = require('cli-progress')
 require('dotenv').config({ path: '../../.env' })
+const db = require('../db')
 
 process.on('SIGINT', () => {
   console.log('Caught interrupt signal')
@@ -11,9 +12,8 @@ process.on('SIGINT', () => {
 })
 
 if (mongoose.connection.readyState === 0) {
-  const mongoDB = 'mongodb://' + process.env.DB_HOST + ':' + process.env.DB_PORT + '/' + process.env.DB_NAME
-  console.log('Connecting to: ', mongoDB)
-  mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
+  console.log('Connecting to database..')
+  db.connect()
 }
 
 mongoose.connection.on('error', () => {
