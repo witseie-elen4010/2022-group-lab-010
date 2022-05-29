@@ -206,13 +206,14 @@
                     onclick="functionToExecute('k')">K</button>
                 <button type="button" id="buttonL" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('l')">L</button>
-                <button type="button" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
-                    onclick="removeLetter()"><i class="bi bi-backspace"></i></button>
+                
             </div>
         </div>
 
         <div class="btn-toolbar mb-1 justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group" role="group" aria-label="First group">
+                <button type="button" id="buttonEnter" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
+                    onclick="makeGuess()"><i class="bi bi-arrow-return-left"></i></button>
                 <button type="button" id="buttonA" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('z')">Z</button>
                 <button type="button" id="buttonX" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom "
@@ -227,8 +228,8 @@
                     onclick="functionToExecute('n')">N</button>
                 <button type="button" id="buttonM" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
                     onclick="functionToExecute('m')">M</button>
-                <button type="button" id="buttonEnter" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
-                    onclick="makeGuess()"><i class="bi bi-arrow-return-left"></i></button>
+                    <button type="button" class="btn btn-secondary rounded me-1 disable-dbl-tap-zoom"
+                    onclick="removeLetter()"><i class="bi bi-backspace"></i></button>
             </div>
         </div>
     </div>
@@ -358,7 +359,7 @@
                 default:
                 // nothing
             }
-            
+
             if (i === 3) { // To request rematch
                 function showMessage(message) {
                     let messageElem = document.getElementById('rematch');
@@ -505,8 +506,8 @@
 
     </script>
 
-    <script src="/cdn/scripts/keyboardLogger.js"></script>
-    <script src="/cdn/scripts/timer .js"></script>
+    <script src="cdn/scripts/keyboardLogger.js"></script>
+    <script src="cdn/scripts/timer.js"></script>
 
 </body>
 
