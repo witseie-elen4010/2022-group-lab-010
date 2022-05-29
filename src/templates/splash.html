@@ -29,9 +29,20 @@
     </div>
 
     <section class="p-5">
-        <div class="div container text-center">
+        <div class="div container text-center" >
             <p>We're so glad you're here, why don't you go watch this video to learn more about
                 <a href="https://www.youtube.com/watch?v=lv4Zg-209MY">it over here</a>
+
+            <div class="input-group mb-3">
+                <input id="name" type="text" class="form-control" placeholder="Enter your name" autofocus>
+                <div class="input-group-append" id="name button">
+                    <button class="btn btn-outline-secondary" type="button" onclick="checkName()"
+                        id="submit name">Enter</button>
+                </div>
+                
+            </div>
+            <div class="div container text-center" id = "rememberUser"></div>
+        </div>
             </p>
         </div>
     </section>
@@ -160,6 +171,49 @@
                 })
         }
 
+
+        let checkName = async () => {
+            let name = document.getElementById('name').value
+            console.log(name)
+
+            let headers = new Headers();
+            headers.append("Content-Type", "application/json");
+            let raw = JSON.stringify({
+                "username": name
+            });
+            let requestOptions = {
+                method: 'POST',
+                headers: headers,
+                body: raw,
+                redirect: 'follow'
+            };
+            fetch('api/user', requestOptions)
+                .then(function (response) {
+                    if (response.ok) { return response.json() } // Return the response parse as JSON
+                    else { throw 'Failed to load correct word: response code invalid!' }
+                })
+                .then(function (data) {
+                    console.log(data )
+
+                    if(data.status === 1)
+                    {
+                        //console.log('Welcome back ')
+                        document.getElementById("rememberUser").innerHTML = 
+              "Welcome back " + data.usernamee;
+                    }
+                    else{
+                        //console.log('Welcome  newcomer ')
+                        document.getElementById("rememberUser").innerHTML = 
+              "Welcome newcomer " + data.username;
+                    }
+                }
+                )
+                .catch(function (error){
+                    console.log(error)
+                })
+
+
+        }
     </script>
 
 </body>

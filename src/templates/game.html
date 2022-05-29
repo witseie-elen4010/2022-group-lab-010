@@ -146,6 +146,7 @@
                 <div class="modal-footer">
                     <a href="game" class="btn btn-primary" role="button">Play Another Game</a>
                     <a href="/" class="btn btn-primary" role="button">Home</a>
+                    <!-- <a href="/" class="btn btn-primary" role="button" id="rematch">Rematch</a> -->
                 </div>
             </div>
         </div>
@@ -242,7 +243,8 @@
 
             let raw = JSON.stringify({
                 "guess": guess,
-                "game": game
+                "game": game,
+                "i": i
             });
 
             let requestOptions = {
@@ -258,23 +260,6 @@
         guesses = 0
         let i = 0
         let score = 0;
-        let calculateScore = (data, wordNumber) => {
-            let multiplier = 5 - wordNumber
-            let array = data.colour
-            try {
-                for (let index = 0; index < array.length; index++) {
-                    const element = array[index];
-                    if (element == "green") {
-                        score = score + multiplier * 2
-                    }
-                    else if (element == "yellow") {
-                        score = score + multiplier
-                    }
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
 
         // Define End Conditions
         const END_CORRECT_WORD = Symbol('correct')
@@ -291,7 +276,8 @@
                         message.classList.remove('text-danger')
                         message.innerHTML = '&nbsp;' // to prevent height changes
                         generateColouredGuess(guess, data.colour)
-                        calculateScore(data, i)
+
+                        score = score + data.score
                         updateKeyboardColour(guess, data.colour)
                         let allGreen = true
                         for (let index = 0; index < data.colour.length; index++) {
@@ -329,7 +315,7 @@
         let gameEnd = function (endCondition) {
             gameDone = true
             const x = document.getElementById('Game Result')
-            
+
             switch (endCondition) {
                 case END_NO_GUESSES:
                     let headers = new Headers();
@@ -371,6 +357,39 @@
 
                 default:
                 // nothing
+            }
+            
+            if (i === 3) { // To request rematch
+                function showMessage(message) {
+                    let messageElem = document.getElementById('rematch');
+                    messageElem.append(message);
+                    elem.append(messageElem);
+                }
+
+                async function rematch() {
+                    const response = await fetch('api/rematch')
+
+                    if (response.status == 502) {
+                        // Status 502 is a connection timeout error,
+                        // may happen when the connection was pending for too long,
+                        await rematch()
+                    } else if (response.status != 200) {
+                        // An error occured
+                        console.log(response.statusText)
+                        alert(response.statusText)
+                        // Reconnect in one second
+                        await new Promise(resolve => setTimeout(resolve, 1000))
+                        await rematch()
+                    } else {
+                        // Get and show whether rematch was accepted or not
+                        const message = await response.text()
+                        showMessage(message)
+                        const y = document.getElementById('rematch')
+                        y.click()
+                    }
+                }
+
+                rematch()
             }
 
         }
@@ -487,7 +506,8 @@
     </script>
 
     <script src="/cdn/scripts/keyboardLogger.js"></script>
-    <script src="/cdn/scripts/timer.js"></script>
+    <script src="/cdn/scripts/timer .js"></script>
+
 </body>
 
 </html>

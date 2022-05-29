@@ -67,8 +67,8 @@ const colourCodeGuess = async (req, res) => {
   }
 
   const guess = post.guess.toUpperCase()
-
-  const out = { code: 'ok', colour: [], guess } // output array
+  let score = 0
+  const out = { code: 'ok', colour: [], guess, score } // output array
 
   for (let i = 0; i < post.guess.length; i++) {
     const letter = guess.charAt(i)
@@ -83,14 +83,24 @@ const colourCodeGuess = async (req, res) => {
     }
   }
 
+  playerGame.save() // save to database
+  const turn = post.i
+
+  for (let i = 0; i < out.colour.length; i++) {
+    if (out.colour[i] === 'green') {
+      score = score + 4 * (5 - turn) ** 2
+    } else if (out.colour[i] === 'yellow') {
+      score = score + (5 - turn) ** 2
+    }
+  }
+  out.score = score
+
   // log the player's guess
   playerGame.guesses.push({
     guess,
     colours: out.colour,
-    score: 0 // to do
+    score
   })
-
-  playerGame.save() // save to database
 
   res.json(out)
 }
