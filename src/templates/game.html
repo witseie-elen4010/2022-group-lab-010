@@ -129,6 +129,7 @@
                 <div class="modal-footer">
                     <a href="game" class="btn btn-primary" role="button">Play Another Game</a>
                     <a href="/" class="btn btn-primary" role="button">Home</a>
+                    <!-- <a href="/" class="btn btn-primary" role="button" id="rematch">Rematch</a> -->
                 </div>
             </div>
         </div>
@@ -343,8 +344,38 @@
                 y.click()
             }
 
-            if (i === 3) {
-                // For time limit
+            if (i === 3) { // To request rematch
+                function showMessage(message) {
+                    let messageElem = document.getElementById('rematch');
+                    messageElem.append(message);
+                    elem.append(messageElem);
+                }
+
+                async function rematch () {
+                    const response = await fetch('api/rematch')
+
+                    if (response.status == 502) {
+                    // Status 502 is a connection timeout error,
+                    // may happen when the connection was pending for too long,
+                    await rematch()
+                    } else if (response.status != 200) {
+                    // An error occured
+                    console.log(response.statusText)
+                    alert(response.statusText)
+                    // Reconnect in one second
+                    await new Promise(resolve => setTimeout(resolve, 1000))
+                    await rematch()
+                    } else {
+                    // Get and show whether rematch was accepted or not
+                    const message = await response.text()
+                    showMessage(message)
+                    const y = document.getElementById('rematch')
+                    y.setAttribute('data-bs-toggle', 'modal')
+                    y.setAttribute('data-bs-target', '#staticBackdrop')
+                    }
+                }
+
+                rematch()
             }
         }
         // export {gameEnd}
