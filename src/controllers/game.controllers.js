@@ -3,30 +3,35 @@ const Game = require('../models/Game')
 const Word = require('../models/Word')
 
 const getGame = async (gameId) => {
-  const game = await Game.findById(gameId)
+  const game = await Game
+    .findById(gameId)
+    .populate('word')
   if (game) {
     return game
   }
   return false
 }
 
-const generateGame = async () => {
+const generateGame = async (gameMode = 'practice') => {
   // Get a random word from the database
-  const word = await Word.count().exec()
+  const word = await Word.count()
+    .exec()
     .then(async count => {
       const random = Math.floor(Math.random() * count)
       return await Word.findOne().skip(random).exec()
         .then(res => {
-          return res.word
+          return res
         })
     })
 
   const game = {
-    word,
-    guesses: []
+    word: word._id,
+    guesses: [],
+    gameMode
   }
 
   const result = await Game.create(game)
+
   return result._id
 }
 
@@ -35,10 +40,6 @@ const wordIsValid = async (word) => {
   if (word.length !== 5) return false
   return await Word.exists({ word })
 }
-
-// const pushGuess = async (gameId, guess) => {
-
-// }
 
 module.exports = {
   wordIsValid,

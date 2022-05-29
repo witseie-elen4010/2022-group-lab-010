@@ -23,7 +23,7 @@ const revealWord = async (req, res) => {
   }
 
   res.json({
-    word: playerGame.word.toUpperCase()
+    word: playerGame.word.word.toUpperCase()
   })
 }
 
@@ -49,7 +49,7 @@ const colourCodeGuess = async (req, res) => {
     return
   }
 
-  const correctWord = playerGame.word.toUpperCase()
+  const correctWord = playerGame.word.word.toUpperCase()
 
   if (!post.guess || post.guess.length !== 5) {
     res.status(400).send({
@@ -82,6 +82,15 @@ const colourCodeGuess = async (req, res) => {
       out.colour.push('gray')
     }
   }
+
+  // log the player's guess
+  playerGame.guesses.push({
+    guess,
+    colours: out.colour,
+    score: 0 // to do
+  })
+
+  playerGame.save() // save to database
 
   res.json(out)
 }
