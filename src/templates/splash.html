@@ -132,12 +132,12 @@
                             class="bi bi-x"></i></button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" class="form-control" id="recipient-name" placeholder="Enter Code">
+                    <input type="text" class="form-control" id="game-code-enter" placeholder="Enter Code">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <div class="input-group-append">
-                        <button onclick="joinGame()" class="btn btn-primary" role="button">Join Game</button>
+                        <button onclick="joinGameWithCode()" class="btn btn-primary" role="button">Join Game</button>
                     </div>
                 </div>
             </div>
@@ -151,6 +151,10 @@
 
         const joinGame = () => {
             window.location.href = 'game?code='+gameCode
+        }
+
+        const joinGameWithCode = () => {
+            window.location.href = 'game?code='+document.getElementById('game-code-enter').value
         }
 
         const generateCode = async () => {
