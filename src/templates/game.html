@@ -337,7 +337,7 @@
                         })
                         .then(function (data) {
                             console.log('results:', score, data.word)
-                            x.innerHTML = 'The correct word was ${data.word}. You achieved a score of: ' + score
+                            x.innerHTML = `The correct word was ${data.word}. You achieved a score of: ` + score
                             $('#staticBackdrop').modal('show')
                         })
                         .catch(function (e) { // Process error for request
