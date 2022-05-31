@@ -22,6 +22,15 @@ const revealWord = async (req, res) => {
     return
   }
 
+  // check if game is over
+  if (playerGame.complete) {
+    res.status(400).send({
+      message: 'The game has not yet completed.',
+      code: 'error'
+    })
+    return
+  }
+
   res.json({
     word: playerGame.word.word.toUpperCase()
   })
@@ -70,6 +79,7 @@ const colourCodeGuess = async (req, res) => {
   let score = 0
   const out = { code: 'ok', colour: [], guess, score } // output array
 
+  let allGreen = true
   for (let i = 0; i < post.guess.length; i++) {
     const letter = guess.charAt(i)
 
@@ -78,12 +88,13 @@ const colourCodeGuess = async (req, res) => {
       out.colour.push('green')
     } else if (correctWord.indexOf(letter) > -1) {
       out.colour.push('yellow')
+      allGreen = false
     } else {
       out.colour.push('gray')
+      allGreen = false
     }
   }
 
-  playerGame.save() // save to database
   const turn = post.i
 
   for (let i = 0; i < out.colour.length; i++) {
@@ -102,6 +113,10 @@ const colourCodeGuess = async (req, res) => {
     score
   })
 
+  // check if game is done
+  if (allGreen) { playerGame.complete = true }
+
+  playerGame.save() // save to database
   res.json(out)
 }
 

@@ -290,6 +290,8 @@
 
                         if (allGreen) {
                             gameEnd(END_CORRECT_WORD)
+                        } else if (guesses == 6) {
+                            gameEnd(END_NO_GUESSES)
                         }
 
                         guesses++;
@@ -307,9 +309,7 @@
                 })
 
 
-            if (guesses == 6) {
-                await gameEnd(END_NO_GUESSES)
-            }
+
 
         }
 
@@ -318,7 +318,8 @@
             const x = document.getElementById('Game Result')
 
             switch (endCondition) {
-                case END_NO_GUESSES:
+
+                case END_NO_GUESSES: {
                     let headers = new Headers();
                     headers.append("Content-Type", "application/json");
                     let raw = JSON.stringify({
@@ -344,17 +345,20 @@
                             alert(e) // Displays a browser alert with the error message.
                         })
                     break
+                }
 
-                case END_CORRECT_WORD:
+                case END_CORRECT_WORD: {
                     x.innerHTML = 'You Guessed the word correctly. You achieved a score of: ' + score
                     $('#staticBackdrop').modal('show')
-                    break
 
-                case END_TIME_LIMIT:
+                    break
+                }
+
+                case END_TIME_LIMIT: {
                     x.innerHTML = 'You ran out of time. You achieved a score of: ' + score
                     $('#staticBackdrop').modal('show')
                     break
-                    break
+                }
 
                 default:
                 // nothing
@@ -425,25 +429,24 @@
 
         let newGame = () => {
             const code = findGetParameter('code')
-            if(code){
+            if (code) {
                 game = code
             }
-            else 
-            {
+            else {
                 fetch('api/game')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.code === 'ok') {
-                        game = data.game
-                    }
-                    else {
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 'ok') {
+                            game = data.game
+                        }
+                        else {
 
-                        console.log('Cannot create new game')
-                    }
-                })
+                            console.log('Cannot create new game')
+                        }
+                    })
             }
 
-            
+
 
         }
 
