@@ -23,7 +23,7 @@ const revealWord = async (req, res) => {
   }
 
   // check if game is over
-  if (playerGame.complete) {
+  if (!playerGame.complete) {
     res.status(400).send({
       message: 'The game has not yet completed.',
       code: 'error'
@@ -113,10 +113,17 @@ const colourCodeGuess = async (req, res) => {
     score
   })
 
-  // check if game is done
-  if (allGreen) { playerGame.complete = true }
+  // update the total score
+  playerGame.score += score
 
-  playerGame.save() // save to database
+  // check if game is done
+  if (allGreen || playerGame.guesses.length === 6) {
+    playerGame.complete = true
+    playerGame.completedAt = Date.now()
+  }
+
+  playerGame.markModified('completedAt')
+  await playerGame.save() // save to database
   res.json(out)
 }
 

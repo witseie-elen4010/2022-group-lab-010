@@ -26,9 +26,16 @@ const GameSchema = new Schema(
       type: String, // a the type of the game either 'practice', 'multiplayer'
       default: 'practice'
     },
-    complete: {
+    complete: { // has the game finished
       type: Boolean,
       default: false
+    },
+    completedAt: { // when did the game finish
+      type: Date
+    },
+    score: {
+      type: Number,
+      default: 0
     }
     // owner: {
     //   type: mongoose.Types.ObjectId,
