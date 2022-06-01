@@ -34,6 +34,10 @@ beforeAll(async () => {
   mockedGame = await Game.create({ word: mockedWord._id, guesses: [], gameMode: 'practice' })
 })
 
+afterAll(async () => {
+  db.close()
+})
+
 describe('Test Guesses Controller', function () {
   // guess 1/6
   it('tests /api/guess endpoint - First letter wrong', async () => {

@@ -24,6 +24,10 @@ beforeAll(async () => {
   mockedGame = await Game.create({ word: mockedWord._id, guesses: [], gameMode: 'practice' })
 })
 
+afterAll(async () => {
+  db.close()
+})
+
 describe('Test Game Controller', function () {
   it('tests /api/game - Creates a usable game code', async () => {
     const res = await request(app)
