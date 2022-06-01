@@ -2,14 +2,57 @@
 const Game = require('../models/Game')
 const Word = require('../models/Word')
 
-const getGame = async (gameId) => {
-  const game = await Game
-    .findById(gameId)
-    .populate('word')
-  if (game) {
-    return game
+const getGameLog = async (req, res) => {
+  const post = req.body
+  if (!post) {
+    res.status(400).send({
+      message: 'Invalid Request Body',
+      code: 'error'
+    })
+    res.end()
+    return
   }
-  return false
+
+  let gameObj
+  if (!(gameObj = await getGame(post.game))) {
+    res.status(400).send({
+      message: "The 'game' parameter is invalid.",
+      code: 'error'
+    })
+    return
+  }
+
+  // check if game is complete
+  if (!gameObj.complete) {
+    res.status(400).send({
+      message: 'The game has not yet completed.',
+      code: 'error'
+    })
+    return
+  }
+
+  const game = gameObj.toObject()
+
+  let log = {}
+
+  log = {
+    correctWord: game.word.word.toUpperCase(),
+    start: game.createdAt,
+    end: game.completedAt,
+    guesses: game.guesses,
+    score: game.score,
+    gameMode: game.gameMode
+  }
+
+  // delete _id field from guesses
+  log.guesses.forEach(obj => {
+    delete obj._id
+  })
+
+  res.json({
+    code: 'ok',
+    log
+  })
 }
 
 const generateGame = async (gameMode = 'practice') => {
@@ -35,6 +78,18 @@ const generateGame = async (gameMode = 'practice') => {
   return result._id
 }
 
+const getGame = async (gameId) => {
+  const game = await Game
+    .findById(gameId)
+    .populate('word')
+    .catch(() => false)
+
+  if (game) {
+    return game
+  }
+  return false
+}
+
 const wordIsValid = async (word) => {
   word = word.toLowerCase()
   if (word.length !== 5) return false
@@ -44,5 +99,7 @@ const wordIsValid = async (word) => {
 module.exports = {
   wordIsValid,
   generateGame,
-  getGame
+  getGame,
+  getGameLog
+
 }

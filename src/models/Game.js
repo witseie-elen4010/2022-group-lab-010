@@ -16,11 +16,26 @@ const GameSchema = new Schema(
     guesses: [{ // a Game has many Guesses
       guess: String, // the Guess that was made
       colours: [String], // the colour scoring of the Guess
-      score: Number // the score for the Guess
+      score: Number, // the score for the Guess
+      date: { // the timestamp when the guess was made
+        type: Date,
+        default: Date.now
+      }
     }],
     gameMode: {
       type: String, // a the type of the game either 'practice', 'multiplayer'
       default: 'practice'
+    },
+    complete: { // has the game finished
+      type: Boolean,
+      default: false
+    },
+    completedAt: { // when did the game finish
+      type: Date
+    },
+    score: {
+      type: Number,
+      default: 0
     }
     // owner: {
     //   type: mongoose.Types.ObjectId,
