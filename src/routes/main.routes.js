@@ -28,4 +28,6 @@ router.get('/api/multiplayer', async function (req, res) {
   })
 })
 
+router.post('/api/game/log', controllers.getGameLog)
+
 module.exports = router

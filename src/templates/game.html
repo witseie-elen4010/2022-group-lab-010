@@ -144,6 +144,10 @@
                     ...
                 </div>
                 <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="viewGameLog()">
+                        View Game Log <div id="game-log-spinner" hidden="true" class="spinner-border spinner-border-sm">
+                        </div>
+                    </button>
                     <a href="game" class="btn btn-primary" role="button">Play Another Game</a>
                     <a href="/" class="btn btn-primary" role="button">Home</a>
                     <!-- <a href="/" class="btn btn-primary" role="button" id="rematch">Rematch</a> -->
@@ -288,11 +292,13 @@
                             }
                         }
 
+                        guesses++;
                         if (allGreen) {
                             gameEnd(END_CORRECT_WORD)
+                        } else if (guesses == 6) {
+                            gameEnd(END_NO_GUESSES)
                         }
 
-                        guesses++;
                     } else {
                         message.classList.add('text-danger')
                         message.innerHTML = data.message
@@ -307,9 +313,7 @@
                 })
 
 
-            if (guesses == 6) {
-                await gameEnd(END_NO_GUESSES)
-            }
+
 
         }
 
@@ -318,7 +322,8 @@
             const x = document.getElementById('Game Result')
 
             switch (endCondition) {
-                case END_NO_GUESSES:
+
+                case END_NO_GUESSES: {
                     let headers = new Headers();
                     headers.append("Content-Type", "application/json");
                     let raw = JSON.stringify({
@@ -337,24 +342,27 @@
                         })
                         .then(function (data) {
                             console.log('results:', score, data.word)
-                            x.innerHTML = 'The correct word was ${data.word}. You achieved a score of: ' + score
+                            x.innerHTML = `The correct word was ${data.word}. You achieved a score of: ` + score
                             $('#staticBackdrop').modal('show')
                         })
                         .catch(function (e) { // Process error for request
                             alert(e) // Displays a browser alert with the error message.
                         })
                     break
+                }
 
-                case END_CORRECT_WORD:
+                case END_CORRECT_WORD: {
                     x.innerHTML = 'You Guessed the word correctly. You achieved a score of: ' + score
                     $('#staticBackdrop').modal('show')
-                    break
 
-                case END_TIME_LIMIT:
+                    break
+                }
+
+                case END_TIME_LIMIT: {
                     x.innerHTML = 'You ran out of time. You achieved a score of: ' + score
                     $('#staticBackdrop').modal('show')
                     break
-                    break
+                }
 
                 default:
                 // nothing
@@ -425,25 +433,24 @@
 
         let newGame = () => {
             const code = findGetParameter('code')
-            if(code){
+            if (code) {
                 game = code
             }
-            else 
-            {
+            else {
                 fetch('api/game')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.code === 'ok') {
-                        game = data.game
-                    }
-                    else {
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 'ok') {
+                            game = data.game
+                        }
+                        else {
 
-                        console.log('Cannot create new game')
-                    }
-                })
+                            console.log('Cannot create new game')
+                        }
+                    })
             }
 
-            
+
 
         }
 
@@ -525,11 +532,106 @@
             }
         }
 
+        const buildMiniScoredWord = (word, colours) => {
+            let out = ''
+            for(let i = 0; i < word.length; i++){
+                out += `<span class="badge bg-${colours[i]}">${word.charAt(i)}</span>`
+            }
+            return out
+        }
+
+        const viewGameLog = () => {
+            let logSpinner = document.getElementById('game-log-spinner')
+            let gameResult = document.getElementById('Game Result')
+            logSpinner.removeAttribute('hidden')
+            let headers = new Headers();
+            headers.append("Content-Type", "application/json");
+
+            let raw = JSON.stringify({
+                "game": game,
+            });
+
+            let requestOptions = {
+                method: 'POST',
+                headers: headers,
+                body: raw,
+                redirect: 'follow'
+            };
+            fetch("api/game/log", requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    logSpinner.setAttribute('hidden', true)
+                    if (data.code === 'ok') {
+
+                        const uriLog = "data:text/json;charset:utf-8," +
+                            encodeURIComponent(
+                                JSON.stringify(data.log, null, 4)
+                            )
+                        
+                        let guessesRows = ''
+                        const guesses = data.log.guesses
+                        let prevTime = moment(data.log.start)
+                        const start = moment(data.log.start)
+                        const end = moment(data.log.end)
+                        guesses.forEach((guess, index) => {
+                            const thisTime = moment(guess.date)
+                            const duration = moment.duration(thisTime.diff(prevTime)).humanize()
+                            prevTime = thisTime
+                            guessesRows += `
+                            <tr>
+                                <th scope="row">Guess ${index+1} <span class="badge badge-pill text-bg-success">${guess.score} points</span></th>
+                                <td>
+                                    ${buildMiniScoredWord(guess.guess, guess.colours)}
+                                    <span class="badge badge-pill badge-info text-bg-info">${duration}</span>
+                                </td>
+                            </tr>
+                            `
+                        })
+
+                        gameResult.innerHTML = `
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">Correct Word</th>
+                                        <td>${data.log.correctWord}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Score</th>
+                                        <td>${data.log.score} points</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Start</th>
+                                        <td>${start.format("MMMM Do YYYY HH:mm:ss")}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">End</th>
+                                        <td>${end.format("MMMM Do YYYY HH:mm:ss")}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Game Mode</th>
+                                        <td>${data.log.gameMode}</td>
+                                    </tr>
+                                    ${guessesRows}
+                                </tbody>
+                            </table>
+                            <a class="btn btn-outline-primary"href="${uriLog}" download="game_log_${start.format("DD_MM_YYYY_HH_mm")}.json">Download Log</a>
+                        </div>
+                            `
+                    }
+                })
+
+        }
+
+        
+
+
 
     </script>
 
     <script src="cdn/scripts/keyboardLogger.js"></script>
     <script src="cdn/scripts/timer.js"></script>
+    <script src="cdn/scripts/moment.js"></script>
 
 </body>
 

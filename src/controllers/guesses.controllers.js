@@ -22,11 +22,31 @@ const revealWord = async (req, res) => {
     return
   }
 
+  // check if game is over
+  if (!playerGame.complete) {
+    res.status(400).send({
+      message: 'The game has not yet completed.',
+      code: 'error'
+    })
+    return
+  }
+
   res.json({
     word: playerGame.word.word.toUpperCase()
   })
 }
 
+const scoreFunction = (guessesMade, colours) => {
+  let score = 0
+  for (let i = 0; i < colours.length; i++) {
+    if (colours[i] === 'green') {
+      score = score + 4 * (6 - guessesMade) ** 2
+    } else if (colours[i] === 'yellow') {
+      score = score + (6 - guessesMade) ** 2
+    }
+  }
+  return score
+}
 const colourCodeGuess = async (req, res) => {
   // load request parameters from JSON body
   const post = req.body
@@ -70,6 +90,7 @@ const colourCodeGuess = async (req, res) => {
   let score = 0
   const out = { code: 'ok', colour: [], guess, score } // output array
 
+  let allGreen = true
   for (let i = 0; i < post.guess.length; i++) {
     const letter = guess.charAt(i)
 
@@ -78,21 +99,17 @@ const colourCodeGuess = async (req, res) => {
       out.colour.push('green')
     } else if (correctWord.indexOf(letter) > -1) {
       out.colour.push('yellow')
+      allGreen = false
     } else {
       out.colour.push('gray')
+      allGreen = false
     }
   }
 
-  playerGame.save() // save to database
-  const turn = post.i
+  const turn = playerGame.guesses.length
 
-  for (let i = 0; i < out.colour.length; i++) {
-    if (out.colour[i] === 'green') {
-      score = score + 4 * (5 - turn) ** 2
-    } else if (out.colour[i] === 'yellow') {
-      score = score + (5 - turn) ** 2
-    }
-  }
+  score = scoreFunction(turn, out.colour)
+
   out.score = score
 
   // log the player's guess
@@ -102,6 +119,17 @@ const colourCodeGuess = async (req, res) => {
     score
   })
 
+  // update the total score
+  playerGame.score += score
+
+  // check if game is done
+  if (allGreen || playerGame.guesses.length === 6) {
+    playerGame.complete = true
+    playerGame.completedAt = Date.now()
+  }
+
+  playerGame.markModified('completedAt')
+  await playerGame.save() // save to database
   res.json(out)
 }
 
