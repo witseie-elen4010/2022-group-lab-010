@@ -24,18 +24,6 @@ beforeAll(async () => {
   mockedGame = await Game.create({ word: mockedWord._id, guesses: [], gameMode: 'practice' })
 })
 
-const scoreFunction = (guessesMade, colours) => {
-  let score = 0
-  for (let i = 0; i < colours.length; i++) {
-    if (colours[i] === 'green') {
-      score = score + 4 * (5 - guessesMade) ** 2
-    } else if (colours[i] === 'yellow') {
-      score = score + (5 - guessesMade) ** 2
-    }
-  }
-  return score
-}
-
 describe('Test Game Controller', function () {
   it('tests /api/game - Creates a usable game code', async () => {
     const res = await request(app)
@@ -101,14 +89,16 @@ describe('Test Game Controller', function () {
 
     expect(smartGuess.guess).toBe('SMART')
     expect(smartGuess.colours).toStrictEqual(smartColours)
-    expect(smartGuess.score).toBe(scoreFunction(0, smartColours))
+    expect(smartGuess.score).toBe(72)
 
     expect(pizzaGuess.guess).toBe('PIZZA')
     expect(pizzaGuess.colours).toStrictEqual(pizzaColours)
-    expect(pizzaGuess.score).toBe(scoreFunction(1, pizzaColours))
+    expect(pizzaGuess.score).toBe(0)
 
     expect(mouseGuess.guess).toBe('MOUSE')
     expect(mouseGuess.colours).toStrictEqual(mouseColours)
-    expect(mouseGuess.score).toBe(scoreFunction(2, mouseColours))
+    expect(mouseGuess.score).toBe(320)
+
+    expect(log.score).toBe(392)
   })
 })

@@ -16,19 +16,16 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', router)
 
 let mockedGame
-let guessesMade = -1
 
-const scoreFunction = (guessesMade, colours) => {
-  let score = 0
-  for (let i = 0; i < colours.length; i++) {
-    if (colours[i] === 'green') {
-      score = score + 4 * (5 - guessesMade) ** 2
-    } else if (colours[i] === 'yellow') {
-      score = score + (5 - guessesMade) ** 2
-    }
-  }
-  return score
-}
+/*
+
+Scoring algorithm:
+
+multiplier <-- (6 - previous Guesses made) ^ 2
+
+score <-- multiplier * (4 * number of greens + number of yellows)
+
+*/
 
 beforeAll(async () => {
   await db.connect()
@@ -46,13 +43,12 @@ describe('Test Guesses Controller', function () {
       .expect(200)
       .expect('Content-Type', /json/)
 
-    guessesMade++
     const colours = ['gray', 'green', 'green', 'green', 'green']
     const colour = res.body.colour
     const score = res.body.score
     expect(colour.length).toBe(5)
     expect(colour).toStrictEqual(colours)
-    expect(score).toBe(scoreFunction(guessesMade, colours))
+    expect(score).toBe(576)
   })
 
   it('tests /api/correct - Should not reveal word until game is done', async () => {
@@ -83,13 +79,12 @@ describe('Test Guesses Controller', function () {
       .expect(200)
       .expect('Content-Type', /json/)
 
-    guessesMade++
     const colours = ['yellow', 'yellow', 'gray', 'gray', 'gray']
     const colour = res.body.colour
     const score = res.body.score
     expect(colour.length).toBe(5)
     expect(colour).toStrictEqual(colours)
-    expect(score).toBe(scoreFunction(guessesMade, colours))
+    expect(score).toBe(50)
   })
 
   // guess 3/6
@@ -100,13 +95,12 @@ describe('Test Guesses Controller', function () {
       .expect(200)
       .expect('Content-Type', /json/)
 
-    guessesMade++
     const colours = ['gray', 'gray', 'gray', 'gray', 'gray']
     const score = res.body.score
     const colour = res.body.colour
     expect(colour.length).toBe(5)
     expect(colour).toStrictEqual(colours)
-    expect(score).toBe(scoreFunction(guessesMade, colours))
+    expect(score).toBe(0)
   })
 
   // guess not recorded
@@ -129,7 +123,6 @@ describe('Test Guesses Controller', function () {
     expect(res.body.code).toBe('error')
   })
 
-  // guess 4/6
   it('tests /api/guess endpoint - Invalid word', async () => {
     const res = await request(app)
       .post('/api/guess')
@@ -139,7 +132,7 @@ describe('Test Guesses Controller', function () {
     expect(res.body.code).toBe('error')
   })
 
-  // guess 5/6
+  // guess 4/6
   it('tests /api/guess endpoint - Correct word', async () => {
     const res = await request(app)
       .post('/api/guess')
@@ -147,13 +140,12 @@ describe('Test Guesses Controller', function () {
       .expect(200)
       .expect('Content-Type', /json/)
 
-    guessesMade++
     const colours = ['green', 'green', 'green', 'green', 'green']
     const colour = res.body.colour
     const score = res.body.score
     expect(colour.length).toBe(5)
     expect(colour).toStrictEqual(colours)
-    expect(score).toBe(scoreFunction(guessesMade, colours))
+    expect(score).toBe(180)
   })
 
   it('tests /api/correct - Reveals correct word', async () => {

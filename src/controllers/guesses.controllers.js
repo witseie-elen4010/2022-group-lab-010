@@ -36,6 +36,17 @@ const revealWord = async (req, res) => {
   })
 }
 
+const scoreFunction = (guessesMade, colours) => {
+  let score = 0
+  for (let i = 0; i < colours.length; i++) {
+    if (colours[i] === 'green') {
+      score = score + 4 * (6 - guessesMade) ** 2
+    } else if (colours[i] === 'yellow') {
+      score = score + (6 - guessesMade) ** 2
+    }
+  }
+  return score
+}
 const colourCodeGuess = async (req, res) => {
   // load request parameters from JSON body
   const post = req.body
@@ -97,13 +108,8 @@ const colourCodeGuess = async (req, res) => {
 
   const turn = playerGame.guesses.length
 
-  for (let i = 0; i < out.colour.length; i++) {
-    if (out.colour[i] === 'green') {
-      score = score + 4 * (5 - turn) ** 2
-    } else if (out.colour[i] === 'yellow') {
-      score = score + (5 - turn) ** 2
-    }
-  }
+  score = scoreFunction(turn, out.colour)
+
   out.score = score
 
   // log the player's guess
