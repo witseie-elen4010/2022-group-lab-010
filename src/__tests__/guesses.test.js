@@ -2,171 +2,163 @@
 
 /* eslint-env jest */
 
-const game = require('../controllers/game.controllers')
+const Game = require('../models/Game')
+const Word = require('../models/Word')
 // import * as guesses from '../controllers/guesses.controllers'
 const request = require('supertest')
 const express = require('express')
 const router = require('../routes/main.routes')
 const bodyParser = require('body-parser')
-
+const db = require('../models/dbTest')
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', router)
 
-const correctWordSpy = jest.spyOn(game, 'getGame')
-correctWordSpy.mockImplementation(() => ({
-  word: { word: 'MOUSE' },
-  guesses: [],
-  score: [],
-  save: () => {}
-}))
+let mockedGame
 
-const vaildWordSpy = jest.spyOn(game, 'wordIsValid')
-vaildWordSpy.mockImplementation((word) => {
-  const sampleDict = ['mouse', 'house', 'smart', 'pizza']
-  return sampleDict.indexOf(word.toLowerCase()) > -1
+/*
+
+Scoring algorithm:
+
+multiplier <-- (6 - previous Guesses made) ^ 2
+
+score <-- multiplier * (4 * number of greens + number of yellows)
+
+*/
+
+beforeAll(async () => {
+  await db.connect()
+  await db.seed()
+  const mockedWord = await Word.findOne({ word: 'mouse' }).exec() // force game word to be 'MOUSE'
+  mockedGame = await Game.create({ word: mockedWord._id, guesses: [], gameMode: 'practice' })
 })
 
-afterEach(() => {
-  jest.clearAllMocks()
+afterAll(async () => {
+  db.close()
 })
 
 describe('Test Guesses Controller', function () {
-  it('tests /api/guess endpoint - Correct word', async () => {
-    expect(correctWordSpy).toHaveBeenCalledTimes(0)
-    const res = await request(app)
-      .post('/api/guess')
-      .send({ guess: 'MOUSE', game: '1234' })
-      .expect(200)
-      .expect('Content-Type', /json/)
-
-    const colour = res.body.colour
-    expect(correctWordSpy).toHaveBeenCalledTimes(1)
-    expect(colour.length).toBe(5)
-    expect(colour).toStrictEqual(['green', 'green', 'green', 'green', 'green'])
-  })
-
+  // guess 1/6
   it('tests /api/guess endpoint - First letter wrong', async () => {
-    expect(correctWordSpy).toHaveBeenCalledTimes(0)
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'HOUSE', game: '1234' })
+      .send({ guess: 'HOUSE', game: mockedGame._id })
       .expect(200)
       .expect('Content-Type', /json/)
 
+    const colours = ['gray', 'green', 'green', 'green', 'green']
     const colour = res.body.colour
-    expect(correctWordSpy).toHaveBeenCalledTimes(1)
+    const score = res.body.score
     expect(colour.length).toBe(5)
-    expect(colour).toStrictEqual(['gray', 'green', 'green', 'green', 'green'])
+    expect(colour).toStrictEqual(colours)
+    expect(score).toBe(576)
   })
 
+  it('tests /api/correct - Should not reveal word until game is done', async () => {
+    await request(app)
+      .post('/api/correct')
+      .send({ game: mockedGame._id })
+      .expect(400)
+  })
+
+  it('tests /api/correct - Invalid post', async () => {
+    await request(app)
+      .post('/api/correct')
+      .expect(400)
+  })
+
+  it('tests /api/correct - Invalid game', async () => {
+    await request(app)
+      .post('/api/correct')
+      .send({ game: 'an invalid game' })
+      .expect(400)
+  })
+
+  // guess 2/6
   it('tests /api/guess endpoint - Most letters wrong', async () => {
-    expect(correctWordSpy).toHaveBeenCalledTimes(0)
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'SMART', game: '1234' })
+      .send({ guess: 'SMART', game: mockedGame._id })
       .expect(200)
       .expect('Content-Type', /json/)
 
+    const colours = ['yellow', 'yellow', 'gray', 'gray', 'gray']
     const colour = res.body.colour
-    expect(correctWordSpy).toHaveBeenCalledTimes(1)
+    const score = res.body.score
     expect(colour.length).toBe(5)
-    expect(colour).toStrictEqual(['yellow', 'yellow', 'gray', 'gray', 'gray'])
+    expect(colour).toStrictEqual(colours)
+    expect(score).toBe(50)
   })
 
+  // guess 3/6
   it('tests /api/guess endpoint - All letters wrong', async () => {
-    expect(correctWordSpy).toHaveBeenCalledTimes(0)
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'PIZZA', game: '1234' })
+      .send({ guess: 'PIZZA', game: mockedGame._id })
       .expect(200)
       .expect('Content-Type', /json/)
 
+    const colours = ['gray', 'gray', 'gray', 'gray', 'gray']
+    const score = res.body.score
     const colour = res.body.colour
-    expect(correctWordSpy).toHaveBeenCalledTimes(1)
     expect(colour.length).toBe(5)
-    expect(colour).toStrictEqual(['gray', 'gray', 'gray', 'gray', 'gray'])
+    expect(colour).toStrictEqual(colours)
+    expect(score).toBe(0)
   })
 
+  // guess not recorded
   it('tests /api/guess endpoint - Too Long Word', async () => {
-    expect(correctWordSpy).toHaveBeenCalledTimes(0)
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'MOUSES', game: '1234' })
+      .send({ guess: 'MOUSES', game: mockedGame._id })
       .expect(400)
       .expect('Content-Type', /json/)
     expect(res.body.code).toBe('error')
   })
 
+  // guess not recorded
   it('tests /api/guess endpoint - Too Short Word', async () => {
-    expect(correctWordSpy).toHaveBeenCalledTimes(0)
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'MICE', game: '1234' })
+      .send({ guess: 'MICE', game: mockedGame._id })
       .expect(400)
       .expect('Content-Type', /json/)
     expect(res.body.code).toBe('error')
   })
 
   it('tests /api/guess endpoint - Invalid word', async () => {
-    expect(correctWordSpy).toHaveBeenCalledTimes(0)
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'ASDFS', game: '1234' })
+      .send({ guess: 'ASDFS', game: mockedGame._id })
       .expect(400)
       .expect('Content-Type', /json/)
     expect(res.body.code).toBe('error')
   })
 
-  it('tests /api/guess endpoint - Correct word guessed on first turn', async () => {
-    expect(correctWordSpy).toHaveBeenCalledTimes(0)
+  // guess 4/6
+  it('tests /api/guess endpoint - Correct word', async () => {
     const res = await request(app)
       .post('/api/guess')
-      .send({ guess: 'MOUSE', game: '1234', i: 0 })
+      .send({ guess: 'MOUSE', game: mockedGame._id })
       .expect(200)
       .expect('Content-Type', /json/)
 
+    const colours = ['green', 'green', 'green', 'green', 'green']
     const colour = res.body.colour
-    expect(correctWordSpy).toHaveBeenCalledTimes(1)
-    expect(colour.length).toBe(5)
-    expect(colour).toStrictEqual(['green', 'green', 'green', 'green', 'green'])
-
     const score = res.body.score
-    expect(score).toBe(500)
+    expect(colour.length).toBe(5)
+    expect(colour).toStrictEqual(colours)
+    expect(score).toBe(180)
   })
 
-  it('tests /api/guess endpoint - Correct word guessed on Fifth turn', async () => {
-    expect(correctWordSpy).toHaveBeenCalledTimes(0)
+  it('tests /api/correct - Reveals correct word', async () => {
     const res = await request(app)
-      .post('/api/guess')
-      .send({ guess: 'MOUSE', game: '1234', i: 4 })
+      .post('/api/correct')
+      .send({ game: mockedGame._id })
       .expect(200)
-      .expect('Content-Type', /json/)
 
-    const colour = res.body.colour
-    expect(correctWordSpy).toHaveBeenCalledTimes(1)
-    expect(colour.length).toBe(5)
-    expect(colour).toStrictEqual(['green', 'green', 'green', 'green', 'green'])
-
-    const score = res.body.score
-    expect(score).toBe(20)
-  })
-
-  it('tests /api/guess endpoint - Almost correct word', async () => {
-    expect(correctWordSpy).toHaveBeenCalledTimes(0)
-    const res = await request(app)
-      .post('/api/guess')
-      .send({ guess: 'HOUSE', game: '1234', i: 0 })
-      .expect(200)
-      .expect('Content-Type', /json/)
-
-    const colour = res.body.colour
-    expect(correctWordSpy).toHaveBeenCalledTimes(1)
-    expect(colour.length).toBe(5)
-    expect(colour).toStrictEqual(['gray', 'green', 'green', 'green', 'green'])
-
-    const score = res.body.score
-    expect(score).toBe(400)
+    const word = res.body.word
+    expect(word).toBe('MOUSE')
   })
 })
