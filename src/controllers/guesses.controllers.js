@@ -47,6 +47,7 @@ const scoreFunction = (guessesMade, colours) => {
   }
   return score
 }
+
 const colourCodeGuess = async (req, res) => {
   // load request parameters from JSON body
   const post = req.body
