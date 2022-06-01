@@ -169,5 +169,4 @@ describe('Test Guesses Controller', function () {
     const score = res.body.score
     expect(score).toBe(400)
   })
-
 })
