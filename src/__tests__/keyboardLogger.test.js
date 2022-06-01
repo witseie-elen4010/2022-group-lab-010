@@ -1,5 +1,8 @@
 'use strict'
 /* eslint-env jest */
+/**
+ * @jest-environment jsdom
+ */
 
 const jsdom = require('jsdom')
 const { JSDOM } = jsdom
@@ -7,14 +10,6 @@ const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>')
 global.window = dom.window
 global.document = window.document
 const keyboard = require('../public/scripts/keyboardLogger')
-const express = require('express')
-const router = require('../routes/main.routes')
-const bodyParser = require('body-parser')
-
-const app = express()
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use('/', router)
 
 describe('Test Button component', () => {
   it('Test click event', () => {

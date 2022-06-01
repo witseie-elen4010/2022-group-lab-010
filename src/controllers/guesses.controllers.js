@@ -95,7 +95,7 @@ const colourCodeGuess = async (req, res) => {
     }
   }
 
-  const turn = post.i
+  const turn = playerGame.guesses.length
 
   for (let i = 0; i < out.colour.length; i++) {
     if (out.colour[i] === 'green') {

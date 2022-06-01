@@ -22,6 +22,15 @@ const getGameLog = async (req, res) => {
     return
   }
 
+  // check if game is complete
+  if (!gameObj.complete) {
+    res.status(400).send({
+      message: 'The game has not yet completed.',
+      code: 'error'
+    })
+    return
+  }
+
   const game = gameObj.toObject()
 
   let log = {}
@@ -73,6 +82,8 @@ const getGame = async (gameId) => {
   const game = await Game
     .findById(gameId)
     .populate('word')
+    .catch(() => false)
+
   if (game) {
     return game
   }
