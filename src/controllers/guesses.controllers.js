@@ -85,7 +85,6 @@ const colourCodeGuess = async (req, res) => {
 
   playerGame.save() // save to database
   const turn = post.i
-
   for (let i = 0; i < out.colour.length; i++) {
     if (out.colour[i] === 'green') {
       score = score + 4 * (5 - turn) ** 2

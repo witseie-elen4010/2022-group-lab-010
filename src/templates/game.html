@@ -71,6 +71,15 @@
             /* //border-radius: 10%; */
         }
 
+        .score{
+            background-color: rgb(255, 255, 255);
+            width: 110px;
+            height: 36px;
+            border: 1px solid rgb(35, 35, 35);
+            padding: 5px;
+            margin: 5px;
+        }
+
         .pausebutton {
             color: #ffffff;
             background-color: #335;
@@ -119,6 +128,9 @@
         <div>
             <button type="button" id="pauseTimer" class="btn btn-light mt-1" onclick="pauseTimer()"><i id="clockIcon"
                     class="bi bi-clock"> </i><span id="timer"></span></button>
+        </div>
+        <div>
+            <div class="score" id = "score"></div>
         </div>
     </div>
 
@@ -237,8 +249,9 @@
     <script>
         let game = 0;
         let gameDone = false;
-
+        let i = 0
         let sendGuess = async (guess) => {
+            
             let headers = new Headers();
             headers.append("Content-Type", "application/json");
 
@@ -255,17 +268,23 @@
                 redirect: 'follow'
             };
             const response = await fetch("api/guess", requestOptions)
+            i++
             return response.json()
         }
 
         guesses = 0
-        let i = 0
+        
         let score = 0;
 
         // Define End Conditions
         const END_CORRECT_WORD = Symbol('correct')
         const END_NO_GUESSES = Symbol('no_guess')
         const END_TIME_LIMIT = Symbol('time_limit')
+
+        let changebuttonName = function(){
+            var btn = document. getElementById("score");
+            btn.innerHTML = "Score : " + score
+        }
 
 
         let makeGuess = async () => {
@@ -279,6 +298,7 @@
                         generateColouredGuess(guess, data.colour)
 
                         score = score + data.score
+                        changebuttonName()
                         updateKeyboardColour(guess, data.colour)
                         let allGreen = true
                         for (let index = 0; index < data.colour.length; index++) {
