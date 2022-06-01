@@ -32,14 +32,13 @@ function startTimer () {
       global.fetch = fetch
       global.Headers = fetch.Headers */
 
-      const headers = new Headers()
-      headers.append('Content-Type', 'application/json')
+      const headers = { 'Content-Type': 'application/json' }
       const raw = JSON.stringify({
       //  "game":game
       })
       const requestOptions = {
         method: 'POST',
-        headers,
+        headers = headers,
         body: raw,
         redirect: 'follow'
       }

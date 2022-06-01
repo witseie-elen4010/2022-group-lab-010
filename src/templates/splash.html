@@ -183,11 +183,17 @@
         let checkName = async () => {
             let name = document.getElementById('name').value
             console.log(name)
+            let pass = 'password'
+            let email = 'aa@'
+            let num = '0820660676'
 
             let headers = new Headers();
             headers.append("Content-Type", "application/json");
             let raw = JSON.stringify({
-                "username": name
+                "username": name,
+                "password": pass,
+                "email" : email,
+                "phoneNumber": num
             });
             let requestOptions = {
                 method: 'POST',

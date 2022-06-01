@@ -7,6 +7,27 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true
+  },
+  password: { //  a user has one username
+    type: String,
+    required: true,
+    unique: false
+  },
+  email: { //  a user has one username
+    type: String,
+    required: true
+    // unique: true
+  },
+  phoneNumber: { //  a user has one username
+    type: String,
+    required: true
+
+    // unique: true
+  },
+  loggedIn: {
+    type: Boolean,
+    required: false
+
   }
 })
 

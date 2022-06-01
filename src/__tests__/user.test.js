@@ -6,8 +6,15 @@ const game = require('../controllers/game.controllers')
 const user = require('../controllers/user.controllers')
 // import * as guesses from '../controllers/guesses.controllers'
 const express = require('express')
+const request = require('supertest')
 const router = require('../routes/main.routes')
 const bodyParser = require('body-parser')
+
+const jsdom = require('jsdom')
+const { JSDOM } = jsdom
+const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>')
+global.window = dom.window
+global.document = window.document
 
 const app = express()
 app.use(bodyParser.json())
@@ -15,13 +22,12 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', router)
 
 const correctWordSpy = jest.spyOn(user, 'makeNewUser')
-correctWordSpy.mockImplementation(() => ({ username: 'MOUSE' }))
-
-const vaildWordSpy = jest.spyOn(game, 'wordIsValid')
-vaildWordSpy.mockImplementation((word) => {
-  const sampleDict = ['mouse', 'house', 'smart', 'pizza']
-  return sampleDict.indexOf(word.toLowerCase()) > -1
-})
+correctWordSpy.mockImplementation(() => ({
+  username: 'username',
+  password: 'pass',
+  email: 'email',
+  phoneNumber: 'num'
+}))
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -29,17 +35,20 @@ afterEach(() => {
 
 describe('Testing user loggin in ', function () {
   it('tests /api/user testing if the function was called', async () => {
-    expect(correctWordSpy).toHaveBeenCalledTimes(0)
-    // const res = await request(app)
-    // console.log(res.post)
-    /* .post('/api/user')
-      .send({ username: 'MOUSE' })
-    //  .expect(400)
-      .expect('Content-Type', /json/) */
+    // console.log(correctWordSpy)
 
-    /*  const colour = res.body.colour
-    expect(correctWordSpy).toHaveBeenCalledTimes(1)
-    expect(colour.length).toBe(5)
-    expect(colour).toStrictEqual(['green', 'green', 'green', 'green', 'green']) */
+    /*  const username = document.getElementById('username').value
+    const password = document.getElementById('password').value
+    const passwordConfirm = document.getElementById('passwordConfirm').value
+    const email = document.getElementById('email').value
+    const phone = document.getElementById('phone number').value */
+
+    expect(correctWordSpy).toHaveBeenCalledTimes(0)
+    const g = document.createElement('text')
+    g.id = 'password'
+    document.body.appendChild(g)
+    const pc = document.createElement('text')
+    pc.id = 'passwordConfirm'
+    document.body.appendChild(pc)
   })
 })

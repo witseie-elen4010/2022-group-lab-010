@@ -236,59 +236,72 @@
             let valid = true
 
             if (password === passwordConfirm) {
-valid = true
+                valid = true
             }
             else {
                 alert('Your passwords do not match, please confirm your passwords again')
                 valid = false
             }
             let at = email.includes("@");
-            if ( at === false)
-            {
+            if (at === false) {
                 alert('Please enter a valid email')
                 valid = false
             }
+            let pass = 'password'
+            let emaill = 'aa@'
+            let num = '0820660676'
+
+            if (valid == true) {
+
+                let headers = new Headers();
+                headers.append("Content-Type", "application/json");
+                let raw = JSON.stringify({
+                    "username": username ,
+                    "password": pass,
+                    "email": email,
+                    "phoneNumber": num 
+
+                });
+                let requestOptions = {
+                    method: 'POST',
+                    headers: headers,
+                    body: raw,
+                    redirect: 'follow'
+                };
+                fetch('api/user', requestOptions)
+                    .then(function (response) {
+                        if (response.ok) { return response.json() } // Return the response parse as JSON
+                        else { 
+                            console.log(response)
+                            throw 'Failed to create an account' }
+                    })
+                    .then(function (data) {
+                        console.log(data)
+
+                        if (data.status === 1) {
+                            //console.log('Welcome back ')
+                            document.getElementById("rememberUser").innerHTML =
+                                "This username is already Taken, please choose another" ;
+                        }
+                        else {
+                            //console.log('Welcome  newcomer ')
+                            document.getElementById("rememberUser").innerHTML =
+                                "Welcome newcomer " + data.username + "you will be redirected to the log in page momentarily...";
+                                //await setTimeout(2000);
+
+                                alert("Welcome newcomer " + data.username + " click ok to be redirected to the menu and to log in with the username and password you just created")
+                                location.href = "/";
+                        }
+                    }
+                    )
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+            }
 
 
-            
-
-
-
-            /*   let headers = new Headers();
-              headers.append("Content-Type", "application/json");
-              let raw = JSON.stringify({
-                  "username": name
-              });
-              let requestOptions = {
-                  method: 'POST',
-                  headers: headers,
-                  body: raw,
-                  redirect: 'follow'
-              };
-              fetch('api/user', requestOptions)
-                  .then(function (response) {
-                      if (response.ok) { return response.json() } // Return the response parse as JSON
-                      else { throw 'Failed to load correct word: response code invalid!' }
-                  })
-                  .then(function (data) {
-                      console.log(data)
-  
-                      if (data.status === 1) {
-                          //console.log('Welcome back ')
-                          document.getElementById("rememberUser").innerHTML =
-                              "Welcome back " + data.usernamee;
-                      }
-                      else {
-                          //console.log('Welcome  newcomer ')
-                          document.getElementById("rememberUser").innerHTML =
-                              "Welcome newcomer " + data.username;
-                      }
-                  }
-                  )
-                  .catch(function (error) {
-                      console.log(error)
-                  }) */
-
+return  valid 
 
         }
     </script>
