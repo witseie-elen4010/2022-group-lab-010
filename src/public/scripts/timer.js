@@ -21,26 +21,39 @@ function startTimer () {
     document.getElementById('timer').innerHTML =
             m + ':' + s
 
+    if (s === 10) {
+      console.log(typeof (s))
+    }
+
     setTimeout(startTimer, 1000)
 
-    if (m === 0 && s === '00') {
-      fetch('/api/correct')
+    if (m === 9 && s === 10) {
+      /* const fetch = require('node-fetch')
+      global.fetch = fetch
+      global.Headers = fetch.Headers */
+
+      const headers = new Headers()
+      headers.append('Content-Type', 'application/json')
+      const raw = JSON.stringify({
+      //  "game":game
+      })
+      const requestOptions = {
+        method: 'POST',
+        headers,
+        body: raw,
+        redirect: 'follow'
+      }
+      fetch('api/correct', requestOptions)
         .then(function (response) {
           if (response.ok) {
-            return response.json() // Return the response parse as JSON
+            return response.json()// Return the response parse as JSON
           } else { throw new Error('Failed to load correct word: response code invalid!') }
         })
-
         .then(function (data) {
+          console.log(data)
           const x = document.getElementById('Game Result')
           x.innerHTML = ' You ran out of time. Please try again. If you give up, Hover your curser below me to see the word ' // The correct word was ${data}` // Dont show the correct word when you run out of time
-          //  let btn = document.createElement("button");
-          // btn.classList.value = "btn btn-primary"
-          // btn.id = 'revealWord';
-          // btn.onclick = revWord(data)
-          // btn.innerHTML = "If you give up, click to reveal the word";
 
-          // x.appendChild(btn)
           const out = document.createElement('div')
           out.style = 'border:  width: 220px; font-family: sans-serif'
 
@@ -51,7 +64,6 @@ function startTimer () {
           out.appendChild(inner)
           x.appendChild(out)
         })
-
         .catch(function (e) { // Process error for request
           alert(e) // Displays a browser alert with the error message.
         })
