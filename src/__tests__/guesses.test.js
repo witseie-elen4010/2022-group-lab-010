@@ -18,6 +18,7 @@ const correctWordSpy = jest.spyOn(game, 'getGame')
 correctWordSpy.mockImplementation(() => ({
   word: { word: 'MOUSE' },
   guesses: [],
+  score: [],
   save: () => {}
 }))
 
@@ -117,4 +118,56 @@ describe('Test Guesses Controller', function () {
       .expect('Content-Type', /json/)
     expect(res.body.code).toBe('error')
   })
+
+  it('tests /api/guess endpoint - Correct word guessed on first turn', async () => {
+    expect(correctWordSpy).toHaveBeenCalledTimes(0)
+    const res = await request(app)
+      .post('/api/guess')
+      .send({ guess: 'MOUSE', game: '1234', i: 0 })
+      .expect(200)
+      .expect('Content-Type', /json/)
+
+    const colour = res.body.colour
+    expect(correctWordSpy).toHaveBeenCalledTimes(1)
+    expect(colour.length).toBe(5)
+    expect(colour).toStrictEqual(['green', 'green', 'green', 'green', 'green'])
+
+    const score = res.body.score
+    expect(score).toBe(500)
+  })
+
+  it('tests /api/guess endpoint - Correct word guessed on Fifth turn', async () => {
+    expect(correctWordSpy).toHaveBeenCalledTimes(0)
+    const res = await request(app)
+      .post('/api/guess')
+      .send({ guess: 'MOUSE', game: '1234', i: 4 })
+      .expect(200)
+      .expect('Content-Type', /json/)
+
+    const colour = res.body.colour
+    expect(correctWordSpy).toHaveBeenCalledTimes(1)
+    expect(colour.length).toBe(5)
+    expect(colour).toStrictEqual(['green', 'green', 'green', 'green', 'green'])
+
+    const score = res.body.score
+    expect(score).toBe(20)
+  })
+
+  it('tests /api/guess endpoint - Almost correct word', async () => {
+    expect(correctWordSpy).toHaveBeenCalledTimes(0)
+    const res = await request(app)
+      .post('/api/guess')
+      .send({ guess: 'HOUSE', game: '1234', i: 0 })
+      .expect(200)
+      .expect('Content-Type', /json/)
+
+    const colour = res.body.colour
+    expect(correctWordSpy).toHaveBeenCalledTimes(1)
+    expect(colour.length).toBe(5)
+    expect(colour).toStrictEqual(['gray', 'green', 'green', 'green', 'green'])
+
+    const score = res.body.score
+    expect(score).toBe(400)
+  })
+
 })
