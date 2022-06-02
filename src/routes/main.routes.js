@@ -15,7 +15,7 @@ router.get('/createAccount', handlers.createAccount)
 router.post('/api/guess', handlers.guessController.colourCodeGuess)
 router.post('/api/correct', handlers.guessController.revealWord)
 router.post('/api/user', users.makeNewUser)
-
+router.post('/api/LogIn', users.logginIn)
 router.get('/api/game', async function (req, res) {
   res.json({
     game: await controllers.generateGame(),

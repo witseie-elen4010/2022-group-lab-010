@@ -26,7 +26,7 @@
 <body>
     <div class="container-fluid p-5 bg-primary text-white text-center">
         <h1>Welcome to Twordle-dee!</h1>
-        <h3>Please log in or create an account  </h3>
+        <h3>Please log in or create an account </h3>
     </div>
 
     <section class="p-5">
@@ -35,15 +35,15 @@
                 <!-- <a href="https://www.youtube.com/watch?v=lv4Zg-209MY">it over here</a> -->
 
             <div class="input-group mb-3">
-                <input id="username" type="text" class="form-control" placeholder="Enter your username" autofocus>            
+                <input id="username" type="text" class="form-control" placeholder="Enter your username" autofocus>
             </div>
             <input id="password" type="text" class="form-control" placeholder="Enter your password" autofocus>
 
         </div>
         <div class="container text-center" id="name button">
             <button class="btn btn-primary" role="button" onclick="logIn()" id="Log in">Log in </button>
-            
-            <a href="createAccount" class="btn btn-primary" role="button">Create an account  </a>
+
+            <a href="createAccount" class="btn btn-primary" role="button">Create an account </a>
             <div class="div container text-center" id="rememberUser"></div>
         </div>
         </p>
@@ -103,49 +103,6 @@
     </section> -->
 
 
-    <!-- Modal -->
-    <div class="modal fade" id="Generator" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Share this code with your friend</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                            class="bi bi-x"></i></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-info" id="game-code">
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button onclick="joinGame()" class="btn btn-primary" role="button">Join Game</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="Loader" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Enter code to join game</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                            class="bi bi-x"></i></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" class="form-control" id="game-code-enter" placeholder="Enter Code">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <div class="input-group-append">
-                        <button onclick="joinGameWithCode()" class="btn btn-primary" role="button">Join Game</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
     <script>
@@ -185,10 +142,11 @@
             console.log(username)
             console.log(password)
 
-          /*   let headers = new Headers();
+            let headers = new Headers();
             headers.append("Content-Type", "application/json");
             let raw = JSON.stringify({
-                "username": name
+                "username": username,
+                "password": password
             });
             let requestOptions = {
                 method: 'POST',
@@ -196,29 +154,43 @@
                 body: raw,
                 redirect: 'follow'
             };
-            fetch('api/user', requestOptions)
+            fetch('api/LogIn', requestOptions)
                 .then(function (response) {
-                    if (response.ok) { return response.json() } // Return the response parse as JSON
-                    else { throw 'Failed to load correct word: response code invalid!' }
+                    console.log('LOGIN >HTML ', response)
+
+                     if (response.ok) {
+                        return response.json()
+                        console.log('response ok  ', response)
+                        document.getElementById("rememberUser").innerHTML = "You are now logged in"
+                    } // Return the response parse as JSON
+                    else {
+                        console.log('response not okay  ', response)
+                        document.getElementById("rememberUser").innerHTML =
+                            "Your username or password is incorrect" + data.usernamee;
+                        console.log('LOGIN >HTML ', response)
+                        throw 'Failed to load correct word: response code invalid!'
+                    } 
                 })
                 .then(function (data) {
                     console.log(data)
-
-                    if (data.status === 1) {
-                        //console.log('Welcome back ')
-                        document.getElementById("rememberUser").innerHTML =
-                            "Welcome back " + data.usernamee;
+                    if (data.code == 'ok') {
+                        
+                        alert("Welcome back " + data.username + " you are logged in and being redirected to the menu, enjoy!")
+                        location.href = "/game";
                     }
                     else {
-                        //console.log('Welcome  newcomer ')
-                        document.getElementById("rememberUser").innerHTML =
-                            "Welcome newcomer " + data.username;
+                        document.getElementById("rememberUser").innerHTML = "Your username or password is incorrect"
+                        document.getElementById('password').value = '';
                     }
+
+
+                   
+
                 }
                 )
                 .catch(function (error) {
                     console.log(error)
-                }) */
+                })
 
 
         }

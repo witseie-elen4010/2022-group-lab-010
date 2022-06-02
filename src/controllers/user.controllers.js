@@ -52,14 +52,43 @@ const makeNewUser = async (req, res) => {
   }
 }
 
-const findUserByUsername = async (username) => {
-  const user = await User.findOne({ username }).exec()
+const findUserByUsername = async (name) => {
+  console.log('Loggin the name ', name)
+  const user = await User.findOne({ username: name }).exec()
+  console.log('LOGGIN THE USER NAME', user)
   if (user) {
     return user
   }
   return false
 }
+
+const logginIn = async (req, res) => {
+  console.log('LOGGING IN REQUEST .body', req.body)
+  const post = req.body
+  const userNamee = post.username
+  const pword = post.password
+  const userChecker = await User.findOne({ username: userNamee }).exec()
+  const passwordChecker = await User.findOne({ password: pword }).exec()
+  console.log('1-', userChecker)
+  console.log('2-', passwordChecker)
+  const userBool = false
+  const passwordBool = false
+
+  if (userChecker) {
+    console.log(userChecker)
+
+    if (userChecker.password === pword) {
+      res.json({ code: 'ok', username: userChecker.username })
+    } else {
+      res.json({ code: 'error' })
+    }
+  }
+  console.log('1 ', userBool)
+  console.log('2', passwordBool)
+}
+
 module.exports = {
   generateUser,
-  makeNewUser
+  makeNewUser,
+  logginIn
 }

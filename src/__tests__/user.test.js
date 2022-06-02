@@ -2,53 +2,78 @@
 
 /* eslint-env jest */
 
-const game = require('../controllers/game.controllers')
 const user = require('../controllers/user.controllers')
 // import * as guesses from '../controllers/guesses.controllers'
 const express = require('express')
 const request = require('supertest')
 const router = require('../routes/main.routes')
 const bodyParser = require('body-parser')
-
-const jsdom = require('jsdom')
-const { JSDOM } = jsdom
-const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>')
-global.window = dom.window
-global.document = window.document
-
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', router)
-
+const db = require('../models/dbTest')
 const correctWordSpy = jest.spyOn(user, 'makeNewUser')
-correctWordSpy.mockImplementation(() => ({
-  username: 'username',
-  password: 'pass',
-  email: 'email',
-  phoneNumber: 'num'
-}))
+correctWordSpy.mockImplementation(() => ({ username: 'MOUSE' }))
+
+/* const vaildWordSpy = jest.spyOn(game, 'wordIsValid')
+vaildWordSpy.mockImplementation((word) => {
+  const sampleDict = ['mouse', 'house', 'smart', 'pizza']
+  return sampleDict.indexOf(word.toLowerCase()) > -1
+}) */
+
+let mockedGame
+
+jest.setTimeout(30000)
+beforeAll(async () => {
+  await db.connect()
+  await db.seed()
+  // const mockedWord = await user.findOne({ word: 'mouse' }).exec() // force game word to be 'MOUSE'
+  await user.generateUser({ username: 'John', password: 'pass', email: 'emai@l', phoneNumber: '2323' })
+})
+
+afterAll(async () => {
+  db.close()
+})
 
 afterEach(() => {
   jest.clearAllMocks()
 })
+jest.setTimeout(30000)
 
 describe('Testing user loggin in ', function () {
   it('tests /api/user testing if the function was called', async () => {
-    // console.log(correctWordSpy)
-
-    /*  const username = document.getElementById('username').value
-    const password = document.getElementById('password').value
-    const passwordConfirm = document.getElementById('passwordConfirm').value
-    const email = document.getElementById('email').value
-    const phone = document.getElementById('phone number').value */
-
+    // jest.setTimeout(30000)
     expect(correctWordSpy).toHaveBeenCalledTimes(0)
-    const g = document.createElement('text')
-    g.id = 'password'
-    document.body.appendChild(g)
-    const pc = document.createElement('text')
-    pc.id = 'passwordConfirm'
-    document.body.appendChild(pc)
+    const res = await request(app)
+      .post('/api/user')
+      .send({ username: 'Tom', password: 'pass', email: 'emai@l', phoneNumber: '2323' })
+      .expect(200)
+    // .expect('Content-Type', /json/)
+
+    console.log(res.body)
+    // const colour = res.body
+    // expect(res.body.usernamee).toBe('John')
+    /*
+
+    expect(colour.length).toBe(5)
+    expect(colour).toStrictEqual(['green', 'green', 'green', 'green', 'green']) */
+  })
+  it('testing duplicate names', async () => {
+    // jest.setTimeout(30000)
+    expect(correctWordSpy).toHaveBeenCalledTimes(0)
+    const res = await request(app)
+      .post('/api/user')
+      .send({ username: 'John', password: 'pass', email: 'emai@l', phoneNumber: '2323' })
+
+      .expect('Content-Type', /json/)
+
+    console.log(res.body)
+    // const colour = res.body
+    // expect(colour.status).toBe(1)
+    /*
+
+    expect(colour.length).toBe(5)
+    expect(colour).toStrictEqual(['green', 'green', 'green', 'green', 'green']) */
   })
 })

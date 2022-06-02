@@ -31,14 +31,17 @@ function startTimer () {
       /* const fetch = require('node-fetch')
       global.fetch = fetch
       global.Headers = fetch.Headers */
+      console.log('times up')
+      const x = document.getElementById('Game Result')
+      x.innerHTML = 'Times up ! Please try again.  ' //   $('#staticBackdrop').modal('show') // The correct word was ${data}` // Dont show the correct word when you run out of time
 
-      const headers = { 'Content-Type': 'application/json' }
-      const raw = JSON.stringify({
-      //  "game":game
+      // const headers
+      /* const raw = JSON.stringify({
+        game: game
       })
       const requestOptions = {
         method: 'POST',
-        headers = headers,
+        headers: { 'Content-Type': 'application/json' },
         body: raw,
         redirect: 'follow'
       }
@@ -65,14 +68,14 @@ function startTimer () {
         })
         .catch(function (e) { // Process error for request
           alert(e) // Displays a browser alert with the error message.
-        })
+        }) */
 
-      const y = document.getElementById('submit Guess')
+      /*  const y = document.getElementById('submit Guess')
       y.setAttribute('class', 'btn btn-primary')
       y.setAttribute('data-bs-toggle', 'modal')
       y.setAttribute('data-bs-target', '#staticBackdrop')
       y.innerHTML = 'complete'
-      y.click()
+      y.click() */
 
       // document.body.appendChild(btn);
     }
