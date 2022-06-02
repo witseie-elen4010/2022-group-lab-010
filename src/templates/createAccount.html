@@ -23,7 +23,7 @@
 </head>
 
 
-<body>
+<body onload="clearFields()">
     <div class="container-fluid p-5 bg-primary text-white text-center">
         <h1>Welcome to Twordle-dee!</h1>
         <h3>Create a new account </h3>
@@ -66,7 +66,7 @@
                 <input id="phone number" type="text" class="form-control" placeholder="Enter your phone number"
                     autofocus>
             </div>
-            <div class="input-group mb-3">
+            <!-- <div class="input-group mb-3">
                 <input id="4" type="text" class="form-control" placeholder="Enter your date of birth" autofocus>
             </div>
             <div class="input-group mb-3">
@@ -82,7 +82,7 @@
             <div class="input-group mb-3">
                 <input id="1" type="text" class="form-control" placeholder="Enterthe name of your Grade 1 teachers"
                     autofocus>
-            </div>
+            </div> -->
 
         </div>
         <div class="container text-center" id="name button">
@@ -203,6 +203,14 @@
             window.location.href = 'game?code=' + document.getElementById('game-code-enter').value
         }
 
+        let clearFields = async () => {
+            document.getElementById('username').value = ''
+            document.getElementById('password').value = ''
+            document.getElementById('email').value = ''
+            document.getElementById('phone number').value = ''
+            document.getElementById('passwordConfirm').value = ''
+        }
+
         const generateCode = async () => {
             document.getElementById('generate-code-spinner').removeAttribute('hidden')
             let headers = new Headers()
@@ -289,8 +297,8 @@
                                 "Welcome newcomer " + data.username + "you will be redirected to the log in page momentarily...";
                                 //await setTimeout(2000);
 
-                                alert("Welcome newcomer " + data.username + " click ok to be redirected to the menu and to log in with the username and password you just created")
-                                location.href = "/";
+                                alert("Welcome newcomer " + data.username + " click ok to be redirected to the menu ")
+                                location.href = "/splash";
                         }
                     }
                     )

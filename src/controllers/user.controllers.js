@@ -68,23 +68,33 @@ const logginIn = async (req, res) => {
   const userNamee = post.username
   const pword = post.password
   const userChecker = await User.findOne({ username: userNamee }).exec()
-  const passwordChecker = await User.findOne({ password: pword }).exec()
-  console.log('1-', userChecker)
-  console.log('2-', passwordChecker)
-  const userBool = false
-  const passwordBool = false
 
   if (userChecker) {
     console.log(userChecker)
 
     if (userChecker.password === pword) {
-      res.json({ code: 'ok', username: userChecker.username })
+      // res.json({ code: 'ok', username: userChecker.username })
+      res.status(200).send({
+        message: 'user authenticated',
+        code: 'ok',
+        username: userChecker.username
+
+      })
     } else {
-      res.json({ code: 'error' })
+      // res.json({ code: 'error' })
+      res.status(400).send({
+        message: 'username or password invalid',
+        code: 'error'
+
+      })
     }
+  } else {
+    res.status(400).send({
+      message: 'username  invalid',
+      code: 'error'
+
+    })
   }
-  console.log('1 ', userBool)
-  console.log('2', passwordBool)
 }
 
 module.exports = {

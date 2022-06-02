@@ -16,14 +16,6 @@ const db = require('../models/dbTest')
 const correctWordSpy = jest.spyOn(user, 'makeNewUser')
 correctWordSpy.mockImplementation(() => ({ username: 'MOUSE' }))
 
-/* const vaildWordSpy = jest.spyOn(game, 'wordIsValid')
-vaildWordSpy.mockImplementation((word) => {
-  const sampleDict = ['mouse', 'house', 'smart', 'pizza']
-  return sampleDict.indexOf(word.toLowerCase()) > -1
-}) */
-
-let mockedGame
-
 jest.setTimeout(30000)
 beforeAll(async () => {
   await db.connect()
@@ -49,15 +41,9 @@ describe('Testing user loggin in ', function () {
       .post('/api/user')
       .send({ username: 'Tom', password: 'pass', email: 'emai@l', phoneNumber: '2323' })
       .expect(200)
-    // .expect('Content-Type', /json/)
+      .expect('Content-Type', /json/)
 
     console.log(res.body)
-    // const colour = res.body
-    // expect(res.body.usernamee).toBe('John')
-    /*
-
-    expect(colour.length).toBe(5)
-    expect(colour).toStrictEqual(['green', 'green', 'green', 'green', 'green']) */
   })
   it('testing duplicate names', async () => {
     // jest.setTimeout(30000)
@@ -68,12 +54,45 @@ describe('Testing user loggin in ', function () {
 
       .expect('Content-Type', /json/)
 
-    console.log(res.body)
-    // const colour = res.body
-    // expect(colour.status).toBe(1)
-    /*
+    const req = res.body
+    console.log(req)
+  })
+  it('testing valid user logging in ', async () => {
+    // jest.setTimeout(30000)
+    expect(correctWordSpy).toHaveBeenCalledTimes(0)
+    const res = await request(app)
+      .post('/api/LogIn')
+      .send({ username: 'John', password: 'pass' })
+      .expect(200)
+      .expect('Content-Type', /json/)
 
-    expect(colour.length).toBe(5)
-    expect(colour).toStrictEqual(['green', 'green', 'green', 'green', 'green']) */
+    const req = res.body
+    console.log(req)
+  })
+  it('testing invalid password when user logging in ', async () => {
+    // jest.setTimeout(30000)
+    expect(correctWordSpy).toHaveBeenCalledTimes(0)
+    const res = await request(app)
+      .post('/api/LogIn')
+      .send({ username: 'John', password: 'passa' })
+      .expect(400)
+      .expect('Content-Type', /json/)
+
+    const req = res.body
+    console.log(req)
+    expect(req.code).toBe('error')
+  })
+
+  it('testing invalid username but  correct password ', async () => {
+    expect(correctWordSpy).toHaveBeenCalledTimes(0)
+    const res = await request(app)
+      .post('/api/LogIn')
+      .send({ username: 'Johnaaaa', password: 'pass' })
+      .expect(400)
+      .expect('Content-Type', /json/)
+
+    const req = res.body
+    console.log(req)
+    expect(req.code).toBe('error')
   })
 })

@@ -23,7 +23,7 @@
 </head>
 
 
-<body>
+<body onload="clearFields()">
     <div class="container-fluid p-5 bg-primary text-white text-center">
         <h1>Welcome to Twordle-dee!</h1>
         <h3>Please log in or create an account </h3>
@@ -37,7 +37,7 @@
             <div class="input-group mb-3">
                 <input id="username" type="text" class="form-control" placeholder="Enter your username" autofocus>
             </div>
-            <input id="password" type="text" class="form-control" placeholder="Enter your password" autofocus>
+            <input id="password" type="password" class="form-control" placeholder="Enter your password" autofocus>
 
         </div>
         <div class="container text-center" id="name button">
@@ -135,12 +135,16 @@
                 })
         }
 
-
+        let clearFields = async () => {
+            document.getElementById('username').value = ''
+            document.getElementById('password').value = ''
+           
+        }
         let logIn = async () => {
             let username = document.getElementById('username').value
             let password = document.getElementById('password').value
-            console.log(username)
-            console.log(password)
+           // console.log(username)
+            //console.log(password)
 
             let headers = new Headers();
             headers.append("Content-Type", "application/json");
@@ -156,7 +160,7 @@
             };
             fetch('api/LogIn', requestOptions)
                 .then(function (response) {
-                    console.log('LOGIN >HTML ', response)
+                    //console.log('LOGIN >HTML ', response)
 
                      if (response.ok) {
                         return response.json()
@@ -165,9 +169,12 @@
                     } // Return the response parse as JSON
                     else {
                         console.log('response not okay  ', response)
+                        document.getElementById("rememberUser").innerHTML = "Your username or password is incorrect"
+                        document.getElementById('password').value = '';
+
                         document.getElementById("rememberUser").innerHTML =
                             "Your username or password is incorrect" + data.usernamee;
-                        console.log('LOGIN >HTML ', response)
+                        
                         throw 'Failed to load correct word: response code invalid!'
                     } 
                 })
@@ -176,7 +183,7 @@
                     if (data.code == 'ok') {
                         
                         alert("Welcome back " + data.username + " you are logged in and being redirected to the menu, enjoy!")
-                        location.href = "/game";
+                        location.href = "/splash";
                     }
                     else {
                         document.getElementById("rememberUser").innerHTML = "Your username or password is incorrect"
