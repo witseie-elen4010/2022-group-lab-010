@@ -4,17 +4,17 @@ const game = require('./game.controllers')
 
 const revealWord = async (req, res) => {
   const post = req.body
-  if (!post) {
-    res.status(400).send({
-      message: 'Invalid Request Body',
-      code: 'error'
-    })
-    res.end()
-    return
-  }
+  // if (!post) {
+  //   res.status(400).send({
+  //     message: 'Invalid Request Body',
+  //     code: 'error'
+  //   })
+  //   res.end()
+  //   return
+  // }
 
   let playerGame
-  if (!(playerGame = await game.getGame(post.game))) {
+  if (!(playerGame = await game.getGame(req.user, post.game))) {
     res.status(400).send({
       message: "The 'game' parameter is invalid.",
       code: 'error'
@@ -61,7 +61,7 @@ const colourCodeGuess = async (req, res) => {
 
   let playerGame
 
-  if (!post.game || !(playerGame = await game.getGame(post.game))) {
+  if (!post.game || !(playerGame = await game.getGame(req.user, post.game))) {
     res.status(400).send({
       message: 'Error: Invalid Game',
       code: 'error'

@@ -1,12 +1,7 @@
 'use strict'
-const User = require('../models/user')
+const User = require('../models/User')
 // connected the database
 const generateUser = async (username) => {
-  // Get a random word from the database
-  const word = await User.count().exec()
-  console.log(User)
-  console.log(word)
-
   const user = {
     username
   }
@@ -31,11 +26,15 @@ const makeNewUser = async (req, res) => {
   }
   let user
   if ((user = await findUserByUsername(post.username))) {
-    res.json({ code: 'ok', message: 'Welcome back ' + user.username, status: 1, usernamee: post.username })
+    res
+      .cookie('username', user.username)
+      .json({ code: 'ok', message: 'Welcome back ' + user.username })
   } else {
     user = await generateUser(post.username)
     if (user) {
-      res.json(user)
+      res
+        .cookie('username', user.username)
+        .json(user)
     } else {
       res.status(400).send({
         message: 'Invalid Request Body Duplicate name',
@@ -55,5 +54,6 @@ const findUserByUsername = async (username) => {
 }
 module.exports = {
   generateUser,
-  makeNewUser
+  makeNewUser,
+  findUserByUsername
 }

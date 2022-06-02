@@ -240,12 +240,14 @@
 
     <script>
         let game = 0;
+        let username = '';
         let gameDone = false;
 
         let sendGuess = async (guess) => {
-            let headers = new Headers();
-            headers.append("Content-Type", "application/json");
-
+            let headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
             let raw = JSON.stringify({
                 "guess": guess,
                 "game": game,
@@ -256,7 +258,7 @@
                 method: 'POST',
                 headers: headers,
                 body: raw,
-                redirect: 'follow'
+                redirect: 'follow',
             };
             const response = await fetch("api/guess", requestOptions)
             return response.json()
@@ -324,17 +326,19 @@
             switch (endCondition) {
 
                 case END_NO_GUESSES: {
-                    let headers = new Headers();
-                    headers.append("Content-Type", "application/json");
+                    let headers = {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
                     let raw = JSON.stringify({
                         "game": game
-                    });
+                    })
                     let requestOptions = {
                         method: 'POST',
                         headers: headers,
                         body: raw,
                         redirect: 'follow'
-                    };
+                    }
                     fetch('api/correct', requestOptions)
                         .then(function (response) {
                             if (response.ok) { return response.json() } // Return the response parse as JSON
@@ -376,7 +380,16 @@
                 }
 
                 async function rematch() {
-                    const response = await fetch('api/rematch')
+                    let headers = {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                    let requestOptions = {
+                        method: 'GET',
+                        headers: headers,
+                        redirect: 'follow'
+                    }
+                    const response = await fetch('api/rematch', requestOptions)
 
                     if (response.status == 502) {
                         // Status 502 is a connection timeout error,
@@ -432,12 +445,24 @@
         }
 
         let newGame = () => {
+
+
+
             const code = findGetParameter('code')
             if (code) {
                 game = code
             }
             else {
-                fetch('api/game')
+                let headers = {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+                let requestOptions = {
+                    method: 'GET',
+                    headers: headers,
+                    redirect: 'follow'
+                }
+                fetch('api/game', requestOptions)
                     .then(response => response.json())
                     .then(data => {
                         if (data.code === 'ok') {
@@ -534,7 +559,7 @@
 
         const buildMiniScoredWord = (word, colours) => {
             let out = ''
-            for(let i = 0; i < word.length; i++){
+            for (let i = 0; i < word.length; i++) {
                 out += `<span class="badge bg-${colours[i]}">${word.charAt(i)}</span>`
             }
             return out
@@ -544,8 +569,10 @@
             let logSpinner = document.getElementById('game-log-spinner')
             let gameResult = document.getElementById('Game Result')
             logSpinner.removeAttribute('hidden')
-            let headers = new Headers();
-            headers.append("Content-Type", "application/json");
+            let headers = {
+                'Accept' : 'application/json', 
+                'Content-Type' : 'application/json'
+            }
 
             let raw = JSON.stringify({
                 "game": game,
@@ -567,7 +594,7 @@
                             encodeURIComponent(
                                 JSON.stringify(data.log, null, 4)
                             )
-                        
+
                         let guessesRows = ''
                         const guesses = data.log.guesses
                         let prevTime = moment(data.log.start)
@@ -579,7 +606,7 @@
                             prevTime = thisTime
                             guessesRows += `
                             <tr>
-                                <th scope="row">Guess ${index+1} <span class="badge badge-pill text-bg-success">${guess.score} points</span></th>
+                                <th scope="row">Guess ${index + 1} <span class="badge badge-pill text-bg-success">${guess.score} points</span></th>
                                 <td>
                                     ${buildMiniScoredWord(guess.guess, guess.colours)}
                                     <span class="badge badge-pill badge-info text-bg-info">${duration}</span>
@@ -623,7 +650,7 @@
 
         }
 
-        
+
 
 
 

@@ -14,7 +14,7 @@ const getGameLog = async (req, res) => {
   }
 
   let gameObj
-  if (!(gameObj = await getGame(post.game))) {
+  if (!(gameObj = await getGame(req.user, post.game))) {
     res.status(400).send({
       message: "The 'game' parameter is invalid.",
       code: 'error'
@@ -55,7 +55,7 @@ const getGameLog = async (req, res) => {
   })
 }
 
-const generateGame = async (gameMode = 'practice') => {
+const generateGame = async (owner, gameMode = 'practice') => {
   // Get a random word from the database
   const word = await Word.count()
     .exec()
@@ -70,20 +70,24 @@ const generateGame = async (gameMode = 'practice') => {
   const game = {
     word: word._id,
     guesses: [],
-    gameMode
+    gameMode,
+    players: [{ player: owner._id }]
   }
 
   const result = await Game.create(game)
-
-  return result._id
+  const code = await result.generateCode()
+  return code
 }
 
-const getGame = async (gameId) => {
+// const generateMultiplayer = async (req, res) => {
+//   const game = await generateGame(req.user, 'multiplayer')
+// }
+
+const getGame = async (user, gameId) => {
   const game = await Game
-    .findById(gameId)
+    .findOne({ code: gameId, player: user._id })
     .populate('word')
     .catch(() => false)
-
   if (game) {
     return game
   }

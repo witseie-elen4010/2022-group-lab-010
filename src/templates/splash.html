@@ -19,6 +19,9 @@
         .card-custom {
             background-color: black;
         }
+        body {
+            display: none;
+        }
     </style>
 </head>
 
@@ -28,120 +31,134 @@
         <h1>Welcome to Twordle-dee!</h1>
     </div>
 
-    <section class="p-5">
-        <div class="div container text-center" >
+    <section class="pt-5 px-5 pb-2">
+        <div class="div container text-center">
             <p>We're so glad you're here, why don't you go watch this video to learn more about
                 <a href="https://www.youtube.com/watch?v=lv4Zg-209MY">it over here</a>
-
-            <div class="input-group mb-3">
-                <input id="name" type="text" class="form-control" placeholder="Enter your name" autofocus>
-                <div class="input-group-append" id="name button">
-                    <button class="btn btn-outline-secondary" type="button" onclick="checkName()"
-                        id="submit name">Enter</button>
-                </div>
-                
-            </div>
-            <div class="div container text-center" id = "rememberUser"></div>
-        </div>
             </p>
         </div>
     </section>
 
+    <div class="container text-center" id="page-loading">
+        <h1>Loading <div class="spinner-border"></div>
+        </h1>
+    </div>
 
-    <!-- Game Modes -->
-    <section class="p-10">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md text-center">
-                    <div class="card-custom text-light" style=" height: 18rem;">
-                        <section class="py-5">
-                            <div class="card-body text-center">
-                                <div class="h1"><i class="bi bi-person"></i></div>
-                                <h4 class="card-title">
-                                    Single Player
-                                </h4>
-                                <p class="card-text">Click the button to play single player wordle</p>
-                                <div class="container text-center">
-                                    <a href="game" class="btn btn-primary" role="button">Launch Game!</a>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div class="col-md">
-                    <div class="card-custom text-light" style=" height: 18rem;">
-                        <section class="py-5">
-                            <div class="card-body text-center">
-                                <div class="h1"><i class="bi bi-people"></i></div>
-                                <h4 class="card-title">
-                                    Multiplayer
-                                </h4>
-                                <p class="card-text">Click the button to create or join a game</p>
-                                <div class="row text-center">
-                                    <div class="col-4 text-center offset-2">
-                                        <button onclick="generateCode()" type="button" class="btn btn-primary px-6">
-                                            Generate Code <div id="generate-code-spinner" hidden="true"
-                                                class="spinner-border spinner-border-sm"></div>
-                                        </button>
-                                    </div>
-                                    <div class="col-4 text-center">
-                                        <button type="button" class="btn btn-primary px-4" data-bs-toggle="modal"
-                                            data-bs-target="#Loader">
-                                            Enter Code
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- Modal -->
-    <div class="modal fade" id="Generator" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Share this code with your friend</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                            class="bi bi-x"></i></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-info" id="game-code">
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button onclick="joinGame()" class="btn btn-primary" role="button">Join Game</button>
-                </div>
+    
+    <div id="login-reg">
+        <div class="input-group mb-3">
+            <input id="name" type="text" class="form-control" placeholder="Enter your name" autofocus>
+            <div class="input-group-append" id="name button">
+                <button class="btn btn-outline-secondary" type="button" onclick="checkName()"
+                    id="submit name">Enter</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="Loader" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Enter code to join game</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                            class="bi bi-x"></i></button>
+
+    <div id="lobby">
+        <div class="div container text-center mb-4">
+            <h4><span id="rememberUser"></span>&nbsp;&nbsp;<button onclick="logout()" class="ml-2 btn-sm btn btn-outline-danger">Logout <i class="bi bi-box-arrow-right"></i></button></h4>
+        </div>
+
+
+        <!-- Game Modes -->
+        <section class="p-10">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-md text-center">
+                        <div class="card-custom text-light" style=" height: 18rem;">
+                            <section class="py-5">
+                                <div class="card-body text-center">
+                                    <div class="h1"><i class="bi bi-person"></i></div>
+                                    <h4 class="card-title">
+                                        Single Player
+                                    </h4>
+                                    <p class="card-text">Click the button to play single player wordle</p>
+                                    <div class="container text-center">
+                                        <a href="game" class="btn btn-primary" role="button">Launch Game!</a>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="card-custom text-light" style=" height: 18rem;">
+                            <section class="py-5">
+                                <div class="card-body text-center">
+                                    <div class="h1"><i class="bi bi-people"></i></div>
+                                    <h4 class="card-title">
+                                        Multiplayer
+                                    </h4>
+                                    <p class="card-text">Click the button to create or join a game</p>
+                                    <div class="row text-center">
+                                        <div class="col-4 text-center offset-2">
+                                            <button onclick="generateCode()" type="button" class="btn btn-primary px-6">
+                                                Generate Code <div id="generate-code-spinner" hidden="true"
+                                                    class="spinner-border spinner-border-sm"></div>
+                                            </button>
+                                        </div>
+                                        <div class="col-4 text-center">
+                                            <button type="button" class="btn btn-primary px-4" data-bs-toggle="modal"
+                                                data-bs-target="#Loader">
+                                                Enter Code
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <input type="text" class="form-control" id="game-code-enter" placeholder="Enter Code">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <div class="input-group-append">
-                        <button onclick="joinGameWithCode()" class="btn btn-primary" role="button">Join Game</button>
+            </div>
+        </section>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="Generator" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Share this code with your friend</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                                class="bi bi-x"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info" id="game-code">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button onclick="joinGame()" class="btn btn-primary" role="button">Join Game</button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="Loader" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Enter code to join game</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                                class="bi bi-x"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" id="game-code-enter" placeholder="Enter Code">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <div class="input-group-append">
+                            <button onclick="joinGameWithCode()" class="btn btn-primary" role="button">Join
+                                Game</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 
@@ -149,12 +166,63 @@
         // data-bs-toggle="modal" data-bs-target="#Generator"
         let gameCode = ''
 
+        const logout = () => {
+            // send logout request to server // to do
+            
+
+            //delete cookies and reload page
+            document.cookie = "username= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+
+            window.location.reload()
+        }
+        
+        // check if already logged in
+        const checkLogin = () => {
+            $("#page-loading").show()
+            $("#login-reg").hide()
+            $("#lobby").hide()
+
+            let headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+            fetch('api/user', { headers: headers })
+                .then(res => res.json())
+                .then(data => {
+                    $("#page-loading").hide()
+                    if (data.code === 'ok') {
+                        console.log('okay')
+                        $("#lobby").show()
+                        $("#login-reg").hide()
+                        document.getElementById("rememberUser").innerHTML =
+                            "Hi " + data.username + "!";
+                    }
+                    else {
+                        console.log('need login')
+                        $("#lobby").hide()
+                        $("#login-reg").show()
+                        $('#lobby').hide()
+                      
+                    }
+                    console.log('here')
+                })
+                .catch((err) => {
+                    
+                })
+
+        }
+
+        window.onload = function () {
+            checkLogin()
+            $('body').show()
+        }
+
         const joinGame = () => {
-            window.location.href = 'game?code='+gameCode
+            window.location.href = 'game?code=' + gameCode
         }
 
         const joinGameWithCode = () => {
-            window.location.href = 'game?code='+document.getElementById('game-code-enter').value
+            window.location.href = 'game?code=' + document.getElementById('game-code-enter').value
         }
 
         const generateCode = async () => {
@@ -180,39 +248,41 @@
             let name = document.getElementById('name').value
             console.log(name)
 
-            let headers = new Headers();
-            headers.append("Content-Type", "application/json");
+            let headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
             let raw = JSON.stringify({
                 "username": name
-            });
+            })
             let requestOptions = {
                 method: 'POST',
                 headers: headers,
                 body: raw,
                 redirect: 'follow'
-            };
+            }
             fetch('api/user', requestOptions)
                 .then(function (response) {
                     if (response.ok) { return response.json() } // Return the response parse as JSON
                     else { throw 'Failed to load correct word: response code invalid!' }
                 })
                 .then(function (data) {
-                    console.log(data )
+                    // console.log(data)
 
-                    if(data.status === 1)
-                    {
-                        //console.log('Welcome back ')
-                        document.getElementById("rememberUser").innerHTML = 
-              "Welcome back " + data.usernamee;
-                    }
-                    else{
-                        //console.log('Welcome  newcomer ')
-                        document.getElementById("rememberUser").innerHTML = 
-              "Welcome newcomer " + data.username;
-                    }
+                    // if (data.message.includes('back')) {
+                    //     //console.log('Welcome back ')document.getElementById("rememberUser").innerHTML =
+                    //         "Welcome back " + data.username;
+                    // }
+                    // else {
+                    //     //console.log('Welcome  newcomer ')
+                    //     document.getElementById("rememberUser").innerHTML =
+                    //         "Welcome newcomer " + data.username;
+                    // }
+
+                    checkLogin()
                 }
                 )
-                .catch(function (error){
+                .catch(function (error) {
                     console.log(error)
                 })
 

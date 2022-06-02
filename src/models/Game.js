@@ -1,8 +1,5 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
 const crypto = require('crypto')
-
-const saltRounds = 10
 
 // Define schema
 const Schema = mongoose.Schema
@@ -20,7 +17,8 @@ const GameSchema = new Schema(
       date: { // the timestamp when the guess was made
         type: Date,
         default: Date.now
-      }
+      },
+      playerNumber: Number
     }],
     gameMode: {
       type: String, // a the type of the game either 'practice', 'multiplayer'
@@ -36,26 +34,37 @@ const GameSchema = new Schema(
     score: {
       type: Number,
       default: 0
-    }
-    // owner: {
-    //   type: mongoose.Types.ObjectId,
-    //   required: true,
-    //   ref: 'Player'
-    // }
+    },
+    code: {
+      type: String,
+      unique: true
+    },
+    players: [{
+      player: {
+        type: Schema.Types.ObjectId,
+        required: true
+      }
+    }]
 
   },
   { timestamps: true } // createdAt and updatedAt
 )
 
-GameSchema.method.generateCode = function (callback) {
+GameSchema.methods.generateCode = async function () {
   const game = this
-  const code = crypto.randomBytes(64).toString('hex')
-  game.code = bcrypt.hashSync(saltRounds, code)
-  game.save((err, game) => {
-    if (err) return callback(err)
-    callback(null, code)
-  })
-  return code
+
+  let code = ''
+
+  do {
+    code = crypto.randomBytes(24).toString('hex')
+  }
+  while (await mongoose.model('Game').exists({ code }))
+
+  game.code = code
+  const valid = await game.save()
+
+  if (valid) return code
+  return false
 }
 
 module.exports = mongoose.model('Game', GameSchema)
