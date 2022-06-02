@@ -1,5 +1,5 @@
 'use strict'
-/* global alert */
+
 document.getElementById('timer').innerHTML =
     9 + ':' + 15
 let pause = false
