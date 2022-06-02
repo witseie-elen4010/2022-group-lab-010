@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const { MongoMemoryServer } = require('mongodb-memory-server')
 const Word = require('./Word')
+const User = require('./User')
 
 let mongod
 module.exports.connect = async () => {
@@ -19,6 +20,9 @@ module.exports.seed = async () => {
   })
 
   await Word.insertMany(wordDict)
+
+  const user = { username: 'TestUser' }
+  await User.create(user)
 }
 
 module.exports.close = async () => {
