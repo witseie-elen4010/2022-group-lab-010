@@ -35,9 +35,9 @@
                 <!-- <a href="https://www.youtube.com/watch?v=lv4Zg-209MY">it over here</a> -->
 
             <div class="input-group mb-3">
-                <input id="username" type="text" class="form-control" placeholder="Enter your username" autofocus>
+                <input id="username" type="text" class="form-control" placeholder="Enter your username" autofocus> 
             </div>
-            <input id="password" type="password" class="form-control" placeholder="Enter your password" autofocus>
+            <input id="password" type="password" class="form-control" placeholder="Enter your password" autofocus> 
 
         </div>
         <div class="container text-center" id="name button">
@@ -51,62 +51,9 @@
     </section>
 
 
-    <!--   Game Modes 
-    <section class="p-10">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md text-center">
-                    <div class="card-custom text-light" style=" height: 18rem;">
-                        <section class="py-5">
-                            <div class="card-body text-center">
-                                <div class="h1"><i class="bi bi-person"></i></div>
-                                <h4 class="card-title">
-                                    Single Player
-                                </h4>
-                                <p class="card-text">Click the button to play single player wordle</p>
-                                <div class="container text-center">
-                                    <a href="game" class="btn btn-primary" role="button">Launch Game!</a>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div class="col-md">
-                    <div class="card-custom text-light" style=" height: 18rem;">
-                        <section class="py-5">
-                            <div class="card-body text-center">
-                                <div class="h1"><i class="bi bi-people"></i></div>
-                                <h4 class="card-title">
-                                    Multiplayer
-                                </h4>
-                                <p class="card-text">Click the button to create or join a game</p>
-                                <div class="row text-center">
-                                    <div class="col-4 text-center offset-2">
-                                        <button onclick="generateCode()" type="button" class="btn btn-primary px-6">
-                                            Generate Code <div id="generate-code-spinner" hidden="true"
-                                                class="spinner-border spinner-border-sm"></div>
-                                        </button>
-                                    </div>
-                                    <div class="col-4 text-center">
-                                        <button type="button" class="btn btn-primary px-4" data-bs-toggle="modal"
-                                            data-bs-target="#Loader">
-                                            Enter Code
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-
-
-
 
     <script>
-        // data-bs-toggle="modal" data-bs-target="#Generator"
+      
         let gameCode = ''
 
         const joinGame = () => {
@@ -189,9 +136,6 @@
                         document.getElementById("rememberUser").innerHTML = "Your username or password is incorrect"
                         document.getElementById('password').value = '';
                     }
-
-
-                   
 
                 }
                 )
