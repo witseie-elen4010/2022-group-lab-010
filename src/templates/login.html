@@ -23,36 +23,35 @@
 </head>
 
 
-<body>
+<body onload="clearFields()">
     <div class="container-fluid p-5 bg-primary text-white text-center">
         <h1>Welcome to Twordle-dee!</h1>
+        <h3>Please log in or create an account </h3>
     </div>
 
     <section class="p-5">
-        <div class="div container text-center" >
-            <p>We're so glad you're here, why don't you go watch this video to learn more about
-                <a href="https://www.youtube.com/watch?v=lv4Zg-209MY">it over here</a>
+        <div class="div container text-center">
+            <p>
+                <!-- <a href="https://www.youtube.com/watch?v=lv4Zg-209MY">it over here</a> -->
 
-            <!-- <div class="input-group mb-3">
-
-                <div class="container text-center">
-                    <a href="login" class="btn btn-primary" role="button">Log in </a>
-                </div>
-                <input id="name" type="text" class="form-control" placeholder="Enter your name" autofocus>
-                <div class="input-group-append" id="name button">
-                    <button class="btn btn-outline-secondary" type="button" onclick="checkName()"
-                        id="submit name">Enter</button>
-                </div>
-                
+            <div class="input-group mb-3">
+                <input id="username" type="text" class="form-control" placeholder="Enter your username" autofocus>
             </div>
-            <div class="div container text-center" id = "rememberUser"></div> -->
+            <input id="password" type="password" class="form-control" placeholder="Enter your password" autofocus>
+
         </div>
-            </p>
+        <div class="container text-center" id="name button">
+            <button class="btn btn-primary" role="button" onclick="logIn()" id="Log in">Log in </button>
+
+            <a href="createAccount" class="btn btn-primary" role="button">Create an account </a>
+            <div class="div container text-center" id="rememberUser"></div>
+        </div>
+        </p>
         </div>
     </section>
 
 
-    <!-- Game Modes -->
+    <!--   Game Modes 
     <section class="p-10">
         <div class="container">
             <div class="row text-center">
@@ -101,52 +100,9 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
 
-    <!-- Modal -->
-    <div class="modal fade" id="Generator" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Share this code with your friend</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                            class="bi bi-x"></i></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-info" id="game-code">
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button onclick="joinGame()" class="btn btn-primary" role="button">Join Game</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="Loader" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Enter code to join game</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                            class="bi bi-x"></i></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" class="form-control" id="game-code-enter" placeholder="Enter Code">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <div class="input-group-append">
-                        <button onclick="joinGameWithCode()" class="btn btn-primary" role="button">Join Game</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
     <script>
@@ -154,11 +110,11 @@
         let gameCode = ''
 
         const joinGame = () => {
-            window.location.href = 'game?code='+gameCode
+            window.location.href = 'game?code=' + gameCode
         }
 
         const joinGameWithCode = () => {
-            window.location.href = 'game?code='+document.getElementById('game-code-enter').value
+            window.location.href = 'game?code=' + document.getElementById('game-code-enter').value
         }
 
         const generateCode = async () => {
@@ -179,18 +135,22 @@
                 })
         }
 
-
-        let checkName = async () => {
-            let name = document.getElementById('name').value
-          
+        let clearFields = async () => {
+            document.getElementById('username').value = ''
+            document.getElementById('password').value = ''
+           
+        }
+        let logIn = async () => {
+            let username = document.getElementById('username').value
+            let password = document.getElementById('password').value
+           // console.log(username)
+            //console.log(password)
 
             let headers = new Headers();
             headers.append("Content-Type", "application/json");
             let raw = JSON.stringify({
-                "username": name,
-                "password": pass,
-                "email" : email,
-                "phoneNumber": num
+                "username": username,
+                "password": password
             });
             let requestOptions = {
                 method: 'POST',
@@ -198,28 +158,44 @@
                 body: raw,
                 redirect: 'follow'
             };
-            fetch('api/user', requestOptions)
+            fetch('api/LogIn', requestOptions)
                 .then(function (response) {
-                    if (response.ok) { return response.json() } // Return the response parse as JSON
-                    else { throw 'Failed to load correct word: response code invalid!' }
+                    //console.log('LOGIN >HTML ', response)
+
+                     if (response.ok) {
+                        return response.json()
+                        console.log('response ok  ', response)
+                        document.getElementById("rememberUser").innerHTML = "You are now logged in"
+                    } // Return the response parse as JSON
+                    else {
+                        console.log('response not okay  ', response)
+                        document.getElementById("rememberUser").innerHTML = "Your username or password is incorrect"
+                        document.getElementById('password').value = '';
+
+                        document.getElementById("rememberUser").innerHTML =
+                            "Your username or password is incorrect" + data.usernamee;
+                        
+                        throw 'Failed to load correct word: response code invalid!'
+                    } 
                 })
                 .then(function (data) {
-                    console.log(data )
+                    console.log(data)
+                    if (data.code == 'ok') {
+                        
+                        alert("Welcome back " + data.username + " you are logged in and being redirected to the menu, enjoy!")
+                        location.href = "/splash";
+                    }
+                    else {
+                        document.getElementById("rememberUser").innerHTML = "Your username or password is incorrect"
+                        document.getElementById('password').value = '';
+                    }
 
-                    if(data.status === 1)
-                    {
-                        //console.log('Welcome back ')
-                        document.getElementById("rememberUser").innerHTML = 
-              "Welcome back " + data.usernamee;
-                    }
-                    else{
-                        //console.log('Welcome  newcomer ')
-                        document.getElementById("rememberUser").innerHTML = 
-              "Welcome newcomer " + data.username;
-                    }
+
+                   
+
                 }
                 )
-                .catch(function (error){
+                .catch(function (error) {
                     console.log(error)
                 })
 

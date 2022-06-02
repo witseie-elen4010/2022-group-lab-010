@@ -8,13 +8,15 @@ const router = express.Router()
 
 // Static routes
 router.get('/game', handlers.game)
-router.get('/', handlers.splash)
-
+router.get('/', handlers.login)
+router.get('/splash', handlers.splash)
+router.get('/login', handlers.login)
+router.get('/createAccount', handlers.createAccount)
 // API routes
 router.post('/api/guess', handlers.guessController.colourCodeGuess)
 router.post('/api/correct', handlers.guessController.revealWord)
 router.post('/api/user', users.makeNewUser)
-
+router.post('/api/LogIn', users.logginIn)
 router.get('/api/game', async function (req, res) {
   res.json({
     game: await controllers.generateGame(),

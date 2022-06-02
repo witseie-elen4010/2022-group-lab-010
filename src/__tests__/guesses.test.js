@@ -26,7 +26,7 @@ multiplier <-- (6 - previous Guesses made) ^ 2
 score <-- multiplier * (4 * number of greens + number of yellows)
 
 */
-
+jest.setTimeout(30000)
 beforeAll(async () => {
   await db.connect()
   await db.seed()

@@ -345,12 +345,13 @@
         let gameEnd = function (endCondition) {
             gameDone = true
             const x = document.getElementById('Game Result')
-
+            console.log('LOGGING THE VALUE OF GAME before switch  ', game)
             switch (endCondition) {
 
                 case END_NO_GUESSES: {
                     let headers = new Headers();
                     headers.append("Content-Type", "application/json");
+                    console.log('LOGGING THE VALUE OF GAME ', game)
                     let raw = JSON.stringify({
                         "game": game
                     });

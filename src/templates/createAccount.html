@@ -23,36 +23,78 @@
 </head>
 
 
-<body>
+<body onload="clearFields()">
     <div class="container-fluid p-5 bg-primary text-white text-center">
         <h1>Welcome to Twordle-dee!</h1>
+        <h3>Create a new account </h3>
     </div>
 
     <section class="p-5">
-        <div class="div container text-center" >
-            <p>We're so glad you're here, why don't you go watch this video to learn more about
-                <a href="https://www.youtube.com/watch?v=lv4Zg-209MY">it over here</a>
+        <div class="div container text-center">
+            <p>
+                <!-- <a href="https://www.youtube.com/watch?v=lv4Zg-209MY">it over here</a> -->
 
-            <!-- <div class="input-group mb-3">
-
-                <div class="container text-center">
-                    <a href="login" class="btn btn-primary" role="button">Log in </a>
-                </div>
-                <input id="name" type="text" class="form-control" placeholder="Enter your name" autofocus>
-                <div class="input-group-append" id="name button">
-                    <button class="btn btn-outline-secondary" type="button" onclick="checkName()"
-                        id="submit name">Enter</button>
-                </div>
-                
+            <div class="input-group mb-3">
+                <input id="username" type="text" class="form-control" placeholder="Enter your username" autofocus>
             </div>
-            <div class="div container text-center" id = "rememberUser"></div> -->
+
+
+            <div class="input-group mb-3">
+                <!--     -->
+                <input type="password" class="form-control" id="password" placeholder="Password">
+            </div>
+
+
+            <!--  <div class="input-group mb-3">
+                <input id="password" type="text" class="form-control" placeholder="Enter your password" autofocus>
+            </div> -->
+            <div class="input-group mb-3">
+                <input id="passwordConfirm" type="password" class="form-control" placeholder="Confirm your password"
+                    autofocus>
+            </div>
+
+
+            <div class="input-group mb-3">
+                <input id="email" type="text" class="form-control" placeholder="Enter your email" autofocus>
+                <!--  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+
+
+
+
+            <div class="input-group mb-3">
+                <input id="phone number" type="text" class="form-control" placeholder="Enter your phone number"
+                    autofocus>
+            </div>
+            <!-- <div class="input-group mb-3">
+                <input id="4" type="text" class="form-control" placeholder="Enter your date of birth" autofocus>
+            </div>
+            <div class="input-group mb-3">
+                <input id="3" type="text" class="form-control" placeholder="Enter your ID no." autofocus>
+            </div>
+            <div class="input-group mb-3">
+                <input id="3" type="text" class="form-control" placeholder="Enter your mothers maiden name    "
+                    autofocus>
+            </div>
+            <div class="input-group mb-3">
+                <input id="2" type="text" class="form-control" placeholder="Enter the name of your first pet" autofocus>
+            </div>
+            <div class="input-group mb-3">
+                <input id="1" type="text" class="form-control" placeholder="Enterthe name of your Grade 1 teachers"
+                    autofocus>
+            </div> -->
+
         </div>
-            </p>
+        <div class="container text-center" id="name button">
+            <button class="btn btn-primary" role="button" onclick="createAcc()" id="Log in">Create your account</button>
+            <div class="div container text-center" id="rememberUser"></div>
+        </div>
+        </p>
         </div>
     </section>
 
 
-    <!-- Game Modes -->
+    <!--   Game Modes 
     <section class="p-10">
         <div class="container">
             <div class="row text-center">
@@ -101,7 +143,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
 
     <!-- Modal -->
@@ -154,11 +196,19 @@
         let gameCode = ''
 
         const joinGame = () => {
-            window.location.href = 'game?code='+gameCode
+            window.location.href = 'game?code=' + gameCode
         }
 
         const joinGameWithCode = () => {
-            window.location.href = 'game?code='+document.getElementById('game-code-enter').value
+            window.location.href = 'game?code=' + document.getElementById('game-code-enter').value
+        }
+
+        let clearFields = async () => {
+            document.getElementById('username').value = ''
+            document.getElementById('password').value = ''
+            document.getElementById('email').value = ''
+            document.getElementById('phone number').value = ''
+            document.getElementById('passwordConfirm').value = ''
         }
 
         const generateCode = async () => {
@@ -180,49 +230,86 @@
         }
 
 
-        let checkName = async () => {
-            let name = document.getElementById('name').value
-          
+        let createAcc = async () => {
+            let username = document.getElementById('username').value
+            let password = document.getElementById('password').value
+            let passwordConfirm = document.getElementById('passwordConfirm').value
+            let email = document.getElementById('email').value
+            let phone = document.getElementById('phone number').value
+            console.log(username)
+            console.log(password)
+            console.log(passwordConfirm)
+            console.log(email)
+            console.log(phone)
+            let valid = true
 
-            let headers = new Headers();
-            headers.append("Content-Type", "application/json");
-            let raw = JSON.stringify({
-                "username": name,
-                "password": pass,
-                "email" : email,
-                "phoneNumber": num
-            });
-            let requestOptions = {
-                method: 'POST',
-                headers: headers,
-                body: raw,
-                redirect: 'follow'
-            };
-            fetch('api/user', requestOptions)
-                .then(function (response) {
-                    if (response.ok) { return response.json() } // Return the response parse as JSON
-                    else { throw 'Failed to load correct word: response code invalid!' }
-                })
-                .then(function (data) {
-                    console.log(data )
+            if (password === passwordConfirm) {
+                valid = true
+            }
+            else {
+                alert('Your passwords do not match, please confirm your passwords again')
+                valid = false
+            }
+            let at = email.includes("@");
+            if (at === false) {
+                alert('Please enter a valid email')
+                valid = false
+            }
+            let pass = 'password'
+            let emaill = 'aa@'
+            let num = '0820660676'
 
-                    if(data.status === 1)
-                    {
-                        //console.log('Welcome back ')
-                        document.getElementById("rememberUser").innerHTML = 
-              "Welcome back " + data.usernamee;
+            if (valid == true) {
+
+                let headers = new Headers();
+                headers.append("Content-Type", "application/json");
+                let raw = JSON.stringify({
+                    "username": username ,
+                    "password": pass,
+                    "email": email,
+                    "phoneNumber": num 
+
+                });
+                let requestOptions = {
+                    method: 'POST',
+                    headers: headers,
+                    body: raw,
+                    redirect: 'follow'
+                };
+                fetch('api/user', requestOptions)
+                    .then(function (response) {
+                        if (response.ok) { return response.json() } // Return the response parse as JSON
+                        else { 
+                            console.log(response)
+                            throw 'Failed to create an account' }
+                    })
+                    .then(function (data) {
+                        console.log(data)
+
+                        if (data.status === 1) {
+                            //console.log('Welcome back ')
+                            document.getElementById("rememberUser").innerHTML =
+                                "This username is already Taken, please choose another" ;
+                        }
+                        else {
+                            //console.log('Welcome  newcomer ')
+                            document.getElementById("rememberUser").innerHTML =
+                                "Welcome newcomer " + data.username + "you will be redirected to the log in page momentarily...";
+                                //await setTimeout(2000);
+
+                                alert("Welcome newcomer " + data.username + " click ok to be redirected to the menu ")
+                                location.href = "/splash";
+                        }
                     }
-                    else{
-                        //console.log('Welcome  newcomer ')
-                        document.getElementById("rememberUser").innerHTML = 
-              "Welcome newcomer " + data.username;
-                    }
-                }
-                )
-                .catch(function (error){
-                    console.log(error)
-                })
+                    )
+                    .catch(function (error) {
+                        console.log(error)
+                    })
 
+            }
+
+
+return  valid 
 
         }
     </script>
