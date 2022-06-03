@@ -1,42 +1,49 @@
-const Players = require('../controllers/player.controllers')
-const bcrypt = require('bcrypt')
+const Players = require('../controllers/user.controllers')
 
-const auth = async () => {
-  return async (req, res, next) => {
-    const post = req.body
-    if (!post) {
-      res.status(401).send({
-        message: 'Invalid Request Body',
-        code: 'error'
-      })
-      res.end()
-      return
-    }
+const auth = async (req, res, next) => {
+  const post = req.cookies
+  if (!post) {
+    res.redirect('/login')
+    res.end()
+    return
+  }
 
-    // check if valid player, To do: check if player token is valid
-    let player
-    if (!post.username || (player = await Players.getPlayerByUsername(post.username))) {
-      res.status(401).send({
-        message: "The 'player' parameter is required",
-        code: 'error'
-      })
-    }
+  if (!post.token) {
+    res.redirect('/login')
+    res.end()
+    return
+  }
 
-    if (!post.token) {
-      res.status(401).send({
-        message: "The 'token' parameter is required",
-        code: 'error'
-      })
-    }
+  if (await Players.findUserByToken(post.token)) {
+    next()
+  } else {
+    res.redirect('/login')
+    res.end()
+  }
+}
 
-    // verify token
-    bcrypt.compare(post.token, player.token, (err, result) => {
-      if (err) res.status(500).end()
-      if (result) next()
-    })
+const auth2 = async (req, res, next) => {
+  const post = req.cookies
+
+  if (!post) {
+    next()
+    return
+  }
+
+  if (!post.token) {
+    next()
+    return
+  }
+
+  if (await Players.findUserByToken(post.token)) {
+    res.redirect('/splash')
+    res.end()
+  } else {
+    next()
   }
 }
 
 module.exports = {
-  auth
+  auth,
+  auth2
 }

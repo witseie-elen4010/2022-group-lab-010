@@ -4,6 +4,7 @@ const express = require('express')
 require('dotenv').config({ path: '../.env' })
 const bodyParser = require('body-parser')
 const mainRouter = require('./routes/main.routes')
+const cookieParser = require('cookie-parser')
 const db = require('./db')
 const { default: mongoose } = require('mongoose')
 
@@ -11,6 +12,7 @@ const app = express()
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser())
 
 app.use('/', mainRouter)
 app.use('/cdn', express.static('public'))
