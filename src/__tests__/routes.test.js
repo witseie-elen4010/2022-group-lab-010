@@ -16,6 +16,18 @@ describe('Test main routes', function () {
     expect(res.statusCode).toBe(200)
     expect(res.text).toContain('create an account')
   })
+  test('responds to /login with login', async () => {
+    const res = await supertest(app).get('/login')
+    expect(res.header['content-type']).toBe('text/html; charset=UTF-8')
+    expect(res.statusCode).toBe(200)
+    expect(res.text).toContain('Please log in or create an account')
+  })
+  test('responds to /createAccount with createAccount page', async () => {
+    const res = await supertest(app).get('/createAccount')
+    expect(res.header['content-type']).toBe('text/html; charset=UTF-8')
+    expect(res.statusCode).toBe(200)
+    expect(res.text).toContain('Create a new account')
+  })
 })
 
 describe('Test restricted routes', function () {

@@ -11,6 +11,7 @@ const auth = async (req, res, next) => {
   if (!post.token) {
     res.redirect('/login')
     res.end()
+    return
   }
 
   if (await Players.findUserByToken(post.token)) {
