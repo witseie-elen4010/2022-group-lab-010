@@ -7,6 +7,9 @@ const cookieParser = require('cookie-parser')
 const mainRouter = require('./routes/main.routes')
 const db = require('./db')
 const { default: mongoose } = require('mongoose')
+const Events = require('events')
+
+global.events = new Events()
 
 const app = express()
 

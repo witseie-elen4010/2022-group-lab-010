@@ -1,6 +1,7 @@
 'use strict'
 const Game = require('../models/Game')
 const Word = require('../models/Word')
+const hash = require('../public/scripts/hash')
 
 const getGameLog = async (req, res) => {
   const post = req.body
@@ -79,9 +80,131 @@ const generateGame = async (owner, gameMode = 'practice') => {
   return code
 }
 
-// const generateMultiplayer = async (req, res) => {
-//   const game = await generateGame(req.user, 'multiplayer')
-// }
+const multiplayerStart = async (req, res) => {
+  const post = req.body
+  if (!post || !post.game) {
+    res.status(400).json({ code: 'error', message: 'Invalid Game' })
+    return
+  }
+
+  let game
+  if (!(game = await Game.findOne({ code: post.game }).exec())) {
+    res.status(400).json({ code: 'error', message: 'Invalid Game' })
+    return
+  }
+
+  // check if player is the owner
+  if (!game.players.length === 0 || game.players[0].player.toString() !== req.user._id.toString()) {
+    res.status(400).json({ code: 'error', message: 'Not the owner' })
+    return
+  }
+
+  // notify players of game begin
+  global.events.emit('multiplayerLobby' + game.code,
+    { type: 'start' }
+  )
+
+  res.status(200).json({
+    code: 'ok',
+    message: 'Notified players of game start'
+  })
+}
+
+const multiplayerJoin = async (req, res) => {
+  const post = req.body
+  if (!post || !post.game) {
+    res.status(400).json({ code: 'error', message: 'Invalid Game' })
+    return
+  }
+
+  let game
+  if (!(game = await Game.findOne({ code: post.game }).exec())) {
+    res.status(400).json({ code: 'error', message: 'Invalid Game' })
+    return
+  }
+
+  // check if player already in game
+  if (game.players.some(obj => obj.player.toString() === req.user._id.toString())) {
+    res.status(400).json({ code: 'error', message: 'Player already in game' })
+    return
+  }
+
+  // add the player to the game
+  const player = { player: req.user._id }
+  game.players.push(player)
+  await game.save()
+
+  // notify other players of new user
+  global.events.emit('multiplayerLobby' + game.code, { type: 'player', player: req.user.username })
+
+  const players = await getGamePlayers(game.code)
+
+  res.status(200).json({
+    code: 'ok',
+    players,
+    status: 'wait'
+  })
+}
+
+const getGamePlayers = async (gameId) => {
+  const game = await Game.findOne({ code: gameId }).populate('players.player')
+  const players = []
+  game.players.forEach(player => {
+    players.push({ username: player.player.username })
+  })
+
+  return players
+}
+
+const multiplayerLobby = async (req, res) => {
+  const post = req.body
+  if (!post || !post.game) {
+    res.status(400).json({ code: 'error', message: 'Invalid Game' })
+    return
+  }
+
+  let game
+  if (!(game = await Game.findOne({ code: post.game }).exec())) {
+    res.status(400).json({ code: 'error', message: 'Invalid Game' })
+    return
+  }
+
+  // check hash against database
+  if (typeof post.hash !== 'undefined') {
+    const players = await getGamePlayers(game.code)
+    if (post.hash !== hash.objectArrayHash(players)) {
+      res.status(200).json({ // send a update
+        code: 'ok',
+        status: 'update',
+        players
+      })
+      return
+    }
+  }
+
+  let newPlayer = ''
+
+  // wait for lobby update (new player)
+  await new Promise(resolve =>
+
+    global.events.once('multiplayerLobby' + game.code, (event) => {
+      if (event.type === 'player') {
+        newPlayer = event.player
+        res.status(200).json({
+          code: 'ok',
+          status: 'change',
+          player: { username: newPlayer }
+        })
+      } else if (event.type === 'start') {
+        res.status(200).json({
+          code: 'ok',
+          status: 'begin'
+        })
+      }
+      resolve()
+    })
+  )
+}
 
 const getGame = async (user, gameId) => {
   const game = await Game
@@ -100,10 +223,94 @@ const wordIsValid = async (word) => {
   return await Word.exists({ word })
 }
 
+const invalidGame = (req, res) => {
+  res.status(400)
+
+  if (req.accepts('html')) {
+    res.redirect('/') // redirect to login
+  } else if (req.accepts('json')) {
+    res.json({ code: 'error', message: 'Invalid game' })
+  }
+
+  return false
+}
+
+const validatedGame = async (req, res, next) => {
+  if (!req.query.code) {
+    return invalidGame(req, res)
+  }
+
+  let game
+  if (!(game = await Game.findOne({ code: req.query.code }).exec())) {
+    return invalidGame(req, res)
+  }
+
+  // check if user is apart of the game
+  if (game.players.some(obj => obj.player.toString() === req.user._id.toString())) {
+    next()
+  } else {
+    return invalidGame(req, res)
+  }
+}
+
+const multiplayerGame = async (req, res) => {
+  const post = req.body
+  if (!post || !post.game) {
+    res.status(400).json({ code: 'error', message: 'Invalid Game' })
+    return
+  }
+
+  let game
+  if (!(game = await Game.findOne({ code: post.game }).exec())) {
+    res.status(400).json({ code: 'error', message: 'Invalid Game' })
+    return
+  }
+
+  // check hash against database
+  if (typeof post.hash !== 'undefined') {
+    const players = await getGamePlayers(game.code)
+    if (post.hash !== hash.objectArrayHash(players)) {
+      res.status(200).json({ // send a update
+        code: 'ok',
+        status: 'update',
+        players
+      })
+      return
+    }
+  }
+
+  let newPlayer = ''
+
+  // wait for lobby update (new player)
+  await new Promise(resolve =>
+
+    global.events.once('multiplayerLobby' + game.code, (event) => {
+      if (event.type === 'player') {
+        newPlayer = event.player
+        res.status(200).json({
+          code: 'ok',
+          status: 'change',
+          player: { username: newPlayer }
+        })
+      } else if (event.type === 'start') {
+        res.status(200).json({
+          code: 'ok',
+          status: 'begin'
+        })
+      }
+      resolve()
+    })
+  )
+}
+
 module.exports = {
   wordIsValid,
   generateGame,
   getGame,
-  getGameLog
-
+  getGameLog,
+  multiplayerJoin,
+  multiplayerLobby,
+  multiplayerStart,
+  validatedGame,
+  multiplayerGame
 }

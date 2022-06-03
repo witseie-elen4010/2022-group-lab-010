@@ -8,7 +8,8 @@
   },
   "standard": {
     "ignore": [
-      "public/scripts/moment.js"
+      "public/scripts/moment.js",
+      "public/scripts/socket.io.js"
     ]
   },
   "scripts": {
@@ -28,6 +29,7 @@
     "mongodb-memory-server": "^8.6.0",
     "mongoose": "^6.3.4",
     "node-dev": "^7.4.3",
+    "socket.io": "^4.5.1",
     "validator": "^13.7.0"
   },
   "devDependencies": {

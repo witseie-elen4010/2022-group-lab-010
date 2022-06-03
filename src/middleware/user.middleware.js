@@ -16,7 +16,7 @@ const auth = async (req, res, next) => {
   let user = false
   let search = ''
 
-  if (req.body && req.body.username) search = req.body.username
+  if (typeof req.body !== 'undefined' && req.body.username) search = req.body.username
 
   if (search === '') { // check cookies
     if (req.cookies && req.cookies.username) search = req.cookies.username

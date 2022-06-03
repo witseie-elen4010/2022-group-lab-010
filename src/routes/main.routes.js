@@ -10,7 +10,7 @@ const userMiddleware = require('../middleware/user.middleware')
 const auth = userMiddleware.auth
 
 // Static routes
-router.get('/game', auth, handlers.game)
+router.get('/game', auth, controllers.validatedGame, handlers.game)
 router.get('/', handlers.splash)
 
 // API routes
@@ -39,5 +39,24 @@ router.get('/api/multiplayer', auth, async function (req, res) {
 })
 
 router.post('/api/game/log', auth, controllers.getGameLog)
+
+router.post('/api/multiplayer/lobby', auth, controllers.multiplayerLobby)
+
+router.post('/api/multiplayer/join', auth, controllers.multiplayerJoin)
+
+router.post('/api/multiplayer/start', auth, controllers.multiplayerStart)
+
+// router.get('/api/waitjoin', async (req, res) => {
+//   await new Promise(resolve => global.events.once('test', () => {
+//     res.send('gotya')
+//     resolve()
+//   })
+//   )
+// })
+
+// router.get('/api/join', (req, res) => {
+//   global.events.emit('test')
+//   res.send('done')
+// })
 
 module.exports = router

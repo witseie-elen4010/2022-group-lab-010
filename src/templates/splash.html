@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Twordle-Dee</title>
-
     <link rel="stylesheet" href="/cdn/stylesheets/bootstrap.css">
+
+    <script src="cdn/scripts/hash.js"></script>
+
     <!-- Jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
         integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
@@ -19,6 +21,7 @@
         .card-custom {
             background-color: black;
         }
+
         body {
             display: none;
         }
@@ -44,7 +47,7 @@
         </h1>
     </div>
 
-    
+
     <div id="login-reg">
         <div class="input-group mb-3">
             <input id="name" type="text" class="form-control" placeholder="Enter your name" autofocus>
@@ -58,7 +61,9 @@
 
     <div id="lobby">
         <div class="div container text-center mb-4">
-            <h4><span id="rememberUser"></span>&nbsp;&nbsp;<button onclick="logout()" class="ml-2 btn-sm btn btn-outline-danger">Logout <i class="bi bi-box-arrow-right"></i></button></h4>
+            <h4><span id="rememberUser"></span>&nbsp;&nbsp;<button onclick="logout()"
+                    class="ml-2 btn-sm btn btn-outline-danger">Logout <i class="bi bi-box-arrow-right"></i></button>
+            </h4>
         </div>
 
 
@@ -127,6 +132,11 @@
                         <div class="alert alert-info" id="game-code">
 
                         </div>
+                        <h5>Players:</h5>
+                        <ul class="list-group" id="player-list-host">
+
+                        </ul>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -148,6 +158,8 @@
                     <div class="modal-body">
                         <input type="text" class="form-control" id="game-code-enter" placeholder="Enter Code">
                     </div>
+                    <h5>Players:</h5>
+                    <ul class="list-group" id="player-list-join"></ul>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <div class="input-group-append">
@@ -165,17 +177,87 @@
     <script>
         // data-bs-toggle="modal" data-bs-target="#Generator"
         let gameCode = ''
+        let username = ''
 
         const logout = () => {
             // send logout request to server // to do
-            
+
 
             //delete cookies and reload page
             document.cookie = "username= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
 
             window.location.reload()
         }
-        
+
+        const updatePlayerList = () => {
+            const list = document.getElementById('player-list-host')
+            const listJoin = document.getElementById('player-list-join')
+            list.innerHTML = ""
+            listJoin.innerHTML = ""
+            console.log(players)
+            players.forEach(player => {
+                const item = document.createElement('li')
+                item.classList.add('list-group-item')
+                item.innerHTML = player.username
+                const itemJoin = item.cloneNode(true)
+                list.appendChild(item)
+                listJoin.appendChild(itemJoin)
+            })
+        }
+
+        let players = []
+        const waitOtherPlayers = async () => {
+            const headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+            const params = {
+                headers: headers,
+                method: 'POST',
+                body: JSON.stringify({
+                    game: gameCode,
+                    hash: objectArrayHash(players)
+                })
+            }
+            const res = await fetch('api/multiplayer/lobby', params)
+
+
+            if (res.status != 200) {
+                await new Promise(resolve => setTimeout(resolve, 1000))
+                await waitOtherPlayers() // retry
+            } else {
+
+                const data = await res.json()
+
+                switch (data.status) {
+                    case 'update': {
+                        players = data.players
+                        updatePlayerList()
+                        await waitOtherPlayers()
+                        break;
+                    }
+                    case 'change': {
+
+                        players.push(data.player)
+                        updatePlayerList()
+                        await new Promise(resolve => setTimeout(resolve, 1000))
+                        await waitOtherPlayers()
+                        break;
+                    }
+                    case 'begin': {
+                        console.log(data.message)
+                        window.location.href = 'game?code=' + gameCode
+                        break
+                    }
+                    default:
+                        console.log(data.message)
+                }
+            }
+
+
+        }
+
+
         // check if already logged in
         const checkLogin = () => {
             $("#page-loading").show()
@@ -196,18 +278,20 @@
                         $("#login-reg").hide()
                         document.getElementById("rememberUser").innerHTML =
                             "Hi " + data.username + "!";
+
+                        username = data.username
                     }
                     else {
                         console.log('need login')
                         $("#lobby").hide()
                         $("#login-reg").show()
                         $('#lobby').hide()
-                      
+
                     }
                     console.log('here')
                 })
                 .catch((err) => {
-                    
+
                 })
 
         }
@@ -217,15 +301,59 @@
             $('body').show()
         }
 
-        const joinGame = () => {
-            window.location.href = 'game?code=' + gameCode
+        const joinGame = async () => {
+            // window.location.href = 'game?code=' + gameCode
+
+            const headers = {
+                'Accept' : 'application/json',
+                'Content-Type' : 'application/json'
+            }
+            const params = {
+                headers: headers,
+                method: 'POST', 
+                body: JSON.stringify({
+                    game: gameCode
+                })
+            }
+            await fetch('api/multiplayer/start', params)
+            
         }
 
         const joinGameWithCode = () => {
-            window.location.href = 'game?code=' + document.getElementById('game-code-enter').value
+            // window.location.href = 'game?code=' + 
+            gameCode = document.getElementById('game-code-enter').value
+            const headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+            const params = {
+                headers: headers,
+                method: 'POST',
+                body: JSON.stringify({
+                    game: gameCode
+                })
+            }
+            fetch('api/multiplayer/join', params)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 'ok') {
+                        players = data.players
+                        updatePlayerList()
+                        waitOtherPlayers()
+                    }
+                    else {
+                        console.log(data)
+                        if(data.message.toLowerCase().includes('already')){
+                            console.log('already joined')
+                            waitOtherPlayers()
+                        }
+                    }
+
+                })
         }
 
         const generateCode = async () => {
+
             document.getElementById('generate-code-spinner').removeAttribute('hidden')
             let headers = new Headers()
             let requestOptions = {
@@ -238,8 +366,12 @@
                 .then(data => {
                     gameCode = data.game
                     document.getElementById('game-code').innerHTML = gameCode
+                    $('#Generator').modal({ backdrop: 'static', keyboard: false })
                     $('#Generator').modal('show')
                     document.getElementById('generate-code-spinner').setAttribute('hidden', true)
+                    players = [{ username: username }]
+                    updatePlayerList()
+                    waitOtherPlayers()
                 })
         }
 

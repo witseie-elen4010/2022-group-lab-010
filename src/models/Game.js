@@ -42,7 +42,8 @@ const GameSchema = new Schema(
     players: [{
       player: {
         type: Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref: 'User'
       }
     }]
 
