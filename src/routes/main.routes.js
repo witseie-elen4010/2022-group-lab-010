@@ -9,9 +9,9 @@ const router = express.Router()
 
 // Static routes
 router.get('/game', middleWare.auth, handlers.game)
-router.get('/', handlers.login)
+router.get('/', middleWare.auth2, handlers.login)
 router.get('/splash', middleWare.auth, handlers.splash)
-router.get('/login', handlers.login)
+router.get('/login', middleWare.auth2, handlers.login)
 router.get('/createAccount', handlers.createAccount)
 // API routes
 router.post('/api/guess', handlers.guessController.colourCodeGuess)

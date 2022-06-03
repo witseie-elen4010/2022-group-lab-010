@@ -21,6 +21,18 @@ const auth = async (req, res, next) => {
   }
 }
 
+const auth2 = async (req, res, next) => {
+  const post = req.cookies
+
+  if (await Players.findUserByToken(post.token)) {
+    res.redirect('https://twordledee.azurewebsites.net/splash')
+    res.end()
+  } else {
+    next()
+  }
+}
+
 module.exports = {
-  auth
+  auth,
+  auth2
 }
