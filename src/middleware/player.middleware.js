@@ -30,8 +30,7 @@ const auth2 = async (req, res, next) => {
   }
 
   if (!post.token) {
-    res.redirect('https://twordledee.azurewebsites.net/')
-    res.end()
+    next()
     return
   }
 
