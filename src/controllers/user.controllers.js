@@ -44,6 +44,8 @@ const makeNewUser = async (req, res) => {
       const hashedPassword = await bcrypt.hash(post.password, salt)
       user = await generateUser(post.username, hashedPassword, post.email, post.phoneNumber, post.loggedIn)
       if (user) {
+        user.generateToken()
+        res.cookie('token', user.token, { expires: new Date(Date.now() + 86400000), httpOnly: true })
         res.json(user)
       } else {
         res.status(400).send({
@@ -69,6 +71,15 @@ const findUserByUsername = async (name) => {
   return false
 }
 
+const findUserByToken = async (Token) => {
+  const user = await User.findOne({ token: Token }).exec()
+  // console.log('LOGGIN THE USER NAME', user)
+  if (user) {
+    return user
+  }
+  return false
+}
+
 const logginIn = async (req, res) => {
   // console.log('LOGGING IN REQUEST .body', req.body)
   const post = req.body
@@ -81,6 +92,8 @@ const logginIn = async (req, res) => {
 
     if (await bcrypt.compare(pword, userChecker.password)) {
       // res.json({ code: 'ok', username: userChecker.username })
+      userChecker.generateToken()
+      res.cookie('token', userChecker.token, { expires: new Date(Date.now() + 86400000), httpOnly: true })
       res.status(200).send({
         message: 'user authenticated',
         code: 'ok',
@@ -107,5 +120,6 @@ const logginIn = async (req, res) => {
 module.exports = {
   generateUser,
   makeNewUser,
+  findUserByToken,
   logginIn
 }
