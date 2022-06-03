@@ -3,20 +3,20 @@ const Players = require('../controllers/user.controllers')
 const auth = async (req, res, next) => {
   const post = req.cookies
   if (!post) {
-    res.redirect('https://twordledee.azurewebsites.net/')
+    res.redirect('/login')
     res.end()
     return
   }
 
   if (!post.token) {
-    res.redirect('https://twordledee.azurewebsites.net/')
+    res.redirect('/login')
     res.end()
   }
 
   if (await Players.findUserByToken(post.token)) {
     next()
   } else {
-    res.redirect('https://twordledee.azurewebsites.net/')
+    res.redirect('/login')
     res.end()
   }
 }
@@ -35,7 +35,7 @@ const auth2 = async (req, res, next) => {
   }
 
   if (await Players.findUserByToken(post.token)) {
-    res.redirect('https://twordledee.azurewebsites.net/splash')
+    res.redirect('/splash')
     res.end()
   } else {
     next()
