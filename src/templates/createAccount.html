@@ -211,6 +211,20 @@
             document.getElementById('passwordConfirm').value = ''
         }
 
+        let checkEmpty =  () => {
+            let username = document.getElementById('username').value
+            let passwordConfirm = document.getElementById('passwordConfirm').value
+            let num = document.getElementById('phone number').value
+            let password = document.getElementById('password').value
+            let email = document.getElementById('email').value
+            console.log(typeof(email))
+            if(username == null|| passwordConfirm == null || num == null ||  password == null || email == null )
+            {
+                alert('Plese fill in all fields')
+            }
+            
+        }
+
         const generateCode = async () => {
             document.getElementById('generate-code-spinner').removeAttribute('hidden')
             let headers = new Headers()
@@ -231,6 +245,10 @@
 
 
         let createAcc = async () => {
+
+            
+            checkEmpty()
+
             let username = document.getElementById('username').value
             let password = document.getElementById('password').value
             let passwordConfirm = document.getElementById('passwordConfirm').value
@@ -241,6 +259,8 @@
             console.log(passwordConfirm)
             console.log(email)
             console.log(phone)
+            console.log(typeof(email))
+            console.log(typeof(phone))
             let valid = true
 
             if (password === passwordConfirm) {
@@ -255,9 +275,7 @@
                 alert('Please enter a valid email')
                 valid = false
             }
-            let pass = 'password'
-            let emaill = 'aa@'
-            let num = '0820660676'
+        
 
             if (valid == true) {
 
@@ -265,9 +283,9 @@
                 headers.append("Content-Type", "application/json");
                 let raw = JSON.stringify({
                     "username": username ,
-                    "password": pass,
+                    "password": password,
                     "email": email,
-                    "phoneNumber": num 
+                    "phoneNumber": phone 
 
                 });
                 let requestOptions = {

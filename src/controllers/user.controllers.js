@@ -34,20 +34,31 @@ const makeNewUser = async (req, res) => {
 
     res.end()
   }
-  let user
-  if ((user = await findUserByUsername(post.username))) {
-    res.json({ code: 'ok', message: 'Welcome back ' + user.username, status: 1, usernamee: post.username })
-  } else {
-    console.log(post)
-    user = await generateUser(post.username, post.password, post.email, post.phoneNumber, post.loggedIn)
-    if (user) {
-      res.json(user)
-    } else {
-      res.status(400).send({
-        message: 'Invalid Request Body Duplicate name',
-        code: 'error'
 
-      })
+  if (post.phoneNumber.length !== 10) {
+    res.status(400).send({
+      message: 'Invalid phone number',
+      code: 'error'
+
+    })
+
+    res.end()
+  } else {
+    let user
+    if ((user = await findUserByUsername(post.username))) {
+      res.json({ code: 'ok', message: 'Welcome back ' + user.username, status: 1, usernamee: post.username })
+    } else {
+      console.log(post)
+      user = await generateUser(post.username, post.password, post.email, post.phoneNumber, post.loggedIn)
+      if (user) {
+        res.json(user)
+      } else {
+        res.status(400).send({
+          message: 'Invalid Request Body Duplicate name',
+          code: 'error'
+
+        })
+      }
     }
   }
 }
