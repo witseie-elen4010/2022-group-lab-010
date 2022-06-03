@@ -43,7 +43,8 @@ describe('Testing user loggin in ', function () {
       .expect(200)
       .expect('Content-Type', /json/)
 
-    // console.log(res.body)
+    const req = res.body
+    expect(req.username).toBe('Tom')
   })
   it('testing duplicate names', async () => {
     // jest.setTimeout(30000)
@@ -54,8 +55,9 @@ describe('Testing user loggin in ', function () {
 
       .expect('Content-Type', /json/)
 
-    // const req = res.body
-    // console.log(req)
+    const req = res.body
+    console.log(req)
+    expect(req.username).toBe('John')
   })
   it('testing not all data entered', async () => {
     // jest.setTimeout(30000)
@@ -67,7 +69,9 @@ describe('Testing user loggin in ', function () {
       .expect('Content-Type', /json/)
 
     const req = res.body
-    console.log(req)
+
+    expect(req.message).toBe('Invalid phone number')
+    expect(req.code).toBe('error')
   })
   it('testing valid user logging in ', async () => {
     // jest.setTimeout(30000)
@@ -79,7 +83,8 @@ describe('Testing user loggin in ', function () {
       .expect('Content-Type', /json/)
 
     const req = res.body
-    // console.log(req)
+    expect(req.message).toBe('user authenticated')
+    expect(req.code).toBe('ok')
   })
   it('testing invalid password when user logging in ', async () => {
     // jest.setTimeout(30000)
@@ -104,7 +109,7 @@ describe('Testing user loggin in ', function () {
       .expect('Content-Type', /json/)
 
     const req = res.body
-    // console.log(req)
     expect(req.code).toBe('error')
+    expect(req.message).toBe('username  invalid')
   })
 })

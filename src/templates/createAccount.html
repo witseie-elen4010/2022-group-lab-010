@@ -60,8 +60,6 @@
             </div>
 
 
-
-
             <div class="input-group mb-3">
                 <input id="phone number" type="text" class="form-control" placeholder="Enter your phone number"
                     autofocus>
@@ -94,56 +92,7 @@
     </section>
 
 
-    <!--   Game Modes 
-    <section class="p-10">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md text-center">
-                    <div class="card-custom text-light" style=" height: 18rem;">
-                        <section class="py-5">
-                            <div class="card-body text-center">
-                                <div class="h1"><i class="bi bi-person"></i></div>
-                                <h4 class="card-title">
-                                    Single Player
-                                </h4>
-                                <p class="card-text">Click the button to play single player wordle</p>
-                                <div class="container text-center">
-                                    <a href="game" class="btn btn-primary" role="button">Launch Game!</a>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div class="col-md">
-                    <div class="card-custom text-light" style=" height: 18rem;">
-                        <section class="py-5">
-                            <div class="card-body text-center">
-                                <div class="h1"><i class="bi bi-people"></i></div>
-                                <h4 class="card-title">
-                                    Multiplayer
-                                </h4>
-                                <p class="card-text">Click the button to create or join a game</p>
-                                <div class="row text-center">
-                                    <div class="col-4 text-center offset-2">
-                                        <button onclick="generateCode()" type="button" class="btn btn-primary px-6">
-                                            Generate Code <div id="generate-code-spinner" hidden="true"
-                                                class="spinner-border spinner-border-sm"></div>
-                                        </button>
-                                    </div>
-                                    <div class="col-4 text-center">
-                                        <button type="button" class="btn btn-primary px-4" data-bs-toggle="modal"
-                                            data-bs-target="#Loader">
-                                            Enter Code
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
+   
 
 
     <!-- Modal -->
@@ -211,18 +160,18 @@
             document.getElementById('passwordConfirm').value = ''
         }
 
-        let checkEmpty =  () => {
+        let checkEmpty = () => {
             let username = document.getElementById('username').value
             let passwordConfirm = document.getElementById('passwordConfirm').value
             let num = document.getElementById('phone number').value
             let password = document.getElementById('password').value
             let email = document.getElementById('email').value
-            console.log(typeof(email))
-            if(username == null|| passwordConfirm == null || num == null ||  password == null || email == null )
-            {
+            console.log(typeof (email))
+            if (username.length === 0 || passwordConfirm.length === 0 || password.length === 0 || num.length === 0 || email.length === 0) {
                 alert('Plese fill in all fields')
+
             }
-            
+
         }
 
         const generateCode = async () => {
@@ -246,7 +195,7 @@
 
         let createAcc = async () => {
 
-            
+
             checkEmpty()
 
             let username = document.getElementById('username').value
@@ -259,8 +208,8 @@
             console.log(passwordConfirm)
             console.log(email)
             console.log(phone)
-            console.log(typeof(email))
-            console.log(typeof(phone))
+            console.log(typeof (email))
+            console.log(typeof (phone))
             let valid = true
 
             if (password === passwordConfirm) {
@@ -275,17 +224,17 @@
                 alert('Please enter a valid email')
                 valid = false
             }
-        
+
 
             if (valid == true) {
 
                 let headers = new Headers();
                 headers.append("Content-Type", "application/json");
                 let raw = JSON.stringify({
-                    "username": username ,
+                    "username": username,
                     "password": password,
                     "email": email,
-                    "phoneNumber": phone 
+                    "phoneNumber": phone
 
                 });
                 let requestOptions = {
@@ -295,31 +244,30 @@
                     redirect: 'follow'
                 };
                 fetch('api/user', requestOptions)
+
                     .then(function (response) {
-                        if (response.ok) { return response.json() } // Return the response parse as JSON
-                        else { 
-                            console.log(response)
-                            throw 'Failed to create an account' }
-                    })
-                    .then(function (data) {
-                        console.log(data)
+                        console.log(response)
+                        
 
-                        if (data.status === 1) {
-                            //console.log('Welcome back ')
-                            document.getElementById("rememberUser").innerHTML =
-                                "This username is already Taken, please choose another" ;
-                        }
+                        if (response.ok) {
+                            
+                            return response.json()
+                        } // Return the response parse as JSON
                         else {
-                            //console.log('Welcome  newcomer ')
+                            console.log(response)
                             document.getElementById("rememberUser").innerHTML =
-                                "Welcome newcomer " + data.username + "you will be redirected to the log in page momentarily...";
-                                //await setTimeout(2000);
-
-                                alert("Welcome newcomer " + data.username + " click ok to be redirected to the menu ")
-                                location.href = "/splash";
+                                "There wa an error creating your account, please choose a unique username and  try again";
+                            throw 'Failed to create an account'
                         }
+
+                      
+                    })
+                     .then(function (data) {
+                        console.log(data)
+                        alert("Welcome newcomer "+data.username+"  click ok to be redirected to the menu ")
+                            location.href = "/splash";
                     }
-                    )
+                    ) 
                     .catch(function (error) {
                         console.log(error)
                     })
@@ -327,7 +275,7 @@
             }
 
 
-return  valid 
+            return valid
 
         }
     </script>

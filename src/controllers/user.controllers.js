@@ -23,7 +23,7 @@ const generateUser = async (username, password, email, phoneNumber, loggedIn) =>
 }
 
 const makeNewUser = async (req, res) => {
-//  console.log('making a new user', req)
+  //  console.log('making a new user', req)
   const post = req.body
   if (!post) {
     res.status(400).send({
@@ -46,9 +46,16 @@ const makeNewUser = async (req, res) => {
   } else {
     let user
     if ((user = await findUserByUsername(post.username))) {
-      res.json({ code: 'ok', message: 'Welcome back ' + user.username, status: 1, usernamee: post.username })
+      res.status(999).send({
+        message: '  Duplicate name',
+        code: 'error',
+        statusText: 'Duplicate name'
+
+      })
+
+      /*  res.json({ status: 400, code: 'error', message: 'duplicate username' + user.username, status: 1, usernamee: post.username }) */
     } else {
-      console.log(post)
+      // console.log(post)
       user = await generateUser(post.username, post.password, post.email, post.phoneNumber, post.loggedIn)
       if (user) {
         res.json(user)
@@ -64,9 +71,9 @@ const makeNewUser = async (req, res) => {
 }
 
 const findUserByUsername = async (name) => {
-  console.log('Loggin the name ', name)
+  // console.log('Loggin the name ', name)
   const user = await User.findOne({ username: name }).exec()
-  console.log('LOGGIN THE USER NAME', user)
+  // console.log('LOGGIN THE USER NAME', user)
   if (user) {
     return user
   }
@@ -74,14 +81,14 @@ const findUserByUsername = async (name) => {
 }
 
 const logginIn = async (req, res) => {
-  console.log('LOGGING IN REQUEST .body', req.body)
+  // console.log('LOGGING IN REQUEST .body', req.body)
   const post = req.body
   const userNamee = post.username
   const pword = post.password
   const userChecker = await User.findOne({ username: userNamee }).exec()
 
   if (userChecker) {
-    console.log(userChecker)
+    // console.log(userChecker)
 
     if (userChecker.password === pword) {
       // res.json({ code: 'ok', username: userChecker.username })
