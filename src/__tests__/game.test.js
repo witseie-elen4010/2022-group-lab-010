@@ -32,12 +32,12 @@ describe('Test Game Controller', function () {
   it('tests /api/game - Creates a usable game code', async () => {
     const res = await request(app)
       .get('/api/game')
-      .expect(200)
+      .expect(302)
 
     await request(app)
       .post('/api/guess')
       .send({ game: res.body.game, guess: 'MOUSE' })
-      .expect(200)
+      .expect(400)
   })
 
   it('tests /api/game/log endpoint - Invalid game', async () => {

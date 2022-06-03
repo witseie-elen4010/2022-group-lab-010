@@ -1,5 +1,6 @@
 'use strict'
 const User = require('../models/user')
+const bcrypt = require('bcrypt')
 // connected the database
 const generateUser = async (username, password, email, phoneNumber, loggedIn) => {
   // Get a random word from the database
@@ -66,6 +67,24 @@ const makeNewUser = async (req, res) => {
 
         })
       }
+    try {
+      const salt = await bcrypt.genSalt()
+      const hashedPassword = await bcrypt.hash(post.password, salt)
+      user = await generateUser(post.username, hashedPassword, post.email, post.phoneNumber, post.loggedIn)
+      if (user) {
+        user.generateToken()
+        res.cookie('token', user.token, { expires: new Date(Date.now() + 86400000), httpOnly: true })
+        res.json(user)
+      } else {
+        res.status(400).send({
+          message: 'Invalid Request Body Duplicate name',
+          code: 'error'
+
+        })
+      }
+    } catch {
+      res.status(500).send('Error In Creating User')
+      console.log('Error In Creating User')
     }
   }
 }
@@ -73,6 +92,15 @@ const makeNewUser = async (req, res) => {
 const findUserByUsername = async (name) => {
   // console.log('Loggin the name ', name)
   const user = await User.findOne({ username: name }).exec()
+  // console.log('LOGGIN THE USER NAME', user)
+  if (user) {
+    return user
+  }
+  return false
+}
+
+const findUserByToken = async (Token) => {
+  const user = await User.findOne({ token: Token }).exec()
   // console.log('LOGGIN THE USER NAME', user)
   if (user) {
     return user
@@ -90,8 +118,10 @@ const logginIn = async (req, res) => {
   if (userChecker) {
     // console.log(userChecker)
 
-    if (userChecker.password === pword) {
+    if (await bcrypt.compare(pword, userChecker.password)) {
       // res.json({ code: 'ok', username: userChecker.username })
+      userChecker.generateToken()
+      res.cookie('token', userChecker.token, { expires: new Date(Date.now() + 86400000), httpOnly: true })
       res.status(200).send({
         message: 'user authenticated',
         code: 'ok',
@@ -118,5 +148,6 @@ const logginIn = async (req, res) => {
 module.exports = {
   generateUser,
   makeNewUser,
+  findUserByToken,
   logginIn
 }
