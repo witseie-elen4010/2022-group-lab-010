@@ -1,5 +1,4 @@
 const Players = require('../controllers/user.controllers')
-const bcrypt = require('bcrypt')
 
 const auth = async (req, res, next) => {
   const post = req.cookies

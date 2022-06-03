@@ -14,6 +14,36 @@ describe('Test main routes', function () {
     const res = await supertest(app).get('/')
     expect(res.header['content-type']).toBe('text/html; charset=UTF-8')
     expect(res.statusCode).toBe(200)
-    expect(res.text).toContain('Welcome to Twordle-dee!')
+    expect(res.text).toContain('create an account')
+  })
+})
+
+describe('Test restricted routes', function () {
+  test('responds to /splash with login page', async () => {
+    const res = await supertest(app).get('/splash')
+    expect(res.header['content-type']).toBe('text/plain; charset=utf-8')
+    expect(res.statusCode).toBe(302)
+    expect(res.text).toContain('Found. Redirecting to https://twordledee.azurewebsites.net/')
+  })
+
+  test('responds to /game with login page', async () => {
+    const res = await supertest(app).get('/game')
+    expect(res.header['content-type']).toBe('text/plain; charset=utf-8')
+    expect(res.statusCode).toBe(302)
+    expect(res.text).toContain('Found. Redirecting to https://twordledee.azurewebsites.net/')
+  })
+
+  test('responds to /api/game with login page', async () => {
+    const res = await supertest(app).get('/api/game')
+    expect(res.header['content-type']).toBe('text/plain; charset=utf-8')
+    expect(res.statusCode).toBe(302)
+    expect(res.text).toContain('Found. Redirecting to https://twordledee.azurewebsites.net/')
+  })
+
+  test('responds to /api/multiplayer with login page', async () => {
+    const res = await supertest(app).get('/api/multiplayer')
+    expect(res.header['content-type']).toBe('text/plain; charset=utf-8')
+    expect(res.statusCode).toBe(302)
+    expect(res.text).toContain('Found. Redirecting to https://twordledee.azurewebsites.net/')
   })
 })
