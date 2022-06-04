@@ -7,6 +7,7 @@ const users = require('../controllers/user.controllers')
 const express = require('express')
 const router = express.Router()
 const userMiddleware = require('../middleware/user.middleware')
+const Word = require('../models/Word')
 
 const auth = userMiddleware.auth
 
@@ -39,6 +40,45 @@ router.get('/api/multiplayer', auth, async function (req, res) {
     game: await controllers.generateGame(req.user, 'multiplayer'),
     code: 'ok'
   })
+})
+
+router.post('/api/game/word', auth, async function (req, res) {
+
+  if(!(req.body || req.body.word)){
+    res.status(400).json({
+      code: 'error',
+      message: 'invalid body'
+    })
+    return
+  }
+
+  const post = req.body
+  let playerGame
+  if (!post.game || !(playerGame = await controllers.getGame(req.user, post.game))) {
+    res.status(400).send({
+      message: 'Error: Invalid Game',
+      code: 'error'
+    })
+    return
+  }
+
+  let word = req.body.word
+  let test = await controllers.wordIsValid(word)
+  if(test)
+  {
+    playerGame.word = test._id
+    await playerGame.save()
+
+    res.json({
+      message: 'Word is valid',
+      code: 'ok'
+    })
+  }else{
+    res.status(400).send({
+      message: 'Error: Word not found in dictionary',
+      code: 'error'
+    })
+  }
 })
 
 router.post('/api/game/log', auth, controllers.getGameLog)

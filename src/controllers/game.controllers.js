@@ -67,7 +67,7 @@ const generateGame = async (owner, gameMode = 'practice') => {
           return res
         })
     })
-
+    
   const game = {
     word: word._id,
     guesses: [],
