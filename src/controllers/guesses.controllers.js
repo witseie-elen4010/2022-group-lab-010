@@ -47,6 +47,7 @@ const scoreFunction = (guessesMade, colours) => {
   }
   return score
 }
+
 const colourCodeGuess = async (req, res) => {
   // load request parameters from JSON body
   const post = req.body
@@ -106,7 +107,10 @@ const colourCodeGuess = async (req, res) => {
     }
   }
 
-  const turn = playerGame.guesses.length
+  // count the number of turns for the player
+  const turn = playerGame.guesses.filter(guess =>
+    guess.player.toString() === req.user._id.toString()
+  ).length
 
   score = scoreFunction(turn, out.colour)
 
@@ -116,20 +120,49 @@ const colourCodeGuess = async (req, res) => {
   playerGame.guesses.push({
     guess,
     colours: out.colour,
-    score
+    score,
+    player: req.user._id
   })
 
   // update the total score
   playerGame.score += score
 
   // check if game is done
-  if (allGreen || playerGame.guesses.length === 6) {
-    playerGame.complete = true
-    playerGame.completedAt = Date.now()
+  if (playerGame.gameMode === 'practice') {
+    if (allGreen || ((turn + 1) === 6)) {
+      playerGame.complete = true
+      playerGame.completedAt = Date.now()
+      playerGame.markModified('completedAt')
+    }
   }
 
-  playerGame.markModified('completedAt')
+  // report guess if multiplayer
+  if (playerGame.gameMode === 'multiplayer') {
+    // check if game is done
+    if (allGreen || playerGame.guesses.length === playerGame.players.length * 6) {
+      global.events.emit('multiplayerGame' + playerGame.code, {
+        type: 'end',
+        guess: {
+          player: req.user.username,
+          colours: out.colour
+        }
+      })
+      playerGame.complete = true
+      playerGame.completedAt = Date.now()
+      playerGame.markModified('completedAt')
+    } else {
+      global.events.emit('multiplayerGame' + playerGame.code, {
+        type: 'guess',
+        guess: {
+          player: req.user.username,
+          colours: out.colour
+        }
+      })
+    }
+  }
+
   await playerGame.save() // save to database
+
   res.json(out)
 }
 

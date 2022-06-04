@@ -253,6 +253,35 @@ const validatedGame = async (req, res, next) => {
   }
 }
 
+const getMultiplayerState = async (userId, gameId) => {
+  const game = await Game.findOne({ code: gameId }).populate('guesses.player players.player')
+  const guesses = []
+  let score = 0
+  let g
+  game.guesses.forEach(guess => {
+    g = {
+      player: guess.player.username,
+      colours: guess.colours
+    }
+
+    if (userId.toString() === guess.player._id.toString()) {
+      g.guess = guess.guess
+      score += guess.score
+    }
+
+    guesses.push(g)
+  })
+
+  const players = []
+  game.players.forEach(player => {
+    if (player.player._id.toString() !== userId.toString()) {
+      players.push({ username: player.player.username })
+    }
+  })
+
+  return { score, players, guesses }
+}
+
 const multiplayerGame = async (req, res) => {
   const post = req.body
   if (!post || !post.game) {
@@ -266,36 +295,42 @@ const multiplayerGame = async (req, res) => {
     return
   }
 
+  // // check if player is out of guesses
+  // const guesses = game.guesses.filter(guess => guess.player.toString() === req.user._id.toString())
+  // if (guesses.length === 6) {
+  //   res.status(200).json({
+  //     code: 'ok',
+  //     status: 'wait'
+  //   })
+  // }
+
   // check hash against database
   if (typeof post.hash !== 'undefined') {
-    const players = await getGamePlayers(game.code)
-    if (post.hash !== hash.objectArrayHash(players)) {
+    const state = await getMultiplayerState(req.user._id, game.code)
+    if (post.hash !== hash.objectArrayHash(state)) {
       res.status(200).json({ // send a update
         code: 'ok',
         status: 'update',
-        players
+        state
       })
       return
     }
   }
 
-  let newPlayer = ''
-
-  // wait for lobby update (new player)
+  // wait for lobby update (new guess)
   await new Promise(resolve =>
-
-    global.events.once('multiplayerLobby' + game.code, (event) => {
-      if (event.type === 'player') {
-        newPlayer = event.player
+    global.events.once('multiplayerGame' + game.code, (event) => {
+      if (event.type === 'guess') {
         res.status(200).json({
           code: 'ok',
           status: 'change',
-          player: { username: newPlayer }
+          guess: event.guess
         })
-      } else if (event.type === 'start') {
+      } else if (event.type === 'end') {
         res.status(200).json({
           code: 'ok',
-          status: 'begin'
+          status: 'end',
+          guess: event.guess
         })
       }
       resolve()

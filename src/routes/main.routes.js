@@ -46,17 +46,6 @@ router.post('/api/multiplayer/join', auth, controllers.multiplayerJoin)
 
 router.post('/api/multiplayer/start', auth, controllers.multiplayerStart)
 
-// router.get('/api/waitjoin', async (req, res) => {
-//   await new Promise(resolve => global.events.once('test', () => {
-//     res.send('gotya')
-//     resolve()
-//   })
-//   )
-// })
-
-// router.get('/api/join', (req, res) => {
-//   global.events.emit('test')
-//   res.send('done')
-// })
+router.post('/api/multiplayer/game', auth, controllers.multiplayerGame)
 
 module.exports = router

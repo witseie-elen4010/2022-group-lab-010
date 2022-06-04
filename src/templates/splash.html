@@ -220,8 +220,6 @@
                 })
             }
             const res = await fetch('api/multiplayer/lobby', params)
-
-
             if (res.status != 200) {
                 await new Promise(resolve => setTimeout(resolve, 1000))
                 await waitOtherPlayers() // retry
@@ -253,8 +251,6 @@
                         console.log(data.message)
                 }
             }
-
-
         }
 
 

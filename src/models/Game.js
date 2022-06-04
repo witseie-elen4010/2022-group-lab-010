@@ -18,7 +18,11 @@ const GameSchema = new Schema(
         type: Date,
         default: Date.now
       },
-      playerNumber: Number
+      player: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
+      }
     }],
     gameMode: {
       type: String, // a the type of the game either 'practice', 'multiplayer'
