@@ -1,5 +1,6 @@
 'use strict'
 
+// const middleWare = require('../middleware/player.middleware')
 const handlers = require('../controllers/routes.controllers')
 const controllers = require('../controllers/game.controllers')
 const users = require('../controllers/user.controllers')
@@ -12,7 +13,7 @@ const auth = userMiddleware.auth
 // Static routes
 router.get('/game', auth, controllers.validatedGame, handlers.game)
 router.get('/', handlers.splash)
-
+router.get('/createAccount', handlers.createAccount)
 // API routes
 router.post('/api/guess', auth, handlers.guessController.colourCodeGuess)
 router.post('/api/correct', auth, handlers.guessController.revealWord)
@@ -25,12 +26,15 @@ router.get('/api/user', auth, function (req, res) { // to test authentication
   })
 })
 
+router.post('/api/login', users.login)
+
 router.get('/api/game', auth, async function (req, res) {
   res.json({
     game: await controllers.generateGame(req.user),
     code: 'ok'
   })
 })
+
 router.get('/api/multiplayer', auth, async function (req, res) {
   res.json({
     game: await controllers.generateGame(req.user, 'multiplayer'),

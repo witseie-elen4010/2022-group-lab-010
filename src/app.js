@@ -14,8 +14,8 @@ global.events = new Events()
 const app = express()
 
 app.use(bodyParser.json())
-app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser())
 
 app.use('/', mainRouter)
 app.use('/cdn', express.static('public'))

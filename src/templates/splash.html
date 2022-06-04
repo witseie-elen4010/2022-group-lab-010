@@ -18,10 +18,6 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
     <style>
-        .card-custom {
-            background-color: black;
-        }
-
         body {
             display: none;
         }
@@ -49,14 +45,63 @@
 
 
     <div id="login-reg">
-        <div class="input-group mb-3">
-            <input id="name" type="text" class="form-control" placeholder="Enter your name" autofocus>
-            <div class="input-group-append" id="name button">
-                <button class="btn btn-outline-secondary" type="button" onclick="checkName()"
-                    id="submit name">Enter</button>
+        <section class="p-5">
+            <div class="div container text-center">
+                <h4>Login</h4>
+                <div class="input-group mb-3">
+                    <input id="login-username" type="text" class="form-control" placeholder="Enter your username"
+                        autofocus>
+                </div>
+                <div class="input-group mb-3">
+                    <input id="login-password" type="password" class="form-control" placeholder="Enter your password"
+                        autofocus>
+                </div>
+
             </div>
-        </div>
+            <div class="container text-center" id="name button">
+                <button class="btn btn-primary" role="button" onclick="login()" id="Log in">Log in </button>
+                <p>
+                <div class="div container text-center" id="login-message"></div>
+                </p>
+            </div>
+        </section>
+        <section class="p-5">
+            <div class="div container text-center">
+                <h4>Register</h4>
+                <div class="input-group mb-3">
+                    <input id="reg-username" type="text" class="form-control" placeholder="Enter your username"
+                        autofocus>
+                </div>
+
+
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" id="reg-password" placeholder="Password">
+                </div>
+                <div class="input-group mb-3">
+                    <input id="reg-passwordConfirm" type="password" class="form-control"
+                        placeholder="Confirm your password" autofocus>
+                </div>
+                <div class="input-group mb-3">
+                    <input id="reg-email" type="text" class="form-control" placeholder="Enter your email" autofocus>
+                    <!--  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                </div>
+                <div class="input-group mb-3">
+                    <input id="reg-phone number" type="text" class="form-control" placeholder="Enter your phone number"
+                        autofocus>
+                </div>
+            </div>
+            <div class="container text-center" id="name button">
+                <button class="btn btn-primary" role="button" onclick="createAcc()" id="Log in">Create your
+                    account</button>
+                <p>
+                <div class="div container text-center" id="reg-message"></div>
+                </p>
+            </div>
+
+        </section>
     </div>
+
+
 
 
     <div id="lobby">
@@ -72,7 +117,7 @@
             <div class="container">
                 <div class="row text-center">
                     <div class="col-md text-center">
-                        <div class="card-custom text-light" style=" height: 18rem;">
+                        <div class="bg-dark card text-light my-2" style=" height: 18rem;">
                             <section class="py-5">
                                 <div class="card-body text-center">
                                     <div class="h1"><i class="bi bi-person"></i></div>
@@ -91,7 +136,7 @@
                         </div>
                     </div>
                     <div class="col-md">
-                        <div class="card-custom text-light" style=" height: 18rem;">
+                        <div class="bg-dark card text-light my-2" style=" height: 18rem;">
                             <section class="py-5">
                                 <div class="card-body text-center">
                                     <div class="h1"><i class="bi bi-people"></i></div>
@@ -143,7 +188,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button onclick="joinGame()" class="btn btn-primary" role="button">Join Game</button>
+                        <button id="start-game" onclick="joinGame()" class="btn btn-primary" role="button"
+                            disabled=true>Start Game</button>
                     </div>
                 </div>
             </div>
@@ -160,9 +206,13 @@
                     </div>
                     <div class="modal-body">
                         <input type="text" class="form-control" id="game-code-enter" placeholder="Enter Code">
+                        
+                        <div id="player-list-title-join" class="my-3" style="display: none">
+                            <h5>Players:</h5>
+                            <p>Waiting for host to start the game...</p>
+                        </div>
+                        <ul class="list-group" id="player-list-join"></ul>
                     </div>
-                    <h5>Players:</h5>
-                    <ul class="list-group" id="player-list-join"></ul>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <div class="input-group-append">
@@ -182,6 +232,104 @@
         let gameCode = ''
         let username = ''
 
+        let login = async () => {
+            let username = document.getElementById('login-username').value
+            let password = document.getElementById('login-password').value
+
+            let headers = new Headers();
+            headers.append("Content-Type", "application/json");
+            let raw = JSON.stringify({
+                "username": username,
+                "password": password
+            });
+            let requestOptions = {
+                method: 'POST',
+                headers: headers,
+                body: raw,
+                redirect: 'follow'
+            };
+            fetch('api/login', requestOptions)
+                .then(res => res.json())
+                .then(function (data) {
+                    if (data.code == 'ok') {
+                        checkLogin()
+                    }
+                    else {
+                        console.log(data)
+                        document.getElementById("login-message").innerHTML = "Your username or password is incorrect"
+                        // document.getElementById('password').value = '';
+                    }
+
+                }
+                )
+                .catch(function (error) {
+                    console.log(error)
+                })
+        }
+
+        let createAcc = async () => {
+
+            // checkEmpty()
+            let username = document.getElementById('reg-username').value
+            let password = document.getElementById('reg-password').value
+            let passwordConfirm = document.getElementById('reg-passwordConfirm').value
+            let email = document.getElementById('reg-email').value
+            let phone = document.getElementById('reg-phone number').value
+            // console.log(username, password, passwordConfirm, email, phone)
+            let valid = true
+            if (password === passwordConfirm) {
+                valid = true
+            }
+            else {
+                alert('Your passwords do not match, please confirm your passwords again')
+                valid = false
+            }
+            let at = email.includes("@");
+            if (at === false) {
+                alert('Please enter a valid email')
+                valid = false
+            }
+            if (valid == true) {
+
+                let headers = new Headers();
+                headers.append("Content-Type", "application/json");
+                let raw = JSON.stringify({
+                    "username": username,
+                    "password": password,
+                    "email": email,
+                    "phoneNumber": phone
+
+                });
+                let requestOptions = {
+                    method: 'POST',
+                    headers: headers,
+                    body: raw,
+                    redirect: 'follow'
+                };
+                fetch('api/user', requestOptions)
+
+                    .then(res => res.json())
+                    .then(function (data) {
+                        if (data.code === 'ok') {
+                            checkLogin()
+                        }
+                        else {
+                            // to do display feedback from server
+                            console.log(data)
+                        }
+                    }
+                    )
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+            }
+
+
+            return valid
+
+        }
+
         const logout = () => {
             // send logout request to server // to do
 
@@ -195,9 +343,9 @@
         const updatePlayerList = () => {
             const list = document.getElementById('player-list-host')
             const listJoin = document.getElementById('player-list-join')
+            $('#player-list-title-join').show()
             list.innerHTML = ""
             listJoin.innerHTML = ""
-            console.log(players)
             players.forEach(player => {
                 const item = document.createElement('li')
                 item.classList.add('list-group-item')
@@ -206,6 +354,10 @@
                 list.appendChild(item)
                 listJoin.appendChild(itemJoin)
             })
+
+            if (players.length > 1) {
+                $('#start-game').prop('disabled', false)
+            }
         }
 
         let players = []
@@ -246,7 +398,6 @@
                         break;
                     }
                     case 'begin': {
-                        console.log(data.message)
                         window.location.href = 'game?code=' + gameCode
                         break
                     }
@@ -272,7 +423,6 @@
                 .then(data => {
                     $("#page-loading").hide()
                     if (data.code === 'ok') {
-                        console.log('okay')
                         $("#lobby").show()
                         $("#login-reg").hide()
                         document.getElementById("rememberUser").innerHTML =
@@ -281,13 +431,11 @@
                         username = data.username
                     }
                     else {
-                        console.log('need login')
                         $("#lobby").hide()
                         $("#login-reg").show()
                         $('#lobby').hide()
 
                     }
-                    console.log('here')
                 })
                 .catch((err) => {
 
@@ -301,8 +449,6 @@
         }
 
         const joinGame = async () => {
-            // window.location.href = 'game?code=' + gameCode
-
             const headers = {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -319,7 +465,6 @@
         }
 
         const joinGameWithCode = () => {
-            // window.location.href = 'game?code=' + 
             gameCode = document.getElementById('game-code-enter').value
             const headers = {
                 'Accept': 'application/json',
@@ -341,9 +486,7 @@
                         waitOtherPlayers()
                     }
                     else {
-                        console.log(data)
                         if (data.message.toLowerCase().includes('already')) {
-                            console.log('already joined')
                             waitOtherPlayers()
                         }
                     }
@@ -389,22 +532,23 @@
                     let gameCode = data.game
                     document.getElementById('practice-mode-spinner').setAttribute('hidden', true)
                     window.location.href = 'game?code=' + gameCode
-                    console.log('single player game...')
                 })
         }
 
 
         let checkName = async () => {
             let name = document.getElementById('name').value
-            console.log(name)
 
             let headers = {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
             let raw = JSON.stringify({
-                "username": name
-            })
+                "username": name,
+                "password": pass//,
+                // "email" : email,
+                // "phoneNumber": num
+            });
             let requestOptions = {
                 method: 'POST',
                 headers: headers,
@@ -417,18 +561,6 @@
                     else { throw 'Failed to load correct word: response code invalid!' }
                 })
                 .then(function (data) {
-                    // console.log(data)
-
-                    // if (data.message.includes('back')) {
-                    //     //console.log('Welcome back ')document.getElementById("rememberUser").innerHTML =
-                    //         "Welcome back " + data.username;
-                    // }
-                    // else {
-                    //     //console.log('Welcome  newcomer ')
-                    //     document.getElementById("rememberUser").innerHTML =
-                    //         "Welcome newcomer " + data.username;
-                    // }
-
                     checkLogin()
                 }
                 )

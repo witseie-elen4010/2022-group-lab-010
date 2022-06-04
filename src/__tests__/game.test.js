@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', router)
 
 let mockedGame
-
+jest.setTimeout(15000)
 beforeAll(async () => {
   await db.connect()
   await db.seed()

@@ -1,4 +1,5 @@
 const UserController = require('../controllers/user.controllers')
+const bcrypt = require('bcrypt')
 
 const unauthorized = (req, res) => {
   res.status(401)
@@ -13,21 +14,29 @@ const unauthorized = (req, res) => {
 }
 
 const auth = async (req, res, next) => {
-  let user = false
+  let user
   let search = ''
+  let token = null
 
-  if (typeof req.body !== 'undefined' && req.body.username) search = req.body.username
+  if (typeof req.body !== 'undefined') {
+    if (req.body.username) search = req.body.username
+    if (req.body.token) token = req.body.token
+  }
 
-  if (search === '') { // check cookies
-    if (req.cookies && req.cookies.username) search = req.cookies.username
+  if (req.cookies) { // check cookies
+    if (req.cookies.username) search = req.cookies.username
+    if (req.cookies.token) token = req.cookies.token
   }
 
   if (!(user = await UserController.findUserByUsername(search))) {
     return unauthorized(req, res)
   }
-  // to do check token
 
-  req.user = user // embed the authenticated user in the request
+  // check if the token is valid
+  if (token && await bcrypt.compare(token.toString(), user.token)) {
+    // embed the authenticated user in the request
+    req.user = user
+  } else return (unauthorized(req, res))
 
   next()
 }
