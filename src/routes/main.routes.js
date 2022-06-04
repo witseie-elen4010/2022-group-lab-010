@@ -7,7 +7,6 @@ const users = require('../controllers/user.controllers')
 const express = require('express')
 const router = express.Router()
 const userMiddleware = require('../middleware/user.middleware')
-const Word = require('../models/Word')
 
 const auth = userMiddleware.auth
 
