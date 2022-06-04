@@ -93,21 +93,21 @@ const login = async (req, res) => {
       res
         .cookie('username', user.username)
         .cookie('token', token)
-        .status(200).send({
-          message: 'user authenticated',
+        .status(200).json({
+          message: 'User authenticated',
           code: 'ok',
           username: user.username,
           token
         })
     } else {
-      res.status(401).send({
+      res.status(401).json({
         message: 'Invalid credentials',
         feedback: { password: 'Invalid credentials' },
         code: 'error'
       })
     }
   } else {
-    res.status(401).send({
+    res.status(401).json({
       message: 'Invalid credentials',
       feedback: { password: 'Invalid credentials' },
       code: 'error'

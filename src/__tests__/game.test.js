@@ -13,10 +13,13 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const db = require('../models/dbTest')
 const app = express()
+const EventEmitter = require('events')
 app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', router)
+
+global.events = new EventEmitter()
 
 let mockedGame
 jest.setTimeout(15000)
@@ -37,48 +40,48 @@ describe('Test Game Controller', function () {
     const res = await request(app)
       .get('/api/game')
       .set('Accept', 'application/json')
-      .set('Cookie', ['username=TestUser'])
+      .set('Cookie', ['username=TestUser', 'token=1234'])
       .expect(200)
 
     await request(app)
       .post('/api/guess')
-      .send({ game: res.body.game, guess: 'MOUSE', username: 'TestUser' })
+      .send({ game: res.body.game, guess: 'MOUSE', username: 'TestUser', token: '1234' })
       .expect(200)
   })
 
   it('tests /api/game/log endpoint - Invalid game', async () => {
     await request(app)
       .post('/api/game/log')
-      .send({ game: 'An invalid game', username: 'TestUser' })
+      .send({ game: 'An invalid game', username: 'TestUser', token: '1234' })
       .expect(400)
   })
 
   it('tests /api/game/log endpoint - Game not ended', async () => {
     await request(app)
       .post('/api/game/log')
-      .send({ game: mockedGame.code, username: 'TestUser' })
+      .send({ game: mockedGame.code, username: 'TestUser', token: '1234' })
       .expect(400)
   })
 
   it('tests /api/game/log endpoint - Valid game', async () => {
     await request(app)
       .post('/api/guess')
-      .send({ guess: 'SMART', game: mockedGame.code, username: 'TestUser' })
+      .send({ guess: 'SMART', game: mockedGame.code, username: 'TestUser', token: '1234' })
       .expect(200)
 
     await request(app)
       .post('/api/guess')
-      .send({ guess: 'PIZZA', game: mockedGame.code, username: 'TestUser' })
+      .send({ guess: 'PIZZA', game: mockedGame.code, username: 'TestUser', token: '1234' })
       .expect(200)
 
     await request(app)
       .post('/api/guess')
-      .send({ guess: 'MOUSE', game: mockedGame.code, username: 'TestUser' })
+      .send({ guess: 'MOUSE', game: mockedGame.code, username: 'TestUser', token: '1234' })
       .expect(200)
 
     const res = await request(app)
       .post('/api/game/log')
-      .send({ game: mockedGame.code, username: 'TestUser' })
+      .send({ game: mockedGame.code, username: 'TestUser', token: '1234' })
       .expect(200)
 
     const smartColours = ['yellow', 'yellow', 'gray', 'gray', 'gray']
