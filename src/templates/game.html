@@ -723,7 +723,7 @@
                     hash: objectArrayHash(mstate)
                 })
             }
-            const res = await fetch('api/multiplayer/game', params)
+            const res = await fetch('api/game/channel', params)
             if (res.status != 200) {
                 await new Promise(resolve => setTimeout(resolve, 1000))
                 await waitGame() // retry

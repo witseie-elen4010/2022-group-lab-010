@@ -127,39 +127,39 @@ const colourCodeGuess = async (req, res) => {
   // update the total score
   playerGame.score += score
 
-  // check if game is done
-  if (playerGame.gameMode === 'practice') {
-    if (allGreen || ((turn + 1) === 6)) {
-      playerGame.complete = true
-      playerGame.completedAt = Date.now()
-      playerGame.markModified('completedAt')
-    }
-  }
+  // // check if game is done
+  // if (playerGame.gameMode === 'practice') {
+  //   if (allGreen || ((turn + 1) === 6)) {
+  //     playerGame.complete = true
+  //     playerGame.completedAt = Date.now()
+  //     playerGame.markModified('completedAt')
+  //   }
+  // }
 
   // report guess if multiplayer
-  if (playerGame.gameMode === 'multiplayer') {
-    // check if game is done
-    if (allGreen || playerGame.guesses.length === playerGame.players.length * 6) {
-      global.events.emit('multiplayerGame' + playerGame.code, {
-        type: 'end',
-        guess: {
-          player: req.user.username,
-          colours: out.colour
-        }
-      })
-      playerGame.complete = true
-      playerGame.completedAt = Date.now()
-      playerGame.markModified('completedAt')
-    } else {
-      global.events.emit('multiplayerGame' + playerGame.code, {
-        type: 'guess',
-        guess: {
-          player: req.user.username,
-          colours: out.colour
-        }
-      })
-    }
+  // if (playerGame.gameMode === 'multiplayer' || true) {
+  // check if game is done
+  if (allGreen || playerGame.guesses.length === playerGame.players.length * 6) {
+    global.events.emit('gameChannel' + playerGame.code, {
+      type: 'end',
+      guess: {
+        player: req.user.username,
+        colours: out.colour
+      }
+    })
+    playerGame.complete = true
+    playerGame.completedAt = Date.now()
+    playerGame.markModified('completedAt')
+  } else {
+    global.events.emit('gameChannel' + playerGame.code, {
+      type: 'guess',
+      guess: {
+        player: req.user.username,
+        colours: out.colour
+      }
+    })
   }
+  // }
 
   await playerGame.save() // save to database
 

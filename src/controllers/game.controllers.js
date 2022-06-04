@@ -282,7 +282,7 @@ const getMultiplayerState = async (userId, gameId) => {
   return { score, players, guesses }
 }
 
-const multiplayerGame = async (req, res) => {
+const gameChannel = async (req, res) => {
   const post = req.body
   if (!post || !post.game) {
     res.status(400).json({ code: 'error', message: 'Invalid Game' })
@@ -319,7 +319,7 @@ const multiplayerGame = async (req, res) => {
 
   // wait for lobby update (new guess)
   await new Promise(resolve =>
-    global.events.once('multiplayerGame' + game.code, (event) => {
+    global.events.once('gameChannel' + game.code, (event) => {
       if (event.type === 'guess') {
         res.status(200).json({
           code: 'ok',
@@ -347,5 +347,5 @@ module.exports = {
   multiplayerLobby,
   multiplayerStart,
   validatedGame,
-  multiplayerGame
+  gameChannel
 }

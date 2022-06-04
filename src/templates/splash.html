@@ -81,7 +81,10 @@
                                     </h4>
                                     <p class="card-text">Click the button to play single player wordle</p>
                                     <div class="container text-center">
-                                        <a href="game" class="btn btn-primary" role="button">Launch Game!</a>
+                                        <button onclick="practiceMode()" class="btn btn-primary">Launch
+                                            Game! <div id="practice-mode-spinner" hidden="true"
+                                                class="spinner-border spinner-border-sm"></div>
+                                        </button>
                                     </div>
                                 </div>
                             </section>
@@ -301,18 +304,18 @@
             // window.location.href = 'game?code=' + gameCode
 
             const headers = {
-                'Accept' : 'application/json',
-                'Content-Type' : 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             }
             const params = {
                 headers: headers,
-                method: 'POST', 
+                method: 'POST',
                 body: JSON.stringify({
                     game: gameCode
                 })
             }
             await fetch('api/multiplayer/start', params)
-            
+
         }
 
         const joinGameWithCode = () => {
@@ -339,7 +342,7 @@
                     }
                     else {
                         console.log(data)
-                        if(data.message.toLowerCase().includes('already')){
+                        if (data.message.toLowerCase().includes('already')) {
                             console.log('already joined')
                             waitOtherPlayers()
                         }
@@ -368,6 +371,25 @@
                     players = [{ username: username }]
                     updatePlayerList()
                     waitOtherPlayers()
+                })
+        }
+
+        const practiceMode = async () => {
+
+            document.getElementById('practice-mode-spinner').removeAttribute('hidden')
+            let headers = new Headers()
+            let requestOptions = {
+                method: 'GET',
+                headers: headers,
+                redirect: 'follow'
+            };
+            fetch("api/game", requestOptions)
+                .then(res => res.json())
+                .then(data => {
+                    let gameCode = data.game
+                    document.getElementById('practice-mode-spinner').setAttribute('hidden', true)
+                    window.location.href = 'game?code=' + gameCode
+                    console.log('single player game...')
                 })
         }
 

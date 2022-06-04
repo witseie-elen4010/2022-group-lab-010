@@ -46,6 +46,6 @@ router.post('/api/multiplayer/join', auth, controllers.multiplayerJoin)
 
 router.post('/api/multiplayer/start', auth, controllers.multiplayerStart)
 
-router.post('/api/multiplayer/game', auth, controllers.multiplayerGame)
+router.post('/api/game/channel', auth, controllers.gameChannel)
 
 module.exports = router
