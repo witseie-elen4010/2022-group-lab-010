@@ -24,7 +24,7 @@ const generateUser = async (username, password, email, phoneNumber, loggedIn) =>
 }
 
 const makeNewUser = async (req, res) => {
-//  console.log('making a new user', req)
+  //  console.log('making a new user', req)
   const post = req.body
   if (!post) {
     res.status(400).send({
@@ -35,17 +35,30 @@ const makeNewUser = async (req, res) => {
 
     res.end()
   }
-  let user
-  if ((user = await findUserByUsername(post.username))) {
-    res.json({ code: 'ok', message: 'Welcome back ' + user.username, status: 1, usernamee: post.username })
+
+  if (post.phoneNumber.length !== 10) {
+    res.status(400).send({
+      message: 'Invalid phone number',
+      code: 'error'
+
+    })
+
+    res.end()
   } else {
-    try {
-      const salt = await bcrypt.genSalt()
-      const hashedPassword = await bcrypt.hash(post.password, salt)
-      user = await generateUser(post.username, hashedPassword, post.email, post.phoneNumber, post.loggedIn)
+    let user
+    if ((user = await findUserByUsername(post.username))) {
+      res.status(999).send({
+        message: '  Duplicate name',
+        code: 'error',
+        statusText: 'Duplicate name'
+
+      })
+
+      /*  res.json({ status: 400, code: 'error', message: 'duplicate username' + user.username, status: 1, usernamee: post.username }) */
+    } else {
+      // console.log(post)
+      /* user = await generateUser(post.username, post.password, post.email, post.phoneNumber, post.loggedIn)
       if (user) {
-        user.generateToken()
-        res.cookie('token', user.token, { expires: new Date(Date.now() + 86400000), httpOnly: true })
         res.json(user)
       } else {
         res.status(400).send({
@@ -53,16 +66,32 @@ const makeNewUser = async (req, res) => {
           code: 'error'
 
         })
+      } */
+      try {
+        const salt = await bcrypt.genSalt()
+        const hashedPassword = await bcrypt.hash(post.password, salt)
+        user = await generateUser(post.username, hashedPassword, post.email, post.phoneNumber, post.loggedIn)
+        if (user) {
+          user.generateToken()
+          res.cookie('token', user.token, { expires: new Date(Date.now() + 86400000), httpOnly: true })
+          res.json(user)
+        } else {
+          res.status(400).send({
+            message: 'Invalid Request Body Duplicate name',
+            code: 'error'
+
+          })
+        }
+      } catch {
+        res.status(500).send('Error In Creating User')
+        console.log('Error In Creating User')
       }
-    } catch {
-      res.status(500).send('Error In Creating User')
-      console.log('Error In Creating User')
     }
   }
 }
 
 const findUserByUsername = async (name) => {
-  console.log('Loggin the name ', name)
+  // console.log('Loggin the name ', name)
   const user = await User.findOne({ username: name }).exec()
   // console.log('LOGGIN THE USER NAME', user)
   if (user) {
@@ -117,9 +146,4 @@ const logginIn = async (req, res) => {
   }
 }
 
-module.exports = {
-  generateUser,
-  makeNewUser,
-  findUserByToken,
-  logginIn
-}
+module.exports = { generateUser, makeNewUser, findUserByToken, logginIn }
