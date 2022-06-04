@@ -161,7 +161,7 @@ describe('Test Guesses Controller', function () {
     expect(score).toBe(180)
   })
 
-  /* it('tests /api/guess endpoint - duplicate letters', async () => {
+  it('tests /api/guess endpoint - duplicate letters', async () => {
     const res = await request(app)
       .post('/api/guess')
       .set('Accept', 'application/json')
@@ -175,7 +175,7 @@ describe('Test Guesses Controller', function () {
     expect(colour.length).toBe(5)
     expect(colour).toStrictEqual(colours)
     expect(score).toBe(0)
-  }) */
+  })
 
   it('tests /api/correct - Reveals correct word', async () => {
     const res = await request(app)
