@@ -31,7 +31,7 @@ const updateKeyboardColour = function (guess, colours) {
     const letterID = 'button' + guess.charAt(i).toUpperCase()
     // console.log('after getting letter ID : ', letterID)
     const btn = document.getElementById(letterID)
-    console.log(i, ' BEFORE', btn.classList.value)
+    // console.log(i, ' BEFORE', btn.classList.value)
     // btn.classList.add('bg-' + colours[i])
     // console.log('AFTER class list ', btn.classList.value)
 
@@ -44,8 +44,9 @@ const updateKeyboardColour = function (guess, colours) {
       case 'gray':
         btn.classList.remove('btn-secondary')
         if (btn.classList.contains('bg-green') || btn.classList.contains('bg-yellow')) {
-          /* console.log('NOT ADDED GRAY ', btn.classList) */
+          // console.log('NOT ADDED GRAY ')
         } else {
+          if (btn.classList.contains('bg-gray')) { btn.classList.remove('bg-gray') }
           btn.classList.add('bg-gray')
         }
 
@@ -57,7 +58,7 @@ const updateKeyboardColour = function (guess, colours) {
         break
     }
 
-    console.log('AFTER ', btn.classList.value)
+    //
   }
 }
 

@@ -95,50 +95,31 @@ const colourCodeGuess = async (req, res) => {
   const guess = post.guess.toUpperCase()
   let score = 0
   const out = { code: 'ok', colour: [], guess, score } // output array
-  console.log('The guess made is: ', post.guess, ' correct word: ', correctWord)
+  // console.log('The guess made is: ', post.guess, ' correct word: ', correctWord)
   let allGreen = true
   for (let i = 0; i < post.guess.length; i++) {
     const letter = guess.charAt(i)
     const temp = correctWord
 
-    console.log('guess position ', i)
-
-    /* const re = new RegExp(letter, 'g')
-    const count = countOcurrences(temp, letter)
-    console.log('The letter ', letter, 'appears in the word : ', count)
-
-    const countGuess = countOcurrences(guess, letter)
-    console.log('The letter ', letter, 'appears in the guess: ', countGuess)
-
-    const prevLetters = correctWord.substring(0, i)
-    console.log('The previous letters are ', prevLetters)
-    const preOccurCount = countOcurrences(prevLetters, letter)
-    console.log('The letter ', letter, 'appeared before: ', preOccurCount)
-    console.log(' ') */
-
-    // Score each letter
-    /* if (countGuess > count && (preOccurCount > 0 || i === 0)) {
-      out.colour.push('gray')
-      allGreen = false
-    } else */
+    // console.log('guess position ', i)
 
     if (letter === correctWord.charAt(i)) {
       out.colour.push('green')
     } else if (correctWord.indexOf(letter) > -1) {
       let valid = true
-      console.log('guess position ', i)
+      // console.log('guess position ', i)
       const countInWord = countOcurrences(temp, letter)
-      console.log('The letter ', letter, 'appears in the word : ', countInWord)
+      // console.log('The letter ', letter, 'appears in the word : ', countInWord)
       const countInGuess = countOcurrences(guess, letter)
-      console.log('The letter ', letter, 'appears in the guess: ', countInGuess)
+      // console.log('The letter ', letter, 'appears in the guess: ', countInGuess)
 
       if (countInWord === 1) {
         // check if this is the first duplicate letter
 
         const prevLettersInGuess = guess.substring(0, i)
-        console.log('The previous letters are ', prevLettersInGuess)
+        // console.log('The previous letters are ', prevLettersInGuess)
         const preOccurCount = countOcurrences(prevLettersInGuess, letter)
-        console.log('The letter ', letter, 'appeared before: ', preOccurCount)
+        // console.log('The letter ', letter, 'appeared before: ', preOccurCount)
 
         if (preOccurCount > 0) {
           valid = false
@@ -154,9 +135,9 @@ const colourCodeGuess = async (req, res) => {
         } else {
           if (guess.charAt(i) === correctWord.charAt(index)) {
             const newWord = correctWord.substr(0, index) + correctWord.substr((index + 1), correctWord.length)
-            console.log('new word is ', newWord)
-            const newGuess = guess.substr(0, i) + guess.substr((i + 1), guess.length)
-            console.log('new word is ', newGuess)
+            // console.log('new word is ', newWord)
+            // const newGuess = guess.substr(0, i) + guess.substr((i + 1), guess.length)
+            // console.log('new word is ', newGuess)
 
             if (newWord.indexOf(letter) === -1) {
               valid = false

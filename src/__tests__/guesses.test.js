@@ -161,6 +161,22 @@ describe('Test Guesses Controller', function () {
     expect(score).toBe(180)
   })
 
+  /* it('tests /api/guess endpoint - duplicate letters', async () => {
+    const res = await request(app)
+      .post('/api/guess')
+      .set('Accept', 'application/json')
+      .send({ guess: 'MAMBA', game: mockedGame.code, username: 'TestUser', token: '1234' }) // MOUSE
+      .expect(200)
+      .expect('Content-Type', /json/)
+
+    const colours = ['green', 'gray', 'gray', 'gray', 'gray']
+    const score = res.body.score
+    const colour = res.body.colour
+    expect(colour.length).toBe(5)
+    expect(colour).toStrictEqual(colours)
+    expect(score).toBe(0)
+  }) */
+
   it('tests /api/correct - Reveals correct word', async () => {
     const res = await request(app)
       .post('/api/correct')
