@@ -83,6 +83,7 @@ describe('Testing user loggin in ', function () {
       .expect('Content-Type', /json/)
 
     const req = res.body
+    console.log(req)
     expect(req.message).toBe('user authenticated')
     expect(req.code).toBe('ok')
   })
