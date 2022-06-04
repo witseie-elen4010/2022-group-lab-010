@@ -4,16 +4,22 @@
 
 const Game = require('../models/Game')
 const Word = require('../models/Word')
+const User = require('../models/User')
 // import * as guesses from '../controllers/guesses.controllers'
 const request = require('supertest')
 const express = require('express')
 const router = require('../routes/main.routes')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const db = require('../models/dbTest')
 const app = express()
+const EventEmitter = require('events')
 app.use(bodyParser.json())
+app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', router)
+
+global.events = new EventEmitter()
 
 let mockedGame
 jest.setTimeout(15000)
@@ -21,7 +27,8 @@ beforeAll(async () => {
   await db.connect()
   await db.seed()
   const mockedWord = await Word.findOne({ word: 'mouse' }).exec() // force game word to be 'MOUSE'
-  mockedGame = await Game.create({ word: mockedWord._id, guesses: [], gameMode: 'practice' })
+  const mockUser = await User.findOne({ username: 'TestUser' }).exec() // force user to be 'TestUser'
+  mockedGame = await Game.create({ word: mockedWord._id, guesses: [], gameMode: 'practice', players: [{ player: mockUser._id }], code: 'mockCode' })
 })
 
 afterAll(async () => {
@@ -32,47 +39,49 @@ describe('Test Game Controller', function () {
   it('tests /api/game - Creates a usable game code', async () => {
     const res = await request(app)
       .get('/api/game')
-      .expect(302)
+      .set('Accept', 'application/json')
+      .set('Cookie', ['username=TestUser', 'token=1234'])
+      .expect(200)
 
     await request(app)
       .post('/api/guess')
-      .send({ game: res.body.game, guess: 'MOUSE' })
-      .expect(400)
+      .send({ game: res.body.game, guess: 'MOUSE', username: 'TestUser', token: '1234' })
+      .expect(200)
   })
 
   it('tests /api/game/log endpoint - Invalid game', async () => {
     await request(app)
       .post('/api/game/log')
-      .send({ game: 'An invalid game' })
+      .send({ game: 'An invalid game', username: 'TestUser', token: '1234' })
       .expect(400)
   })
 
   it('tests /api/game/log endpoint - Game not ended', async () => {
     await request(app)
       .post('/api/game/log')
-      .send({ game: mockedGame._id })
+      .send({ game: mockedGame.code, username: 'TestUser', token: '1234' })
       .expect(400)
   })
 
   it('tests /api/game/log endpoint - Valid game', async () => {
     await request(app)
       .post('/api/guess')
-      .send({ guess: 'SMART', game: mockedGame._id })
+      .send({ guess: 'SMART', game: mockedGame.code, username: 'TestUser', token: '1234' })
       .expect(200)
 
     await request(app)
       .post('/api/guess')
-      .send({ guess: 'PIZZA', game: mockedGame._id })
+      .send({ guess: 'PIZZA', game: mockedGame.code, username: 'TestUser', token: '1234' })
       .expect(200)
 
     await request(app)
       .post('/api/guess')
-      .send({ guess: 'MOUSE', game: mockedGame._id })
+      .send({ guess: 'MOUSE', game: mockedGame.code, username: 'TestUser', token: '1234' })
       .expect(200)
 
     const res = await request(app)
       .post('/api/game/log')
-      .send({ game: mockedGame._id })
+      .send({ game: mockedGame.code, username: 'TestUser', token: '1234' })
       .expect(200)
 
     const smartColours = ['yellow', 'yellow', 'gray', 'gray', 'gray']

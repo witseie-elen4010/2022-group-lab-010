@@ -32,7 +32,6 @@
     <section class="p-5">
         <div class="div container text-center">
             <p>
-                <!-- <a href="https://www.youtube.com/watch?v=lv4Zg-209MY">it over here</a> -->
 
             <div class="input-group mb-3">
                 <input id="username" type="text" class="form-control" placeholder="Enter your username" autofocus> 
@@ -87,64 +86,8 @@
             document.getElementById('password').value = ''
            
         }
-        let logIn = async () => {
-            let username = document.getElementById('username').value
-            let password = document.getElementById('password').value
-           // console.log(username)
-            //console.log(password)
 
-            let headers = new Headers();
-            headers.append("Content-Type", "application/json");
-            let raw = JSON.stringify({
-                "username": username,
-                "password": password
-            });
-            let requestOptions = {
-                method: 'POST',
-                headers: headers,
-                body: raw,
-                redirect: 'follow'
-            };
-            fetch('api/LogIn', requestOptions)
-                .then(function (response) {
-                    //console.log('LOGIN >HTML ', response)
-
-                     if (response.ok) {
-                        return response.json()
-                        console.log('response ok  ', response)
-                        document.getElementById("rememberUser").innerHTML = "You are now logged in"
-                    } // Return the response parse as JSON
-                    else {
-                        console.log('response not okay  ', response)
-                        document.getElementById("rememberUser").innerHTML = "Your username or password is incorrect"
-                        document.getElementById('password').value = '';
-
-                        document.getElementById("rememberUser").innerHTML =
-                            "Your username or password is incorrect" + data.usernamee;
-                        
-                        throw 'Failed to load correct word: response code invalid!'
-                    } 
-                })
-                .then(function (data) {
-                    console.log(data)
-                    if (data.code == 'ok') {
-                        
-                        alert("Welcome back " + data.username + " you are logged in and being redirected to the menu, enjoy!")
-                        location.href = "/splash";
-                    }
-                    else {
-                        document.getElementById("rememberUser").innerHTML = "Your username or password is incorrect"
-                        document.getElementById('password').value = '';
-                    }
-
-                }
-                )
-                .catch(function (error) {
-                    console.log(error)
-                })
-
-
-        }
+        
     </script>
 
 </body>

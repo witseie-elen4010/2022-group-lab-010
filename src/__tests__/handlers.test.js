@@ -5,14 +5,14 @@
 const handlers = require('../controllers/routes.controllers')
 
 describe('Test Handlers', function () {
-  test('hello handler works', () => {
-    const req = {}
-    const res = { sendFile: function (input) { this.text = input } }
+  // test('hello handler works', () => {
+  //   const req = {}
+  //   const res = { sendFile: function (input) { this.text = input } }
 
-    handlers.hello(req, res)
+  //   handlers.hello(req, res)
 
-    expect(res.text.replace(/\\/g, '/')).toContain('templates/hello.html')
-  })
+  //   expect(res.text.replace(/\\/g, '/')).toContain('templates/hello.html')
+  // })
 
   test('splash handler works', () => {
     const req = {}

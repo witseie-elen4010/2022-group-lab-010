@@ -3,10 +3,13 @@
 const express = require('express')
 require('dotenv').config({ path: '../.env' })
 const bodyParser = require('body-parser')
-const mainRouter = require('./routes/main.routes')
 const cookieParser = require('cookie-parser')
+const mainRouter = require('./routes/main.routes')
 const db = require('./db')
 const { default: mongoose } = require('mongoose')
+const Events = require('events')
+
+global.events = new Events()
 
 const app = express()
 
@@ -26,16 +29,6 @@ mongoose.connection.on('error', () => {
 })
 
 module.exports = app
-
-/* const mongoDBUsers = process.env.DB_URI
-mongoose.connect(mongoDBUsers, { useUnifiedTopology: true, useNewUrlParser: true })
-const dbUser = mongoose.connection
-
-dbUser.once('open', () => {
-  console.log('connected to mongo user database')
-})
-
-dbUser.on('error', console.error.bind(console, 'MongoDB connection error to User:')) */
 
 const port = process.env.PORT || 3000
 app.listen(port)

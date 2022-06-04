@@ -27,6 +27,16 @@
             vertical-align: middle;
         }
 
+        .letter-block-mini {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0px 2px 0.2px;
+            padding: 1px;
+            border-radius: 2px;
+        }
+
         .bg-green {
             background-color: #198754;
             color: white;
@@ -119,6 +129,14 @@
                 transform: scale(1);
             }
         }
+
+        .player-mini-board {
+            width: 200px;
+        }
+
+        .nowrap {
+            white-space: nowrap;
+        }
     </style>
 </head>
 
@@ -137,6 +155,10 @@
             
             
         </div>
+    </div>
+
+    <div id='mini-boards-holder' class="py-4 mt-4 overflow-auto nowrap text-center">
+        
     </div>
 
     <div class="d-flex justify-content-center mt-1">
@@ -257,13 +279,14 @@
 
     <script>
         let game = 0;
+        let username = '';
         let gameDone = false;
         let i = 0
         let sendGuess = async (guess) => {
-            
-            let headers = new Headers();
-            headers.append("Content-Type", "application/json");
-
+            let headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
             let raw = JSON.stringify({
                 "guess": guess,
                 "game": game,
@@ -274,7 +297,7 @@
                 method: 'POST',
                 headers: headers,
                 body: raw,
-                redirect: 'follow'
+                redirect: 'follow',
             };
             const response = await fetch("api/guess", requestOptions)
             i++
@@ -318,11 +341,11 @@
                         }
 
                         guesses++;
-                        if (allGreen) {
-                            gameEnd(END_CORRECT_WORD)
-                        } else if (guesses == 6) {
-                            gameEnd(END_NO_GUESSES)
-                        }
+                        // if (allGreen) {
+                        //     gameEnd(END_CORRECT_WORD)
+                        // } else if (guesses == 6) {
+                        //     gameEnd(END_NO_GUESSES)
+                        // }
 
                     } else {
                         message.classList.add('text-danger')
@@ -349,18 +372,19 @@
             switch (endCondition) {
 
                 case END_NO_GUESSES: {
-                    let headers = new Headers();
-                    headers.append("Content-Type", "application/json");
-                    console.log('LOGGING THE VALUE OF GAME ', game)
+                    let headers = {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
                     let raw = JSON.stringify({
                         "game": game
-                    });
+                    })
                     let requestOptions = {
                         method: 'POST',
                         headers: headers,
                         body: raw,
                         redirect: 'follow'
-                    };
+                    }
                     fetch('api/correct', requestOptions)
                         .then(function (response) {
                             if (response.ok) { return response.json() } // Return the response parse as JSON
@@ -402,7 +426,16 @@
                 }
 
                 async function rematch() {
-                    const response = await fetch('api/rematch')
+                    let headers = {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                    let requestOptions = {
+                        method: 'GET',
+                        headers: headers,
+                        redirect: 'follow'
+                    }
+                    const response = await fetch('api/rematch', requestOptions)
 
                     if (response.status == 502) {
                         // Status 502 is a connection timeout error,
@@ -430,15 +463,12 @@
         }
         // export {gameEnd}
 
-        let generateColouredGuess = (guess, colours) => {
-            let out = document.createElement("div")
-            out.classList.add(['pb-1'])
-
+        let generateColouredGuess = (guess, colours, board = 1) => {
             guess = guess.toUpperCase()
 
             for (let character = 0; character < colours.length; character++) {
-                document.getElementById('blockrow' + guesses + 'character' + character).classList.add('bg-' + colours[character], 'm-1')
-                document.getElementById('row' + guesses + 'character' + character).innerHTML = guess.charAt(character)
+                document.getElementById(board + 'blockrow' + guesses + 'character' + character).classList.add('bg-' + colours[character], 'm-1')
+                document.getElementById(board + 'row' + guesses + 'character' + character).innerHTML = guess.charAt(character)
             }
 
             document.getElementById('guess').value = ''
@@ -461,61 +491,65 @@
             const code = findGetParameter('code')
             if (code) {
                 game = code
+            } else {
+                console.log('cannot create game')
             }
-            else {
-                fetch('api/game')
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.code === 'ok') {
-                            game = data.game
-                        }
-                        else {
-
-                            console.log('Cannot create new game')
-                        }
-                    })
-            }
-
-
-
         }
 
         let gameIsValid = () => {
             return !gameDone
         }
 
-        window.onload = () => {
-            initBoards(1, 'boards')
-
-            // request a new game ID 
-            newGame()
-        }
-
-        let initBoards = function (count, elementToAttach) {
-            for (let i = 0; i < count; i++) {
-                let board = document.createElement("div")
-                board.classList.add('col-xl', 'pb-2')
-                board.id = 'board' + i
-                for (let row = 0; row < 6; row++) {
-                    let line = document.createElement("div")
-                    line.classList.add(['pb-1'])
-                    for (let character = 0; character < 5; character++) {
-                        let block = document.createElement("div")
-                        block.classList.add('card', 'card-body', 'letter-block', 'm-1')
-                        let letter = document.createElement("h1")
-                        letter.id = 'row' + row + 'character' + character
-                        block.id = 'blockrow' + row + 'character' + character
-                        let letterContainer = document.createElement("div")
-                        letterContainer.classList.add('d-inline-flex', 'h-100', 'w-100', 'align-items-center', 'justify-content-center')
-                        letterContainer.appendChild(letter)
-                        block.appendChild(letterContainer)
-                        line.appendChild(block)
-                    }
-                    board.appendChild(line)
+        function getCookie(cname) {
+            let name = cname + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
                 }
-                document.getElementById(elementToAttach).appendChild(board)
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
             }
+            return ""
         }
+        window.onload = () => {
+            initBoard(1, 'boards')
+            newGame()
+            waitGame()
+            username = getCookie('username')
+        }
+
+        let initBoard = function (id, elementToAttach, mini = false) {
+            let board = document.createElement("div")
+            if (!mini) board.classList.add('col-xl', 'pb-2')
+            board.id = 'board' + id
+            for (let row = 0; row < 6; row++) {
+                let line = document.createElement("div")
+                line.style.whiteSpace = 'nowrap'
+                for (let character = 0; character < 5; character++) {
+                    let block = document.createElement("div")
+                    if (mini) {
+                        block.classList.add('card', 'card-body', 'letter-block-mini')
+                    }
+                    else {
+                        block.classList.add('card', 'card-body', 'letter-block', 'm-1')
+                    }
+                    let letter = document.createElement("h1")
+                    letter.id = id + 'row' + row + 'character' + character
+                    block.id = id + 'blockrow' + row + 'character' + character
+                    let letterContainer = document.createElement("div")
+                    letterContainer.classList.add('d-inline-flex', 'h-100', 'w-100', 'align-items-center', 'justify-content-center')
+                    letterContainer.appendChild(letter)
+                    block.appendChild(letterContainer)
+                    line.appendChild(block)
+                }
+                board.appendChild(line)
+            }
+            document.getElementById(elementToAttach).appendChild(board)
+        }
+
 
         let syncRow = function (guess) {
             if (guess.length > 5) {
@@ -523,10 +557,10 @@
                 document.getElementById('guess').value = guess
             }
             for (let character = 0; character < guess.length; character++) {
-                document.getElementById('row' + guesses + 'character' + character).innerHTML = guess.charAt(character).toUpperCase()
+                document.getElementById('1row' + guesses + 'character' + character).innerHTML = guess.charAt(character).toUpperCase()
             }
             for (let character = guess.length; character < 5; character++) {
-                document.getElementById('row' + guesses + 'character' + character).innerHTML = ''
+                document.getElementById('1row' + guesses + 'character' + character).innerHTML = ''
             }
         }
 
@@ -560,7 +594,7 @@
 
         const buildMiniScoredWord = (word, colours) => {
             let out = ''
-            for(let i = 0; i < word.length; i++){
+            for (let i = 0; i < word.length; i++) {
                 out += `<span class="badge bg-${colours[i]}">${word.charAt(i)}</span>`
             }
             return out
@@ -570,8 +604,10 @@
             let logSpinner = document.getElementById('game-log-spinner')
             let gameResult = document.getElementById('Game Result')
             logSpinner.removeAttribute('hidden')
-            let headers = new Headers();
-            headers.append("Content-Type", "application/json");
+            let headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
 
             let raw = JSON.stringify({
                 "game": game,
@@ -593,7 +629,7 @@
                             encodeURIComponent(
                                 JSON.stringify(data.log, null, 4)
                             )
-                        
+
                         let guessesRows = ''
                         const guesses = data.log.guesses
                         let prevTime = moment(data.log.start)
@@ -605,7 +641,7 @@
                             prevTime = thisTime
                             guessesRows += `
                             <tr>
-                                <th scope="row">Guess ${index+1} <span class="badge badge-pill text-bg-success">${guess.score} points</span></th>
+                                <th scope="row">Guess ${index + 1} <span class="badge badge-pill text-bg-success">${guess.score} points</span></th>
                                 <td>
                                     ${buildMiniScoredWord(guess.guess, guess.colours)}
                                     <span class="badge badge-pill badge-info text-bg-info">${duration}</span>
@@ -642,14 +678,108 @@
                                 </tbody>
                             </table>
                             <a class="btn btn-outline-primary"href="${uriLog}" download="game_log_${start.format("DD_MM_YYYY_HH_mm")}.json">Download Log</a>
-                        </div>
-                            `
+                        </div>`
                     }
                 })
-
         }
 
         
+        let populateMiniBoard = (guessNum, colours, board) => {
+            colours.forEach((colour, index) => {
+                console.log(colour, index)
+                document.getElementById(board + 'blockrow' + guessNum + 'character' + index).classList.add('bg-' + colours[index])
+            })
+        }
+
+        const updateState = () => {
+            // find all guesses belonging to player
+            const g = mstate.guesses.filter(obj => obj.player === username)
+            console.log(mstate.guesses)
+            guesses = 0
+            score = mstate.score
+            // replay all guesses
+            g.forEach(guess => {
+                updateKeyboardColour(guess.guess, guess.colours)
+                generateColouredGuess(guess.guess, guess.colours)
+                guesses++
+            })
+
+            if(guesses === 6) {
+                console.log('waiting')
+                document.getElementById('response').innerHTML = 'Waiting...'
+            }
+
+           updateMiniBoards()
+        }
+        const updateMiniBoards = () => {
+            const miniHolder = document.getElementById('mini-boards-holder') 
+            miniHolder.innerHTML = ""
+
+            // update mini boards
+             mstate.players.forEach((player, index) => {
+                
+                miniHolder.innerHTML += `<div class="d-inline-block text-center player-mini-board">
+                    <h5 class="text-truncate">${player.username}</h5>
+                    <div class="px-2" id="player-board-${index+2}"></div>
+                </div>`
+
+                initBoard(index+2, 'player-board-' + (index+2), true)
+                const playerGuesses = mstate.guesses.filter(obj => obj.player === player.username)
+                playerGuesses.forEach((guess, gNum) => populateMiniBoard(gNum, guess.colours, index+2))
+            })
+        }
+
+        let mstate = {
+            score: 0,
+            players: [],
+            guesses: []
+        }
+        const waitGame = async () => {
+            const headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+            params = {
+                headers: headers,
+                method: 'POST',
+                body: JSON.stringify({
+                    game: game,
+                    hash: objectArrayHash(mstate)
+                })
+            }
+            const res = await fetch('api/game/channel', params)
+            if (res.status != 200) {
+                await new Promise(resolve => setTimeout(resolve, 1000))
+                await waitGame() // retry
+            } else {
+                const data = await res.json()
+                switch (data.status) {
+                    case 'change': {
+                        mstate.guesses.push(data.guess)
+                        updateMiniBoards()
+                        console.log(mstate)
+                        await waitGame()
+                        break;
+                    }
+                    case 'update': {
+                        mstate = data.state
+                        updateState()
+                        console.log(mstate)
+                        await new Promise(resolve => setTimeout(resolve, 1000))
+                        await waitGame()
+                        break;
+                    }
+                    case 'end': {
+                        mstate.guesses.push(data.guess)
+                        updateMiniBoards()
+                        gameEnd(END_NO_GUESSES)
+                        break
+                    }
+                    default:
+                        console.log(data)
+                }
+            }
+        }
 
 
 
@@ -658,6 +788,7 @@
     <script src="cdn/scripts/keyboardLogger.js"></script>
     <script src="cdn/scripts/timer.js"></script>
     <script src="cdn/scripts/moment.js"></script>
+    <script src="cdn/scripts/hash.js"></script>
 
 </body>
 

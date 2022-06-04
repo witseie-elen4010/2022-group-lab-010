@@ -1,36 +1,54 @@
 'use strict'
 
-const middleWare = require('../middleware/player.middleware')
+// const middleWare = require('../middleware/player.middleware')
 const handlers = require('../controllers/routes.controllers')
 const controllers = require('../controllers/game.controllers')
 const users = require('../controllers/user.controllers')
 const express = require('express')
 const router = express.Router()
+const userMiddleware = require('../middleware/user.middleware')
+
+const auth = userMiddleware.auth
 
 // Static routes
-router.get('/game', middleWare.auth, handlers.game)
-router.get('/', middleWare.auth2, handlers.login)
-router.get('/splash', middleWare.auth, handlers.splash)
-router.get('/login', middleWare.auth2, handlers.login)
-router.get('/createAccount', handlers.createAccount)
+router.get('/game', auth, controllers.validatedGame, handlers.game)
+router.get('/', handlers.splash)
 // API routes
-router.post('/api/guess', handlers.guessController.colourCodeGuess)
-router.post('/api/correct', handlers.guessController.revealWord)
+router.post('/api/guess', auth, handlers.guessController.colourCodeGuess)
+router.post('/api/correct', auth, handlers.guessController.revealWord)
 router.post('/api/user', users.makeNewUser)
-router.post('/api/LogIn', users.logginIn)
-router.get('/api/game', middleWare.auth, async function (req, res) {
-  res.json({
-    game: await controllers.generateGame(),
-    code: 'ok'
+router.get('/api/user', auth, function (req, res) { // to test authentication
+  res.status(200).json({
+    code: 'ok',
+    message: 'Authenticated',
+    username: req.user.username
   })
 })
-router.get('/api/multiplayer', middleWare.auth, async function (req, res) {
+
+router.post('/api/login', users.login)
+
+router.get('/api/game', auth, async function (req, res) {
   res.json({
-    game: await controllers.generateGame('multiplayer'),
+    game: await controllers.generateGame(req.user),
     code: 'ok'
   })
 })
 
-router.post('/api/game/log', controllers.getGameLog)
+router.get('/api/multiplayer', auth, async function (req, res) {
+  res.json({
+    game: await controllers.generateGame(req.user, 'multiplayer'),
+    code: 'ok'
+  })
+})
+
+router.post('/api/game/log', auth, controllers.getGameLog)
+
+router.post('/api/multiplayer/lobby', auth, controllers.multiplayerLobby)
+
+router.post('/api/multiplayer/join', auth, controllers.multiplayerJoin)
+
+router.post('/api/multiplayer/start', auth, controllers.multiplayerStart)
+
+router.post('/api/game/channel', auth, controllers.gameChannel)
 
 module.exports = router

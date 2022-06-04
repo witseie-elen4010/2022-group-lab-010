@@ -4,17 +4,17 @@ const game = require('./game.controllers')
 
 const revealWord = async (req, res) => {
   const post = req.body
-  if (!post) {
-    res.status(400).send({
-      message: 'Invalid Request Body',
-      code: 'error'
-    })
-    res.end()
-    return
-  }
+  // if (!post) {
+  //   res.status(400).send({
+  //     message: 'Invalid Request Body',
+  //     code: 'error'
+  //   })
+  //   res.end()
+  //   return
+  // }
 
   let playerGame
-  if (!(playerGame = await game.getGame(post.game))) {
+  if (!(playerGame = await game.getGame(req.user, post.game))) {
     res.status(400).send({
       message: "The 'game' parameter is invalid.",
       code: 'error'
@@ -62,7 +62,7 @@ const colourCodeGuess = async (req, res) => {
 
   let playerGame
 
-  if (!post.game || !(playerGame = await game.getGame(post.game))) {
+  if (!post.game || !(playerGame = await game.getGame(req.user, post.game))) {
     res.status(400).send({
       message: 'Error: Invalid Game',
       code: 'error'
@@ -107,7 +107,10 @@ const colourCodeGuess = async (req, res) => {
     }
   }
 
-  const turn = playerGame.guesses.length
+  // count the number of turns for the player
+  const turn = playerGame.guesses.filter(guess =>
+    guess.player.toString() === req.user._id.toString()
+  ).length
 
   score = scoreFunction(turn, out.colour)
 
@@ -117,20 +120,49 @@ const colourCodeGuess = async (req, res) => {
   playerGame.guesses.push({
     guess,
     colours: out.colour,
-    score
+    score,
+    player: req.user._id
   })
 
   // update the total score
   playerGame.score += score
 
+  // // check if game is done
+  // if (playerGame.gameMode === 'practice') {
+  //   if (allGreen || ((turn + 1) === 6)) {
+  //     playerGame.complete = true
+  //     playerGame.completedAt = Date.now()
+  //     playerGame.markModified('completedAt')
+  //   }
+  // }
+
+  // report guess if multiplayer
+  // if (playerGame.gameMode === 'multiplayer' || true) {
   // check if game is done
-  if (allGreen || playerGame.guesses.length === 6) {
+  if (allGreen || playerGame.guesses.length === playerGame.players.length * 6) {
+    global.events.emit('gameChannel' + playerGame.code, {
+      type: 'end',
+      guess: {
+        player: req.user.username,
+        colours: out.colour
+      }
+    })
     playerGame.complete = true
     playerGame.completedAt = Date.now()
+    playerGame.markModified('completedAt')
+  } else {
+    global.events.emit('gameChannel' + playerGame.code, {
+      type: 'guess',
+      guess: {
+        player: req.user.username,
+        colours: out.colour
+      }
+    })
   }
+  // }
 
-  playerGame.markModified('completedAt')
   await playerGame.save() // save to database
+
   res.json(out)
 }
 

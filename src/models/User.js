@@ -11,41 +11,41 @@ const userSchema = new Schema({
     required: true,
     unique: true
   },
-  password: { //  a user has one username
+  password: { //  store the password hash
     type: String,
     required: true,
     unique: false
   },
-  email: { //  a user has one username
-    type: String,
-    required: true
+  email: { //  a user can provide their email
+    type: String
+    // required: true
     // unique: true
   },
-  phoneNumber: { //  a user has one username
-    type: String,
-    required: true
-
+  phoneNumber: { //  a user can provide their phone number
+    type: String
+    // required: true
     // unique: true
   },
-  loggedIn: {
-    type: Boolean,
-    required: false
+  // loggedIn: {
+  //   type: Boolean,
+  //   required: false
 
-  },
+  // },
   token: String
 })
 
-userSchema.methods.generateToken = function () {
+userSchema.methods.generateToken = async function () {
   const player = this
   const token = crypto.randomBytes(64).toString('hex')
   player.token = bcrypt.hashSync(token, saltRounds)
-  player.save((err, player) => {
+
+  await player.save((err, player) => {
     if (err) {
       console.log('an error occured:', err)
-      player.token = null
+      return null
     }
   })
-  return player.token
+  return token
 }
 
 module.exports = mongoose.model('User', userSchema)

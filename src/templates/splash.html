@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Twordle-Dee</title>
-
     <link rel="stylesheet" href="/cdn/stylesheets/bootstrap.css">
+
+    <script src="cdn/scripts/hash.js"></script>
+
     <!-- Jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
         integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
@@ -16,8 +18,8 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
     <style>
-        .card-custom {
-            background-color: black;
+        body {
+            display: none;
         }
     </style>
 </head>
@@ -28,138 +30,472 @@
         <h1>Welcome to Twordle-dee!</h1>
     </div>
 
-    <section class="p-5">
-        <div class="div container text-center" >
+    <section class="pt-5 px-5 pb-2">
+        <div class="div container text-center">
             <p>We're so glad you're here, why don't you go watch this video to learn more about
                 <a href="https://www.youtube.com/watch?v=lv4Zg-209MY">it over here</a>
-
-            <!-- <div class="input-group mb-3">
-
-                <div class="container text-center">
-                    <a href="login" class="btn btn-primary" role="button">Log in </a>
-                </div>
-                <input id="name" type="text" class="form-control" placeholder="Enter your name" autofocus>
-                <div class="input-group-append" id="name button">
-                    <button class="btn btn-outline-secondary" type="button" onclick="checkName()"
-                        id="submit name">Enter</button>
-                </div>
-                
-            </div>
-            <div class="div container text-center" id = "rememberUser"></div> -->
-        </div>
             </p>
         </div>
     </section>
 
+    <div class="container text-center" id="page-loading">
+        <h1>Loading <div class="spinner-border"></div>
+        </h1>
+    </div>
 
-    <!-- Game Modes -->
-    <section class="p-10">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md text-center">
-                    <div class="card-custom text-light" style=" height: 18rem;">
-                        <section class="py-5">
-                            <div class="card-body text-center">
-                                <div class="h1"><i class="bi bi-person"></i></div>
-                                <h4 class="card-title">
-                                    Single Player
-                                </h4>
-                                <p class="card-text">Click the button to play single player wordle</p>
-                                <div class="container text-center">
-                                    <a href="game" class="btn btn-primary" role="button">Launch Game!</a>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
+
+    <div id="login-reg">
+        <section class="p-5">
+            <div class="div container text-center">
+                <h4>Login</h4>
+                <div class="input-group mb-3">
+                    <input id="login-username" type="text" class="form-control" placeholder="Enter your username"
+                        autofocus>
                 </div>
-                <div class="col-md">
-                    <div class="card-custom text-light" style=" height: 18rem;">
-                        <section class="py-5">
-                            <div class="card-body text-center">
-                                <div class="h1"><i class="bi bi-people"></i></div>
-                                <h4 class="card-title">
-                                    Multiplayer
-                                </h4>
-                                <p class="card-text">Click the button to create or join a game</p>
-                                <div class="row text-center">
-                                    <div class="col-4 text-center offset-2">
-                                        <button onclick="generateCode()" type="button" class="btn btn-primary px-6">
-                                            Generate Code <div id="generate-code-spinner" hidden="true"
+                <div class="input-group mb-3">
+                    <input id="login-password" type="password" class="form-control" placeholder="Enter your password"
+                        autofocus>
+                </div>
+
+            </div>
+            <div class="container text-center" id="name button">
+                <button class="btn btn-primary" role="button" onclick="login()" id="Log in">Log in </button>
+                <p>
+                <div class="div container text-center" id="login-message"></div>
+                </p>
+            </div>
+        </section>
+        <section class="p-5">
+            <div class="div container text-center">
+                <h4>Register</h4>
+                <div class="input-group mb-3">
+                    <input id="reg-username" type="text" class="form-control" placeholder="Enter your username"
+                        autofocus>
+                </div>
+
+
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" id="reg-password" placeholder="Password">
+                </div>
+                <div class="input-group mb-3">
+                    <input id="reg-passwordConfirm" type="password" class="form-control"
+                        placeholder="Confirm your password" autofocus>
+                </div>
+                <div class="input-group mb-3">
+                    <input id="reg-email" type="text" class="form-control" placeholder="Enter your email" autofocus>
+                    <!--  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                </div>
+                <div class="input-group mb-3">
+                    <input id="reg-phone number" type="text" class="form-control" placeholder="Enter your phone number"
+                        autofocus>
+                </div>
+            </div>
+            <div class="container text-center" id="name button">
+                <button class="btn btn-primary" role="button" onclick="createAcc()" id="Log in">Create your
+                    account</button>
+                <p>
+                <div class="div container text-center" id="reg-message"></div>
+                </p>
+            </div>
+
+        </section>
+    </div>
+
+
+
+
+    <div id="lobby">
+        <div class="div container text-center mb-4">
+            <h4><span id="rememberUser"></span>&nbsp;&nbsp;<button onclick="logout()"
+                    class="ml-2 btn-sm btn btn-outline-danger">Logout <i class="bi bi-box-arrow-right"></i></button>
+            </h4>
+        </div>
+
+
+        <!-- Game Modes -->
+        <section class="p-10">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-md text-center">
+                        <div class="bg-dark card text-light my-2" style=" height: 18rem;">
+                            <section class="py-5">
+                                <div class="card-body text-center">
+                                    <div class="h1"><i class="bi bi-person"></i></div>
+                                    <h4 class="card-title">
+                                        Single Player
+                                    </h4>
+                                    <p class="card-text">Click the button to play single player wordle</p>
+                                    <div class="container text-center">
+                                        <button onclick="practiceMode()" class="btn btn-primary">Launch
+                                            Game! <div id="practice-mode-spinner" hidden="true"
                                                 class="spinner-border spinner-border-sm"></div>
                                         </button>
                                     </div>
-                                    <div class="col-4 text-center">
-                                        <button type="button" class="btn btn-primary px-4" data-bs-toggle="modal"
-                                            data-bs-target="#Loader">
-                                            Enter Code
-                                        </button>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="bg-dark card text-light my-2" style=" height: 18rem;">
+                            <section class="py-5">
+                                <div class="card-body text-center">
+                                    <div class="h1"><i class="bi bi-people"></i></div>
+                                    <h4 class="card-title">
+                                        Multiplayer
+                                    </h4>
+                                    <p class="card-text">Click the button to create or join a game</p>
+                                    <div class="row text-center">
+                                        <div class="col-4 text-center offset-2">
+                                            <button onclick="generateCode()" type="button" class="btn btn-primary px-6">
+                                                Generate Code <div id="generate-code-spinner" hidden="true"
+                                                    class="spinner-border spinner-border-sm"></div>
+                                            </button>
+                                        </div>
+                                        <div class="col-4 text-center">
+                                            <button type="button" class="btn btn-primary px-4" data-bs-toggle="modal"
+                                                data-bs-target="#Loader">
+                                                Enter Code
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </section>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="Generator" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Share this code with your friend</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                                class="bi bi-x"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info" id="game-code">
+
+                        </div>
+                        <h5>Players:</h5>
+                        <ul class="list-group" id="player-list-host">
+
+                        </ul>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button id="start-game" onclick="joinGame()" class="btn btn-primary" role="button"
+                            disabled=true>Start Game</button>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-
-    <!-- Modal -->
-    <div class="modal fade" id="Generator" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Share this code with your friend</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-info" id="game-code">
-
+        <!-- Modal -->
+        <div class="modal fade" id="Loader" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Enter code to join game</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                                class="bi bi-x"></i></button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button onclick="joinGame()" class="btn btn-primary" role="button">Join Game</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="Loader" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Enter code to join game</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" class="form-control" id="game-code-enter" placeholder="Enter Code">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <div class="input-group-append">
-                        <button onclick="joinGameWithCode()" class="btn btn-primary" role="button">Join Game</button>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" id="game-code-enter" placeholder="Enter Code">
+                        
+                        <div id="player-list-title-join" class="my-3" style="display: none">
+                            <h5>Players:</h5>
+                            <p>Waiting for host to start the game...</p>
+                        </div>
+                        <ul class="list-group" id="player-list-join"></ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <div class="input-group-append">
+                            <button onclick="joinGameWithCode()" class="btn btn-primary" role="button">Join
+                                Game</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
 
     <script>
         // data-bs-toggle="modal" data-bs-target="#Generator"
         let gameCode = ''
+        let username = ''
 
-        const joinGame = () => {
-            window.location.href = 'game?code='+gameCode
+        let login = async () => {
+            let username = document.getElementById('login-username').value
+            let password = document.getElementById('login-password').value
+
+            let headers = new Headers();
+            headers.append("Content-Type", "application/json");
+            let raw = JSON.stringify({
+                "username": username,
+                "password": password
+            });
+            let requestOptions = {
+                method: 'POST',
+                headers: headers,
+                body: raw,
+                redirect: 'follow'
+            };
+            fetch('api/login', requestOptions)
+                .then(res => res.json())
+                .then(function (data) {
+                    if (data.code == 'ok') {
+                        checkLogin()
+                    }
+                    else {
+                        console.log(data)
+                        document.getElementById("login-message").innerHTML = "Your username or password is incorrect"
+                        // document.getElementById('password').value = '';
+                    }
+
+                }
+                )
+                .catch(function (error) {
+                    console.log(error)
+                })
+        }
+
+        let createAcc = async () => {
+
+            // checkEmpty()
+            let username = document.getElementById('reg-username').value
+            let password = document.getElementById('reg-password').value
+            let passwordConfirm = document.getElementById('reg-passwordConfirm').value
+            let email = document.getElementById('reg-email').value
+            let phone = document.getElementById('reg-phone number').value
+            // console.log(username, password, passwordConfirm, email, phone)
+            let valid = true
+            if (password === passwordConfirm) {
+                valid = true
+            }
+            else {
+                alert('Your passwords do not match, please confirm your passwords again')
+                valid = false
+            }
+            let at = email.includes("@");
+            if (at === false) {
+                alert('Please enter a valid email')
+                valid = false
+            }
+            if (valid == true) {
+
+                let headers = new Headers();
+                headers.append("Content-Type", "application/json");
+                let raw = JSON.stringify({
+                    "username": username,
+                    "password": password,
+                    "email": email,
+                    "phoneNumber": phone
+
+                });
+                let requestOptions = {
+                    method: 'POST',
+                    headers: headers,
+                    body: raw,
+                    redirect: 'follow'
+                };
+                fetch('api/user', requestOptions)
+
+                    .then(res => res.json())
+                    .then(function (data) {
+                        if (data.code === 'ok') {
+                            checkLogin()
+                        }
+                        else {
+                            // to do display feedback from server
+                            console.log(data)
+                        }
+                    }
+                    )
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+            }
+
+
+            return valid
+
+        }
+
+        const logout = () => {
+            // send logout request to server // to do
+
+
+            //delete cookies and reload page
+            document.cookie = "username= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+
+            window.location.reload()
+        }
+
+        const updatePlayerList = () => {
+            const list = document.getElementById('player-list-host')
+            const listJoin = document.getElementById('player-list-join')
+            $('#player-list-title-join').show()
+            list.innerHTML = ""
+            listJoin.innerHTML = ""
+            players.forEach(player => {
+                const item = document.createElement('li')
+                item.classList.add('list-group-item')
+                item.innerHTML = player.username
+                const itemJoin = item.cloneNode(true)
+                list.appendChild(item)
+                listJoin.appendChild(itemJoin)
+            })
+
+            if (players.length > 1) {
+                $('#start-game').prop('disabled', false)
+            }
+        }
+
+        let players = []
+        const waitOtherPlayers = async () => {
+            const headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+            const params = {
+                headers: headers,
+                method: 'POST',
+                body: JSON.stringify({
+                    game: gameCode,
+                    hash: objectArrayHash(players)
+                })
+            }
+            const res = await fetch('api/multiplayer/lobby', params)
+            if (res.status != 200) {
+                await new Promise(resolve => setTimeout(resolve, 1000))
+                await waitOtherPlayers() // retry
+            } else {
+
+                const data = await res.json()
+
+                switch (data.status) {
+                    case 'update': {
+                        players = data.players
+                        updatePlayerList()
+                        await waitOtherPlayers()
+                        break;
+                    }
+                    case 'change': {
+
+                        players.push(data.player)
+                        updatePlayerList()
+                        await new Promise(resolve => setTimeout(resolve, 1000))
+                        await waitOtherPlayers()
+                        break;
+                    }
+                    case 'begin': {
+                        window.location.href = 'game?code=' + gameCode
+                        break
+                    }
+                    default:
+                        console.log(data.message)
+                }
+            }
+        }
+
+
+        // check if already logged in
+        const checkLogin = () => {
+            $("#page-loading").show()
+            $("#login-reg").hide()
+            $("#lobby").hide()
+
+            let headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+            fetch('api/user', { headers: headers })
+                .then(res => res.json())
+                .then(data => {
+                    $("#page-loading").hide()
+                    if (data.code === 'ok') {
+                        $("#lobby").show()
+                        $("#login-reg").hide()
+                        document.getElementById("rememberUser").innerHTML =
+                            "Hi " + data.username + "!";
+
+                        username = data.username
+                    }
+                    else {
+                        $("#lobby").hide()
+                        $("#login-reg").show()
+                        $('#lobby').hide()
+
+                    }
+                })
+                .catch((err) => {
+
+                })
+
+        }
+
+        window.onload = function () {
+            checkLogin()
+            $('body').show()
+        }
+
+        const joinGame = async () => {
+            const headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+            const params = {
+                headers: headers,
+                method: 'POST',
+                body: JSON.stringify({
+                    game: gameCode
+                })
+            }
+            await fetch('api/multiplayer/start', params)
+
         }
 
         const joinGameWithCode = () => {
-            window.location.href = 'game?code='+document.getElementById('game-code-enter').value
+            gameCode = document.getElementById('game-code-enter').value
+            const headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+            const params = {
+                headers: headers,
+                method: 'POST',
+                body: JSON.stringify({
+                    game: gameCode
+                })
+            }
+            fetch('api/multiplayer/join', params)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 'ok') {
+                        players = data.players
+                        updatePlayerList()
+                        waitOtherPlayers()
+                    }
+                    else {
+                        if (data.message.toLowerCase().includes('already')) {
+                            waitOtherPlayers()
+                        }
+                    }
+
+                })
         }
 
         const generateCode = async () => {
+
             document.getElementById('generate-code-spinner').removeAttribute('hidden')
             let headers = new Headers()
             let requestOptions = {
@@ -172,52 +508,63 @@
                 .then(data => {
                     gameCode = data.game
                     document.getElementById('game-code').innerHTML = gameCode
+                    $('#Generator').modal({ backdrop: 'static', keyboard: false })
                     $('#Generator').modal('show')
                     document.getElementById('generate-code-spinner').setAttribute('hidden', true)
+                    players = [{ username: username }]
+                    updatePlayerList()
+                    waitOtherPlayers()
+                })
+        }
+
+        const practiceMode = async () => {
+
+            document.getElementById('practice-mode-spinner').removeAttribute('hidden')
+            let headers = new Headers()
+            let requestOptions = {
+                method: 'GET',
+                headers: headers,
+                redirect: 'follow'
+            };
+            fetch("api/game", requestOptions)
+                .then(res => res.json())
+                .then(data => {
+                    let gameCode = data.game
+                    document.getElementById('practice-mode-spinner').setAttribute('hidden', true)
+                    window.location.href = 'game?code=' + gameCode
                 })
         }
 
 
         let checkName = async () => {
             let name = document.getElementById('name').value
-          
 
-            let headers = new Headers();
-            headers.append("Content-Type", "application/json");
+            let headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
             let raw = JSON.stringify({
                 "username": name,
-                "password": pass,
-                "email" : email,
-                "phoneNumber": num
+                "password": pass//,
+                // "email" : email,
+                // "phoneNumber": num
             });
             let requestOptions = {
                 method: 'POST',
                 headers: headers,
                 body: raw,
                 redirect: 'follow'
-            };
+            }
             fetch('api/user', requestOptions)
                 .then(function (response) {
                     if (response.ok) { return response.json() } // Return the response parse as JSON
                     else { throw 'Failed to load correct word: response code invalid!' }
                 })
                 .then(function (data) {
-                    console.log(data )
-
-                    if(data.status === 1)
-                    {
-                        //console.log('Welcome back ')
-                        document.getElementById("rememberUser").innerHTML = 
-              "Welcome back " + data.usernamee;
-                    }
-                    else{
-                        //console.log('Welcome  newcomer ')
-                        document.getElementById("rememberUser").innerHTML = 
-              "Welcome newcomer " + data.username;
-                    }
+                    checkLogin()
                 }
                 )
-                .catch(function (error){
+                .catch(function (error) {
                     console.log(error)
                 })
 
