@@ -43,8 +43,7 @@ router.get('/api/multiplayer', auth, async function (req, res) {
 })
 
 router.post('/api/game/word', auth, async function (req, res) {
-
-  if(!(req.body || req.body.word)){
+  if (!(req.body || req.body.word)) {
     res.status(400).json({
       code: 'error',
       message: 'invalid body'
@@ -62,10 +61,9 @@ router.post('/api/game/word', auth, async function (req, res) {
     return
   }
 
-  let word = req.body.word
-  let test = await controllers.wordIsValid(word)
-  if(test)
-  {
+  const word = req.body.word
+  const test = await controllers.wordIsValid(word)
+  if (test) {
     playerGame.word = test._id
     await playerGame.save()
 
@@ -73,7 +71,7 @@ router.post('/api/game/word', auth, async function (req, res) {
       message: 'Word is valid',
       code: 'ok'
     })
-  }else{
+  } else {
     res.status(400).send({
       message: 'Error: Word not found in dictionary',
       code: 'error'
