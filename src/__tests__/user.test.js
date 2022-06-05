@@ -107,7 +107,7 @@ describe('Testing user can change details', function () {
       .post('/api/changeDetails')
       .set('Accept', 'application/json')
       .set('Cookie', ['username=TestUser2', 'token=1234'])
-      .send({ username: 'TestUser2', newUsername: 'TestUser3', newPassword: '', token: '1234' })
+      .send({ username: 'TestUser2', newUsername: 'TestUser3', newPassword: '', password: '1234', token: '1234' })
       .expect(200)
       .expect('Content-Type', /json/)
     const req = res.body
@@ -119,7 +119,7 @@ describe('Testing user can change details', function () {
       .post('/api/changeDetails')
       .set('Accept', 'application/json')
       .set('Cookie', ['username=TestUser3', 'token=1234'])
-      .send({ username: 'TestUser3', newPassword: '1234', token: '1234' })
+      .send({ username: 'TestUser3', newPassword: '1234', password: '1234', token: '1234' })
       .expect(200)
       .expect('Content-Type', /json/)
     const req = res.body
@@ -131,7 +131,7 @@ describe('Testing user can change details', function () {
       .post('/api/changeDetails')
       .set('Accept', 'application/json')
       .set('Cookie', ['username=TestUser3', 'token=1234'])
-      .send({ username: 'TestUser3', newUsername: 'TestUser3', newPassword: '', token: '1234' })
+      .send({ username: 'TestUser3', newUsername: 'TestUser3', newPassword: '', password: '1234', token: '1234' })
       .expect(200)
       .expect('Content-Type', /json/)
     const req = res.body

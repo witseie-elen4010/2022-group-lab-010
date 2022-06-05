@@ -30,8 +30,14 @@ const changeUserDetails = async (req, res) => {
     return
   }
 
+  const username = post.username
+  const password = post.password
+  const user = await findUserByUsername(username)
+
   if (await findUserByUsername(post.newUsername)) {
     res.json({ code: 'error', message: 'Username is taken', feedback: { username: 'Username is taken' } })
+  } else if (!(await bcrypt.compare(password, user.password))) {
+    res.json({ code: 'error', message: 'incorrect password', feedback: { username: 'incorrect password' } })
   } else {
     if (post.newUsername !== '' && post.newPassword !== '') {
       const salt = await bcrypt.genSalt().then(salt => salt)

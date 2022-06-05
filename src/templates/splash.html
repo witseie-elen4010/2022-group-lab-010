@@ -319,6 +319,7 @@
                 headers.append("Content-Type", "application/json");
                 let raw = JSON.stringify({
                     "username": username,
+                    "password": password,
                     "newUsername": newUsername,
                     "newPassword": newPassword
                 });
@@ -368,6 +369,7 @@
             $("#gameInfo").hide()
             $("#edit").show()
 
+            document.getElementById('rememberUser2').innerHTML = ''
             document.getElementById('oldUsername').value = ''
             document.getElementById('oldPassword').value = ''
             document.getElementById('newUsername').value = ''
