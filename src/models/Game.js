@@ -32,6 +32,10 @@ const GameSchema = new Schema(
       type: Boolean,
       default: false
     },
+    started: { // has the game started
+      type: Boolean,
+      default: false
+    },
     completedAt: { // when did the game finish
       type: Date
     },
