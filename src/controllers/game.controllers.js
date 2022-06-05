@@ -6,8 +6,8 @@ const hash = require('../public/scripts/hash')
 const getGameLog = async (req, res) => {
   const post = req.body
 
-  let gameObj
-  if (!post || !post.game || !(gameObj = await getGame(req.user, post.game))) {
+  const gameObj = await Game.findOne({ code: post.game, player: req.user._id }).populate('word guesses.player players.player')
+  if (!post || !post.game || !gameObj) {
     res.status(400).send({
       message: "The 'game' parameter is invalid.",
       code: 'error'
@@ -26,22 +26,31 @@ const getGameLog = async (req, res) => {
 
   const game = gameObj.toObject()
 
+  const players = []
+  const guesses = []
+
+  // filter data
+  game.players.forEach(player => {
+    players.push({ player: player.player.username, score: player.score })
+  })
+
+  game.guesses.forEach(guess => {
+    guesses.push({ player: guess.player.username, guess: guess.guess, colours: guess.colours, score: guess.score, date: guess.date })
+  })
+
   let log = {}
+
+  const winner = game.winner === '' ? 'No one guessed the word' : game.winner
 
   log = {
     correctWord: game.word.word.toUpperCase(),
     start: game.createdAt,
     end: game.completedAt,
-    guesses: game.guesses,
-    score: game.score,
-    gameMode: game.gameMode
+    guesses,
+    players,
+    gameMode: game.gameMode,
+    winner
   }
-
-  // delete _id field from guesses
-  log.guesses.forEach(obj => {
-    delete obj._id
-  })
-
   res.json({
     code: 'ok',
     log
@@ -137,7 +146,7 @@ const getGamePlayers = async (gameId) => {
   const game = await Game.findOne({ code: gameId }).populate('players.player')
   const players = []
   game.players.forEach(player => {
-    players.push({ username: player.player.username })
+    players.push({ username: player.player.username, score: player.score })
   })
 
   return players
@@ -155,11 +164,13 @@ const multiplayerLobby = async (req, res) => {
   // check hash against database
   if (typeof post.hash !== 'undefined') {
     const players = await getGamePlayers(game.code)
-    if (post.hash !== hash.objectArrayHash(players)) {
+    const customWord = game.gameMode === 'custom-word'
+    const state = { players, customWord }
+    if (post.hash !== hash.objectArrayHash(state)) {
       res.status(200).json({ // send a update
         code: 'ok',
         status: 'update',
-        players
+        state
       })
       return
     }
@@ -182,6 +193,11 @@ const multiplayerLobby = async (req, res) => {
         res.status(200).json({
           code: 'ok',
           status: 'begin'
+        })
+      } else if (event.type === 'gameMode') {
+        res.status(200).json({
+          code: 'ok',
+          status: 'custom-word'
         })
       }
       resolve()
@@ -251,11 +267,11 @@ const getMultiplayerState = async (userId, gameId) => {
   const players = []
   game.players.forEach(player => {
     if (player.player._id.toString() !== userId.toString()) {
-      players.push({ username: player.player.username })
+      players.push({ username: player.player.username, score: player.score })
     }
   })
 
-  return { score, players, guesses }
+  return { score, players, guesses, complete: game.complete }
 }
 
 const gameChannel = async (req, res) => {
@@ -300,7 +316,52 @@ const gameChannel = async (req, res) => {
   )
 }
 
+const customWord = async (req, res) => {
+  if (!(req.body || req.body.word)) {
+    res.status(400).json({
+      code: 'error',
+      message: 'invalid body'
+    })
+    return
+  }
+
+  const post = req.body
+  let playerGame
+  if (!post.game || !(playerGame = await getGame(req.user, post.game))) {
+    res.status(400).send({
+      message: 'Error: Invalid Game',
+      code: 'error'
+    })
+    return
+  }
+
+  const word = req.body.word
+  const test = await wordIsValid(word)
+  if (test) {
+    playerGame.word = test._id
+    playerGame.gameMode = 'custom-word'
+
+    // notify lobby
+    global.events.emit('multiplayerLobby' + playerGame.code,
+      { type: 'gameMode', gameMode: 'custom-word' }
+    )
+
+    await playerGame.save()
+
+    res.json({
+      message: 'Word is valid',
+      code: 'ok'
+    })
+  } else {
+    res.status(400).send({
+      message: 'Error: Word not found in dictionary',
+      code: 'error'
+    })
+  }
+}
+
 module.exports = {
+  customWord,
   wordIsValid,
   generateGame,
   getGame,

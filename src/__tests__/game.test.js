@@ -153,7 +153,7 @@ describe('Test Game Controller', function () {
     expect(mouseGuess.colours).toStrictEqual(mouseColours)
     expect(mouseGuess.score).toBe(320)
 
-    expect(log.score).toBe(392)
+    expect(log.players[0].score).toBe(392)
   })
 })
 
@@ -335,16 +335,18 @@ describe('Testing Multiplayer', function () {
     const body = req.body
     expect(body.status).toBe('update')
     expect(body.state).toStrictEqual({
-      players: [{ username: 'TestUser' }],
+      players: [{ username: 'TestUser', score: 0 }],
       guesses: [
         {
-          player: 'TestUser', colours: ['gray', 'gray', 'gray', 'gray', 'gray']
+          player: 'TestUser',
+          colours: ['gray', 'gray', 'gray', 'gray', 'gray']
         },
         {
           player: 'TestUser2', colours: ['gray', 'gray', 'gray', 'gray', 'gray'], guess: 'PIZZA'
         }
       ],
-      score: 0
+      score: 0,
+      complete: false
     })
   })
 

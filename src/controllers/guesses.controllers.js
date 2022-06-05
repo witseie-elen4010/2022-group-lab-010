@@ -62,9 +62,18 @@ const colourCodeGuess = async (req, res) => {
   }
 
   // check if game has started for multiplayer
-  if (playerGame.gameMode === 'multiplayer' && !playerGame.started) {
+  if ((playerGame.gameMode === 'multiplayer' || playerGame.gameMode === 'custom-word') && !playerGame.started) {
     res.status(400).send({
       message: 'The game has not yet started',
+      code: 'error'
+    })
+    return
+  }
+
+  // check if game owner trying to play game
+  if (playerGame.gameMode === 'custom-word' && req.user._id.toString() === playerGame.players[0].player.toString()) {
+    res.status(400).send({
+      message: 'You already know the word ;)',
       code: 'error'
     })
     return
@@ -89,27 +98,28 @@ const colourCodeGuess = async (req, res) => {
 
   const guess = post.guess.toUpperCase()
   let score = 0
-  const out = { code: 'ok', colour: [], guess, score } // output array
+  const out = { code: 'ok', colour: ['gray', 'gray', 'gray', 'gray', 'gray'], guess, score } // output array
   let allGreen = true
 
   let available = correctWord
+  // mark green
   for (let i = 0; i < post.guess.length; i++) {
     const letter = guess.charAt(i)
-
-    let counted = false
     if (letter === correctWord[i]) {
-      out.colour.push('green')
-      counted = true
-    } else if (available.indexOf(letter) > -1) {
-      out.colour.push('yellow')
-      allGreen = false
-      counted = true
+      out.colour[i] = 'green'
+      const index = available.indexOf(letter)
+      // remove letter from available
+      available = available.slice(0, index) + available.slice(index + 1)
     } else {
-      out.colour.push('gray')
       allGreen = false
     }
+  }
 
-    if (counted) {
+  // mark yellow
+  for (let i = 0; i < post.guess.length; i++) {
+    const letter = guess.charAt(i)
+    if (out.colour[i] !== 'green' && available.indexOf(letter) > -1) {
+      out.colour[i] = 'yellow'
       const index = available.indexOf(letter)
       // remove letter from available
       available = available.slice(0, index) + available.slice(index + 1)
@@ -134,8 +144,14 @@ const colourCodeGuess = async (req, res) => {
   })
 
   // update the total score
-  playerGame.score += score
-  if (allGreen || playerGame.guesses.length === playerGame.players.length * 6) {
+  // get the current player
+  const currentPlayer = playerGame.players.filter(elem => elem.player.toString() === req.user._id.toString())[0]
+  currentPlayer.score += score
+
+  let validPlayers = playerGame.players.length
+  validPlayers = playerGame.gameMode === 'custom-word' ? validPlayers - 1 : validPlayers
+
+  if (allGreen || playerGame.guesses.length === validPlayers * 6) {
     global.events.emit('gameChannel' + playerGame.code, {
       type: 'end',
       guess: {
@@ -143,6 +159,8 @@ const colourCodeGuess = async (req, res) => {
         colours: out.colour
       }
     })
+
+    if (allGreen) { playerGame.winner = req.user.username }
     playerGame.complete = true
     playerGame.completedAt = Date.now()
     playerGame.markModified('completedAt')
