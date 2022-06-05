@@ -25,6 +25,8 @@ router.get('/api/user', auth, function (req, res) { // to test authentication
   })
 })
 
+router.post('/api/changeDetails', auth, users.changeUserDetails)
+
 router.post('/api/login', users.login)
 
 router.get('/api/game', auth, async function (req, res) {

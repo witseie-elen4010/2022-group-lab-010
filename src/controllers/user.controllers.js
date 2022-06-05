@@ -19,6 +19,37 @@ const generateUser = async (username, password /*, email, phoneNumber */) => {
   return result
 }
 
+const changeUserDetails = async (req, res) => {
+  const post = req.body
+  if (!post) {
+    res.status(400).send({
+      message: 'Invalid Request Body',
+      code: 'error'
+    })
+    res.end()
+    return
+  }
+
+  if (await findUserByUsername(post.newUsername)) {
+    res.json({ code: 'error', message: 'Username is taken', feedback: { username: 'Username is taken' } })
+  } else {
+    if (post.newUsername !== '' && post.newPassword !== '') {
+      const salt = await bcrypt.genSalt().then(salt => salt)
+      const hashedPassword = await bcrypt.hash(post.newPassword, salt).then(hash => hash)
+      await User.updateOne({ username: post.username }, { username: post.newUsername, password: hashedPassword })
+      res.json({ code: 'ok', message: 'Details updated' })
+    } else if (post.newUsername !== '' && post.newPassword === '') {
+      await User.updateOne({ username: post.username }, { username: post.newUsername })
+      res.json({ code: 'ok', message: 'Details updated' })
+    } else {
+      const salt = await bcrypt.genSalt().then(salt => salt)
+      const hashedPassword = await bcrypt.hash(post.newPassword, salt).then(hash => hash)
+      await User.updateOne({ username: post.username }, { password: hashedPassword })
+      res.json({ code: 'ok', message: 'Details updated' })
+    }
+  }
+}
+
 const makeNewUser = async (req, res) => {
   const post = req.body
   if (!post) {
@@ -119,5 +150,6 @@ module.exports = {
   generateUser,
   makeNewUser,
   findUserByUsername,
-  login
+  login,
+  changeUserDetails
 }
