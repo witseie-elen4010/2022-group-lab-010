@@ -62,9 +62,18 @@ const colourCodeGuess = async (req, res) => {
   }
 
   // check if game has started for multiplayer
-  if (playerGame.gameMode === 'multiplayer' && !playerGame.started) {
+  if ((playerGame.gameMode === 'multiplayer' || playerGame.gameMode === 'custom-word') && !playerGame.started) {
     res.status(400).send({
       message: 'The game has not yet started',
+      code: 'error'
+    })
+    return
+  }
+
+  // check if game owner trying to play game
+  if (playerGame.gameMode === 'custom-word' && req.user._id.toString() === playerGame.players[0].player.toString()) {
+    res.status(400).send({
+      message: 'You already know the word ;)',
       code: 'error'
     })
     return
@@ -139,7 +148,10 @@ const colourCodeGuess = async (req, res) => {
   const currentPlayer = playerGame.players.filter(elem => elem.player.toString() === req.user._id.toString())[0]
   currentPlayer.score += score
 
-  if (allGreen || playerGame.guesses.length === playerGame.players.length * 6) {
+  let validPlayers = playerGame.players.length
+  validPlayers = playerGame.gameMode === 'custom-word' ? validPlayers - 1 : validPlayers
+
+  if (allGreen || playerGame.guesses.length === validPlayers * 6) {
     global.events.emit('gameChannel' + playerGame.code, {
       type: 'end',
       guess: {

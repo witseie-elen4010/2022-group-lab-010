@@ -614,20 +614,20 @@
             let playerSelector = ''
 
             players.forEach(p => {
-                const additional = p.player === player ? 'text-bg-primary' : 'text-bg-secondary'
-                playerSelector += `<span class="badge rounded-pill ${additional}" onclick="renderForPlayer('${p.player}')">${p.player}</span>`
+                const additional = p.player === player ? 'primary' : 'secondary'
+                playerSelector += `<button class="btn my-2 btn-outline-${additional} btn-sm" onclick="renderForPlayer('${p.player}')">${p.player}</button>`
             })
 
             guesses.forEach((guess, index) => {
                 const thisTime = moment(guess.date)
-                const duration = moment.duration(thisTime.diff(prevTime)).humanize()
+                const duration = moment.duration(thisTime.diff(prevTime)).seconds()
                 prevTime = thisTime
                 guessesRows += `
                             <tr>
                                 <th scope="row">Guess ${index + 1} <span class="badge badge-pill text-bg-success">${guess.score} points</span></th>
                                 <td>
                                     ${buildMiniScoredWord(guess.guess, guess.colours)}
-                                    <span class="badge badge-pill badge-info text-bg-info" style="cursor: pointer">${duration}</span>
+                                    <span class="badge badge-pill badge-info text-bg-info" style="cursor: pointer">${thisTime}</span>
                                 </td>
                             </tr>
                             `
@@ -647,7 +647,7 @@
                                         <td>${log.winner}</td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Player</th>
+                                        <th scope="row">Select Player</th>
                                         <td>${playerSelector}</td>
                                     </tr>
                                     <tr>

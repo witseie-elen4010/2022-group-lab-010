@@ -35,7 +35,7 @@ const getGameLog = async (req, res) => {
   })
 
   game.guesses.forEach(guess => {
-    guesses.push({ player: guess.player.username, guess: guess.guess, colours: guess.colours, score: guess.score })
+    guesses.push({ player: guess.player.username, guess: guess.guess, colours: guess.colours, score: guess.score, date: guess.date })
   })
 
   let log = {}
@@ -164,11 +164,13 @@ const multiplayerLobby = async (req, res) => {
   // check hash against database
   if (typeof post.hash !== 'undefined') {
     const players = await getGamePlayers(game.code)
-    if (post.hash !== hash.objectArrayHash(players)) {
+    const customWord = game.gameMode === 'custom-word'
+    const state = { players, customWord }
+    if (post.hash !== hash.objectArrayHash(state)) {
       res.status(200).json({ // send a update
         code: 'ok',
         status: 'update',
-        players
+        state
       })
       return
     }
@@ -191,6 +193,11 @@ const multiplayerLobby = async (req, res) => {
         res.status(200).json({
           code: 'ok',
           status: 'begin'
+        })
+      } else if (event.type === 'gameMode') {
+        res.status(200).json({
+          code: 'ok',
+          status: 'custom-word'
         })
       }
       resolve()
@@ -309,7 +316,52 @@ const gameChannel = async (req, res) => {
   )
 }
 
+const customWord = async (req, res) => {
+  if (!(req.body || req.body.word)) {
+    res.status(400).json({
+      code: 'error',
+      message: 'invalid body'
+    })
+    return
+  }
+
+  const post = req.body
+  let playerGame
+  if (!post.game || !(playerGame = await getGame(req.user, post.game))) {
+    res.status(400).send({
+      message: 'Error: Invalid Game',
+      code: 'error'
+    })
+    return
+  }
+
+  const word = req.body.word
+  const test = await wordIsValid(word)
+  if (test) {
+    playerGame.word = test._id
+    playerGame.gameMode = 'custom-word'
+
+    // notify lobby
+    global.events.emit('multiplayerLobby' + playerGame.code,
+      { type: 'gameMode', gameMode: 'custom-word' }
+    )
+
+    await playerGame.save()
+
+    res.json({
+      message: 'Word is valid',
+      code: 'ok'
+    })
+  } else {
+    res.status(400).send({
+      message: 'Error: Word not found in dictionary',
+      code: 'error'
+    })
+  }
+}
+
 module.exports = {
+  customWord,
   wordIsValid,
   generateGame,
   getGame,
