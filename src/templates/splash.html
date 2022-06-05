@@ -181,15 +181,15 @@
 
                         </div>
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" onchange="updateCustomWord(this.checked)" class="custom-control-input" id="customWordCheckBox">
-                            <label class="custom-control-label" for="customWordCheckBox">Custom Word Gamemode</label>
+                            <input type="checkbox" onchange="updateCustomWord(this.checked)"
+                                class="custom-control-input" id="customWordCheckBox">
+                            <label class="custom-control-label pb-2" for="customWordCheckBox">Use custom word</label>
                         </div>
 
-                        
-                        <input type="text" oninput="checkWord()" hidden = "true" class="form-control" id="custom-word" placeholder="Enter word">
-                        <p hidden = "true" id = "custom-word-feedback">  </p>
 
-
+                        <input type="text" oninput="checkWord()" hidden="true" class="form-control" id="custom-word"
+                            placeholder="Enter word">
+                        <p hidden="true" class="pt-2" id="custom-word-feedback"> </p>
 
                         <h5>Players:</h5>
                         <ul class="list-group" id="player-list-host">
@@ -217,7 +217,7 @@
                     </div>
                     <div class="modal-body">
                         <input type="text" class="form-control" id="game-code-enter" placeholder="Enter Code">
-                        
+
                         <div id="player-list-title-join" class="my-3" style="display: none">
                             <h5>Players:</h5>
                             <p>Waiting for host to start the game...</p>
@@ -267,7 +267,7 @@
                     else {
                         console.log(data)
                         document.getElementById("login-message").innerHTML = "Your username or password is incorrect"
-                        
+
                     }
                 }
                 )
@@ -276,12 +276,12 @@
                 })
         }
 
-        let updateCustomWord = (checked) =>{
-            
-            if(checked){
+        let updateCustomWord = (checked) => {
+
+            if (checked) {
                 document.getElementById("custom-word").removeAttribute("hidden")
                 document.getElementById("custom-word-feedback").removeAttribute("hidden")
-            }else{
+            } else {
                 document.getElementById("custom-word").setAttribute("hidden", "true")
                 document.getElementById("custom-word-feedback").setAttribute("hidden", "true")
                 document.getElementById("custom-word").value = ""
@@ -289,43 +289,43 @@
             }
         }
 
-        let checkWord = async() =>{
-            
-            let word = document.getElementById('custom-word').value
+        let checkWord = async () => {
 
-            
-            if(word.length == 5){
-            
+            let word = document.getElementById('custom-word').value
+            console.log("typed " + word)
+
+            if (word.length == 5) {
+
                 let headers = new Headers();
-            headers.append("Content-Type", "application/json");
-            let raw = JSON.stringify({
-                "word": word ,
-                game : gameCode
-            });
-            let requestOptions = {
-                method: 'POST',
-                headers: headers,
-                body: raw,
-                redirect: 'follow'
-            };
-            fetch('api/game/word', requestOptions)
-                .then(res => res.json())
-                .then(function (data) {
-                    if (data.code == 'ok') {
-                        document.getElementById('custom-word-feedback')
-                        .innerHTML = "The word is set: " + word
+                headers.append("Content-Type", "application/json");
+                let raw = JSON.stringify({
+                    "word": word,
+                    game: gameCode
+                });
+                let requestOptions = {
+                    method: 'POST',
+                    headers: headers,
+                    body: raw,
+                    redirect: 'follow'
+                };
+                fetch('api/game/word', requestOptions)
+                    .then(res => res.json())
+                    .then(function (data) {
+                        if (data.code == 'ok') {
+                            document.getElementById('custom-word-feedback')
+                                .innerHTML = "The word is set: " + word
+                        }
+                        else {
+                            document.getElementById('custom-word-feedback')
+                                .innerHTML = data.message
+                        }
                     }
-                    else {
-                        document.getElementById('custom-word-feedback')
-                        .innerHTML = data.message
-                    }
-                }
-                )
-                .catch(function (error) {
-                    console.log(error)
-                })
-        
-            }else{
+                    )
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+            } else {
 
             }
         }
@@ -352,7 +352,6 @@
                 let raw = JSON.stringify({
                     "username": username,
                     "password": password,
-
                 });
                 let requestOptions = {
                     method: 'POST',
@@ -570,7 +569,7 @@
                     waitOtherPlayers()
                 })
 
-            
+
         }
 
         const practiceMode = async () => {
