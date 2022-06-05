@@ -134,7 +134,10 @@ const colourCodeGuess = async (req, res) => {
   })
 
   // update the total score
-  playerGame.score += score
+  // get the current player
+  const currentPlayer = playerGame.players.filter(elem => elem.player.toString() === req.user._id.toString())[0]
+  currentPlayer.score += score
+
   if (allGreen || playerGame.guesses.length === playerGame.players.length * 6) {
     global.events.emit('gameChannel' + playerGame.code, {
       type: 'end',
@@ -143,6 +146,8 @@ const colourCodeGuess = async (req, res) => {
         colours: out.colour
       }
     })
+
+    if (allGreen) { playerGame.winner = req.user.username }
     playerGame.complete = true
     playerGame.completedAt = Date.now()
     playerGame.markModified('completedAt')

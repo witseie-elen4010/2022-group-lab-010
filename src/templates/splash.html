@@ -441,8 +441,6 @@
             let username = document.getElementById('reg-username').value
             let password = document.getElementById('reg-password').value
             let passwordConfirm = document.getElementById('reg-passwordConfirm').value
-            let email = document.getElementById('reg-email').value
-            let phone = document.getElementById('reg-phone number').value
             // console.log(username, password, passwordConfirm, email, phone)
             let valid = true
             if (password === passwordConfirm) {
@@ -452,11 +450,7 @@
                 alert('Your passwords do not match, please confirm your passwords again')
                 valid = false
             }
-            let at = email.includes("@");
-            if (at === false) {
-                alert('Please enter a valid email')
-                valid = false
-            }
+            
             if (valid == true) {
 
                 let headers = new Headers();
@@ -464,9 +458,6 @@
                 let raw = JSON.stringify({
                     "username": username,
                     "password": password,
-                    "email": email,
-                    "phoneNumber": phone
-
                 });
                 let requestOptions = {
                     method: 'POST',

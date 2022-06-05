@@ -31,9 +31,9 @@ function startTimer () {
       /* const fetch = require('node-fetch')
       global.fetch = fetch
       global.Headers = fetch.Headers */
-      console.log('times up')
-      const x = document.getElementById('Game Result')
-      x.innerHTML = 'Times up ! Please try again.  ' //   $('#staticBackdrop').modal('show') // The correct word was ${data}` // Dont show the correct word when you run out of time
+      // console.log('times up')
+      // const x = document.getElementById('Game Result')
+      // x.innerHTML = 'Times up ! Please try again.  ' //   $('#staticBackdrop').modal('show') // The correct word was ${data}` // Dont show the correct word when you run out of time
 
       // const headers
       /* const raw = JSON.stringify({

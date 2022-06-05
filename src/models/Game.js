@@ -39,9 +39,9 @@ const GameSchema = new Schema(
     completedAt: { // when did the game finish
       type: Date
     },
-    score: {
-      type: Number,
-      default: 0
+    winner: {
+      type: String,
+      default: ''
     },
     code: {
       type: String,
@@ -52,6 +52,10 @@ const GameSchema = new Schema(
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'User'
+      },
+      score: {
+        type: Number,
+        default: 0
       }
     }]
 

@@ -6,8 +6,8 @@ const hash = require('../public/scripts/hash')
 const getGameLog = async (req, res) => {
   const post = req.body
 
-  let gameObj
-  if (!post || !post.game || !(gameObj = await getGame(req.user, post.game))) {
+  const gameObj = await Game.findOne({ code: post.game, player: req.user._id }).populate('word guesses.player players.player')
+  if (!post || !post.game || !gameObj) {
     res.status(400).send({
       message: "The 'game' parameter is invalid.",
       code: 'error'
@@ -26,22 +26,31 @@ const getGameLog = async (req, res) => {
 
   const game = gameObj.toObject()
 
+  const players = []
+  const guesses = []
+
+  // filter data
+  game.players.forEach(player => {
+    players.push({ player: player.player.username, score: player.score })
+  })
+
+  game.guesses.forEach(guess => {
+    guesses.push({ player: guess.player.username, guess: guess.guess, colours: guess.colours, score: guess.score })
+  })
+
   let log = {}
+
+  const winner = game.winner === '' ? 'No one guessed the word' : game.winner
 
   log = {
     correctWord: game.word.word.toUpperCase(),
     start: game.createdAt,
     end: game.completedAt,
-    guesses: game.guesses,
-    score: game.score,
-    gameMode: game.gameMode
+    guesses,
+    players,
+    gameMode: game.gameMode,
+    winner
   }
-
-  // delete _id field from guesses
-  log.guesses.forEach(obj => {
-    delete obj._id
-  })
-
   res.json({
     code: 'ok',
     log
@@ -255,7 +264,7 @@ const getMultiplayerState = async (userId, gameId) => {
     }
   })
 
-  return { score, players, guesses }
+  return { score, players, guesses, complete: game.complete }
 }
 
 const gameChannel = async (req, res) => {

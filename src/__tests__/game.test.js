@@ -153,7 +153,7 @@ describe('Test Game Controller', function () {
     expect(mouseGuess.colours).toStrictEqual(mouseColours)
     expect(mouseGuess.score).toBe(320)
 
-    expect(log.score).toBe(392)
+    expect(log.players[0].score).toBe(392)
   })
 })
 
@@ -344,7 +344,8 @@ describe('Testing Multiplayer', function () {
           player: 'TestUser2', colours: ['gray', 'gray', 'gray', 'gray', 'gray'], guess: 'PIZZA'
         }
       ],
-      score: 0
+      score: 0,
+      complete: false
     })
   })
 
