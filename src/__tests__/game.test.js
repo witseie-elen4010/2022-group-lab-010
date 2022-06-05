@@ -253,7 +253,7 @@ describe('Testing Multiplayer', function () {
       .then((req) => {
         expect(req.body.status).toBe('begin')
       })
-    await new Promise(resolve => setTimeout(resolve, 300))
+    await new Promise(resolve => setTimeout(resolve, 500))
     await request(app)
       .post('/api/multiplayer/start')
       .set('Accept', 'application/json')
@@ -305,7 +305,7 @@ describe('Testing Multiplayer', function () {
         expect(body.status).toBe('change')
         expect(body.guess).toStrictEqual({ player: 'TestUser', colours: ['gray', 'gray', 'gray', 'gray', 'gray'] })
       })
-    await new Promise(resolve => setTimeout(resolve, 300))
+    await new Promise(resolve => setTimeout(resolve, 500))
 
     await request(app)
       .post('/api/guess')
@@ -360,7 +360,8 @@ describe('Testing Multiplayer', function () {
         expect(body.status).toBe('end')
         expect(body.guess).toStrictEqual({ player: 'TestUser', colours: ['green', 'green', 'green', 'green', 'green'] })
       })
-    await new Promise(resolve => setTimeout(resolve, 300))
+
+    await new Promise(resolve => setTimeout(resolve, 500))
 
     await request(app)
       .post('/api/guess')

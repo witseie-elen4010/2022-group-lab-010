@@ -4,17 +4,9 @@ const game = require('./game.controllers')
 
 const revealWord = async (req, res) => {
   const post = req.body
-  // if (!post) {
-  //   res.status(400).send({
-  //     message: 'Invalid Request Body',
-  //     code: 'error'
-  //   })
-  //   res.end()
-  //   return
-  // }
 
   let playerGame
-  if (!(playerGame = await game.getGame(req.user, post.game))) {
+  if (!post || !post.game || !(playerGame = await game.getGame(req.user, post.game))) {
     res.status(400).send({
       message: "The 'game' parameter is invalid.",
       code: 'error'
@@ -46,11 +38,6 @@ const scoreFunction = (guessesMade, colours) => {
     }
   }
   return score
-}
-
-const countOcurrences = (str, value) => {
-  const regExp = new RegExp(value, 'gi')
-  return (str.match(regExp) || []).length
 }
 
 const colourCodeGuess = async (req, res) => {
@@ -104,47 +91,28 @@ const colourCodeGuess = async (req, res) => {
   let score = 0
   const out = { code: 'ok', colour: [], guess, score } // output array
   let allGreen = true
+
+  let available = correctWord
   for (let i = 0; i < post.guess.length; i++) {
     const letter = guess.charAt(i)
-    const temp = correctWord
 
-    if (letter === correctWord.charAt(i)) {
+    let counted = false
+    if (letter === correctWord[i]) {
       out.colour.push('green')
-    } else if (correctWord.indexOf(letter) > -1) {
-      let valid = true
-      const countInWord = countOcurrences(temp, letter)
-      const countInGuess = countOcurrences(guess, letter)
-
-      if (countInWord === 1) {
-        const prevLettersInGuess = guess.substring(0, i)
-        const preOccurCount = countOcurrences(prevLettersInGuess, letter)
-
-        if (preOccurCount > 0) {
-          valid = false
-        }
-      } else
-      if (countInGuess > 1 && valid === true) { // is any of the guess duplicate letters right
-        const index = guess.indexOf(letter, i + 1)
-
-        if (index === -1) { // no other occurances of the word found
-          valid = false
-        } else {
-          if (guess.charAt(i) === correctWord.charAt(index)) {
-            const newWord = correctWord.substr(0, index) + correctWord.substr((index + 1), correctWord.length)
-            if (newWord.indexOf(letter) === -1) {
-              valid = false
-            }
-          }
-        }
-      }
-      if (valid === true) { out.colour.push('yellow') } else {
-        out.colour.push('gray')
-      }
-
+      counted = true
+    } else if (available.indexOf(letter) > -1) {
+      out.colour.push('yellow')
       allGreen = false
+      counted = true
     } else {
       out.colour.push('gray')
       allGreen = false
+    }
+
+    if (counted) {
+      const index = available.indexOf(letter)
+      // remove letter from available
+      available = available.slice(0, index) + available.slice(index + 1)
     }
   }
 
@@ -167,19 +135,6 @@ const colourCodeGuess = async (req, res) => {
 
   // update the total score
   playerGame.score += score
-
-  // // check if game is done
-  // if (playerGame.gameMode === 'practice') {
-  //   if (allGreen || ((turn + 1) === 6)) {
-  //     playerGame.complete = true
-  //     playerGame.completedAt = Date.now()
-  //     playerGame.markModified('completedAt')
-  //   }
-  // }
-
-  // report guess if multiplayer
-  // if (playerGame.gameMode === 'multiplayer' || true) {
-  // check if game is done
   if (allGreen || playerGame.guesses.length === playerGame.players.length * 6) {
     global.events.emit('gameChannel' + playerGame.code, {
       type: 'end',
@@ -200,7 +155,6 @@ const colourCodeGuess = async (req, res) => {
       }
     })
   }
-  // }
 
   await playerGame.save() // save to database
 

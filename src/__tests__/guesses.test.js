@@ -23,6 +23,7 @@ global.events = new EventEmitter()
 
 let mockedGame
 let mockedGame2
+let mockedGame3
 
 /*
 
@@ -39,9 +40,11 @@ beforeAll(async () => {
   await db.seed()
   const mockedWord = await Word.findOne({ word: 'mouse' }).exec() // force game word to be 'MOUSE'
   const mockedWord2 = await Word.findOne({ word: 'beets' }).exec() // force game word to be 'MOUSE'
+  const mockedWord3 = await Word.findOne({ word: 'abbey' }).exec() // force game word to be 'MOUSE'
   const mockUser = await User.findOne({ username: 'TestUser' }).exec() // force user to be 'TestUser'
   mockedGame = await Game.create({ word: mockedWord._id, guesses: [], gameMode: 'practice', players: [{ player: mockUser._id }], code: 'mockCode' })
   mockedGame2 = await Game.create({ word: mockedWord2._id, guesses: [], gameMode: 'practice', players: [{ player: mockUser._id }], code: 'mockCode2' })
+  mockedGame3 = await Game.create({ word: mockedWord3._id, guesses: [], gameMode: 'practice', players: [{ player: mockUser._id }], code: 'mockCode3' })
 })
 
 afterAll(async () => {
@@ -211,7 +214,7 @@ describe('Test Guesses Controller', function () {
     expect(word).toBe('MOUSE')
   })
 
-  //
+  // special case
   it('tests /api/guess endpoint - double letter correct', async () => {
     const res = await request(app)
       .post('/api/guess')
@@ -226,5 +229,48 @@ describe('Test Guesses Controller', function () {
     expect(colour.length).toBe(5)
     expect(colour).toStrictEqual(colours)
     expect(score).toBe(216)
+  })
+
+  // special words
+  it('tests /api/guess endpoint - special case 1', async () => {
+    const res = await request(app)
+      .post('/api/guess')
+      .set('Accept', 'application/json')
+      .send({ guess: 'ABASE', game: mockedGame3.code, username: 'TestUser', token: '1234' }) // ABBEY
+      .expect(200)
+      .expect('Content-Type', /json/)
+
+    const colours = ['green', 'green', 'gray', 'gray', 'yellow']
+    const colour = res.body.colour
+    expect(colour.length).toBe(5)
+    expect(colour).toStrictEqual(colours)
+  })
+
+  it('tests /api/guess endpoint - special case 2', async () => {
+    const res = await request(app)
+      .post('/api/guess')
+      .set('Accept', 'application/json')
+      .send({ guess: 'BANAL', game: mockedGame3.code, username: 'TestUser', token: '1234' }) // ABBEY
+      .expect(200)
+      .expect('Content-Type', /json/)
+
+    const colours = ['yellow', 'yellow', 'gray', 'gray', 'gray']
+    const colour = res.body.colour
+    expect(colour.length).toBe(5)
+    expect(colour).toStrictEqual(colours)
+  })
+
+  it('tests /api/guess endpoint - special case 3', async () => {
+    const res = await request(app)
+      .post('/api/guess')
+      .set('Accept', 'application/json')
+      .send({ guess: 'ABACA', game: mockedGame3.code, username: 'TestUser', token: '1234' }) // ABBEY
+      .expect(200)
+      .expect('Content-Type', /json/)
+
+    const colours = ['green', 'green', 'gray', 'gray', 'gray']
+    const colour = res.body.colour
+    expect(colour.length).toBe(5)
+    expect(colour).toStrictEqual(colours)
   })
 })
