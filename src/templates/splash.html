@@ -181,11 +181,15 @@
 
                         </div>
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" onchange="updateCustomWord()" class="custom-control-input" id="customWord">
-                            <label class="custom-control-label" for="customWord">Custom Word Gamemode</label>
+                            <input type="checkbox" onchange="updateCustomWord(this.checked)" class="custom-control-input" id="customWordCheckBox">
+                            <label class="custom-control-label" for="customWordCheckBox">Custom Word Gamemode</label>
                         </div>
-                        <input type="text" oninput="checkWord()" class="form-control" id="custom-word" placeholder="Enter word">
-                        <p id = "custom-word-feedback">  </p>
+
+                        
+                        <input type="text" oninput="checkWord()" hidden = "true" class="form-control" id="custom-word" placeholder="Enter word">
+                        <p hidden = "true" id = "custom-word-feedback">  </p>
+
+
 
                         <h5>Players:</h5>
                         <ul class="list-group" id="player-list-host">
@@ -230,7 +234,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 
@@ -264,9 +267,8 @@
                     else {
                         console.log(data)
                         document.getElementById("login-message").innerHTML = "Your username or password is incorrect"
-                        // document.getElementById('password').value = '';
+                        
                     }
-
                 }
                 )
                 .catch(function (error) {
@@ -274,11 +276,23 @@
                 })
         }
 
+        let updateCustomWord = (checked) =>{
+            
+            if(checked){
+                document.getElementById("custom-word").removeAttribute("hidden")
+                document.getElementById("custom-word-feedback").removeAttribute("hidden")
+            }else{
+                document.getElementById("custom-word").setAttribute("hidden", "true")
+                document.getElementById("custom-word-feedback").setAttribute("hidden", "true")
+                document.getElementById("custom-word").value = ""
+                document.getElementById("custom-word-feedback").innerHTML = ""
+            }
+        }
 
         let checkWord = async() =>{
             
             let word = document.getElementById('custom-word').value
-            console.log("typed " + word)
+
             
             if(word.length == 5){
             
@@ -322,8 +336,6 @@
             let username = document.getElementById('reg-username').value
             let password = document.getElementById('reg-password').value
             let passwordConfirm = document.getElementById('reg-passwordConfirm').value
-            let email = document.getElementById('reg-email').value
-            let phone = document.getElementById('reg-phone number').value
             // console.log(username, password, passwordConfirm, email, phone)
             let valid = true
             if (password === passwordConfirm) {
@@ -333,11 +345,6 @@
                 alert('Your passwords do not match, please confirm your passwords again')
                 valid = false
             }
-            let at = email.includes("@");
-            if (at === false) {
-                alert('Please enter a valid email')
-                valid = false
-            }
             if (valid == true) {
 
                 let headers = new Headers();
@@ -345,8 +352,6 @@
                 let raw = JSON.stringify({
                     "username": username,
                     "password": password,
-                    "email": email,
-                    "phoneNumber": phone
 
                 });
                 let requestOptions = {
@@ -621,6 +626,8 @@
 
 
         }
+
+
     </script>
 
 </body>
