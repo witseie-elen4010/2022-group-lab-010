@@ -433,7 +433,7 @@
                         headers: headers,
                         redirect: 'follow'
                     }
-                    const response = await fetch('api/rematch', requestOptions)
+                    // const response = await fetch('api/rematch', requestOptions)
 
                     if (response.status == 502) {
                         // Status 502 is a connection timeout error,
@@ -460,7 +460,7 @@
 
         }
 
-        let generateColouredGuess = (guess, colours, board = 1) => {
+        let generateColouredGuess = (guess, colours, board = 1, clear=true) => {
             guess = guess.toUpperCase()
 
             for (let character = 0; character < colours.length; character++) {
@@ -468,7 +468,7 @@
                 document.getElementById(board + 'row' + guesses + 'character' + character).innerHTML = guess.charAt(character)
             }
 
-            document.getElementById('guess').value = ''
+            if(clear) document.getElementById('guess').value = ''
         }
 
         function findGetParameter(parameterName) {
@@ -725,7 +725,7 @@
             // replay all guesses
             g.forEach(guess => {
                 updateKeyboardColour(guess.guess, guess.colours)
-                generateColouredGuess(guess.guess, guess.colours)
+                generateColouredGuess(guess.guess, guess.colours, 1, false)
                 guesses++
             })
 
