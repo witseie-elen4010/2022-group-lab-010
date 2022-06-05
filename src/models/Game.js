@@ -70,10 +70,9 @@ GameSchema.methods.generateCode = async function () {
   while (await mongoose.model('Game').exists({ code }))
 
   game.code = code
-  const valid = await game.save()
+  await game.save()
 
-  if (valid) return code
-  return false
+  return code
 }
 
 module.exports = mongoose.model('Game', GameSchema)

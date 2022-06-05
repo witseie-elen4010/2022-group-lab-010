@@ -101,13 +101,35 @@ describe('Testing user login', function () {
   })
 })
 
+describe('Testing user can register', function () {
+  it('tests user can create account - valid', async () => {
+    const res = await request(app)
+      .post('/api/user')
+      .set('Accept', 'application/json')
+      .send({ username: 'TestUser99', password: '1234' })
+      .expect(200)
+      .expect('Content-Type', /json/)
+    const req = res.body
+    expect(req.code).toBe('ok')
+  })
+
+  it('tests user can create account - username exists', async () => {
+    await request(app)
+      .post('/api/user')
+      .set('Accept', 'application/json')
+      .send({ username: 'TestUser', password: '1234' })
+      .expect(400)
+      .expect('Content-Type', /json/)
+  })
+})
+
 describe('Testing user can change details', function () {
   it('tests username can be changed', async () => {
     const res = await request(app)
       .post('/api/changeDetails')
       .set('Accept', 'application/json')
       .set('Cookie', ['username=TestUser2', 'token=1234'])
-      .send({ username: 'TestUser2', newUsername: 'TestUser3', newPassword: '', password: '1234', token: '1234' })
+      .send({ newUsername: 'TestUser3', newPassword: '1234', password: '1234', token: '1234' })
       .expect(200)
       .expect('Content-Type', /json/)
     const req = res.body
@@ -119,7 +141,7 @@ describe('Testing user can change details', function () {
       .post('/api/changeDetails')
       .set('Accept', 'application/json')
       .set('Cookie', ['username=TestUser3', 'token=1234'])
-      .send({ username: 'TestUser3', newPassword: '1234', password: '1234', token: '1234' })
+      .send({ newPassword: '12345', password: '1234', token: '1234' })
       .expect(200)
       .expect('Content-Type', /json/)
     const req = res.body
@@ -131,10 +153,22 @@ describe('Testing user can change details', function () {
       .post('/api/changeDetails')
       .set('Accept', 'application/json')
       .set('Cookie', ['username=TestUser3', 'token=1234'])
-      .send({ username: 'TestUser3', newUsername: 'TestUser3', newPassword: '', password: '1234', token: '1234' })
-      .expect(200)
+      .send({ newUsername: 'TestUser', newPassword: '', password: '1234', token: '1234' })
+      .expect(400)
       .expect('Content-Type', /json/)
     const req = res.body
     expect(req.code).toBe('error')
+  })
+
+  it('tests details cannot be changed because password is incorrect', async () => {
+    const res = await request(app)
+      .post('/api/changeDetails')
+      .set('Accept', 'application/json')
+      .set('Cookie', ['username=TestUser3', 'token=1234'])
+      .send({ newUsername: 'TestUser66', newPassword: '', password: 'wrong password', token: '1234' })
+      .expect(400)
+      .expect('Content-Type', /json/)
+    const req = res.body
+    expect(req.message).toBe('Incorrect Password')
   })
 })

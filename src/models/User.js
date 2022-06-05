@@ -39,12 +39,7 @@ userSchema.methods.generateToken = async function () {
   const token = crypto.randomBytes(64).toString('hex')
   player.token = bcrypt.hashSync(token, saltRounds)
 
-  await player.save((err, player) => {
-    if (err) {
-      console.log('an error occured:', err)
-      return null
-    }
-  })
+  await player.save()
   return token
 }
 

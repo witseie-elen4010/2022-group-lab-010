@@ -34,14 +34,6 @@ module.exports.seed = async () => {
     token: '$2b$10$hXwKJf8/kHUVdfqA8jkH5ueJPYXbadAw0nYU3ZF9oDiKbok3aYxKO' // 1234
   }
   await User.create(user2)
-
-  const user3 = {
-    username: 'TestUser3',
-    password: '$2b$10$hXwKJf8/kHUVdfqA8jkH5ueJPYXbadAw0nYU3ZF9oDiKbok3aYxKO', // 1234
-    token: '$2b$10$hXwKJf8/kHUVdfqA8jkH5ueJPYXbadAw0nYU3ZF9oDiKbok3aYxKO' // 1234
-  }
-  await User.create(user3)
-
 }
 
 /* istanbul ignore next */
