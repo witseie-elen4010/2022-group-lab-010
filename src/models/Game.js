@@ -32,6 +32,10 @@ const GameSchema = new Schema(
       type: Boolean,
       default: false
     },
+    started: { // has the game started
+      type: Boolean,
+      default: false
+    },
     completedAt: { // when did the game finish
       type: Date
     },
@@ -66,10 +70,9 @@ GameSchema.methods.generateCode = async function () {
   while (await mongoose.model('Game').exists({ code }))
 
   game.code = code
-  const valid = await game.save()
+  await game.save()
 
-  if (valid) return code
-  return false
+  return code
 }
 
 module.exports = mongoose.model('Game', GameSchema)

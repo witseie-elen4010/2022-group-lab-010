@@ -14,6 +14,10 @@ describe('Test main routes', function () {
     const res = await supertest(app).get('/')
     expect(res.statusCode).toBe(200)
   })
+  test('responds to /privacy with privacy policy', async () => {
+    const res = await supertest(app).get('/privacy')
+    expect(res.statusCode).toBe(200)
+  })
 })
 
 describe('Test restricted routes', function () {

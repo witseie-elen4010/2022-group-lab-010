@@ -36,7 +36,9 @@ const auth = async (req, res, next) => {
   if (token && await bcrypt.compare(token.toString(), user.token)) {
     // embed the authenticated user in the request
     req.user = user
-  } else return (unauthorized(req, res))
+  } else {
+    return (unauthorized(req, res))
+  }
 
   next()
 }

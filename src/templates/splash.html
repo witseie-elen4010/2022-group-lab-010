@@ -26,14 +26,13 @@
 
 
 <body>
-    <div class="container-fluid p-5 bg-primary text-white text-center">
+    <div class="container-fluid p-5 bg-primary text-white text-center" id="welcome">
         <h1>Welcome to Twordle-dee!</h1>
     </div>
 
-    <section class="pt-5 px-5 pb-2">
+    <section class="pt-5 px-5 pb-2" id="gameInfo">
         <div class="div container text-center">
-            <p>We're so glad you're here, why don't you go watch this video to learn more about
-                <a href="https://www.youtube.com/watch?v=lv4Zg-209MY">it over here</a>
+            <p>We're so glad you're here. Follow the prompts to get started.
             </p>
         </div>
     </section>
@@ -49,12 +48,10 @@
             <div class="div container text-center">
                 <h4>Login</h4>
                 <div class="input-group mb-3">
-                    <input id="login-username" type="text" class="form-control" placeholder="Enter your username"
-                        autofocus>
+                    <input id="login-username" type="text" class="form-control" placeholder="Username" autofocus>
                 </div>
                 <div class="input-group mb-3">
-                    <input id="login-password" type="password" class="form-control" placeholder="Enter your password"
-                        autofocus>
+                    <input id="login-password" type="password" class="form-control" placeholder="Password" autofocus>
                 </div>
 
             </div>
@@ -69,8 +66,7 @@
             <div class="div container text-center">
                 <h4>Register</h4>
                 <div class="input-group mb-3">
-                    <input id="reg-username" type="text" class="form-control" placeholder="Enter your username"
-                        autofocus>
+                    <input id="reg-username" type="text" class="form-control" placeholder="Username" autofocus>
                 </div>
 
 
@@ -78,15 +74,7 @@
                     <input type="password" class="form-control" id="reg-password" placeholder="Password">
                 </div>
                 <div class="input-group mb-3">
-                    <input id="reg-passwordConfirm" type="password" class="form-control"
-                        placeholder="Confirm your password" autofocus>
-                </div>
-                <div class="input-group mb-3">
-                    <input id="reg-email" type="text" class="form-control" placeholder="Enter your email" autofocus>
-                    <!--  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                </div>
-                <div class="input-group mb-3">
-                    <input id="reg-phone number" type="text" class="form-control" placeholder="Enter your phone number"
+                    <input id="reg-passwordConfirm" type="password" class="form-control" placeholder="Confirm password"
                         autofocus>
                 </div>
             </div>
@@ -106,9 +94,10 @@
 
     <div id="lobby">
         <div class="div container text-center mb-4">
-            <h4><span id="rememberUser"></span>&nbsp;&nbsp;<button onclick="logout()"
-                    class="ml-2 btn-sm btn btn-outline-danger">Logout <i class="bi bi-box-arrow-right"></i></button>
-            </h4>
+            <h4><span id="rememberUser"></span>&nbsp;&nbsp;</h4>
+            <button onclick="logout()" class="ml-2 btn-sm btn btn-outline-danger">Logout <i
+                    class="bi bi-box-arrow-right"></i></button>
+            <button onclick="editAccountPage()" class="ml-2 btn-sm btn btn-outline-danger">Edit Account</button>
         </div>
 
 
@@ -173,8 +162,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Share this code with your friend</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                                class="bi bi-x"></i></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="alert alert-info" id="game-code">
@@ -212,8 +200,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Enter code to join game</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                                class="bi bi-x"></i></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <input type="text" class="form-control" id="game-code-enter" placeholder="Enter Code">
@@ -236,11 +223,140 @@
         </div>
     </div>
 
+    <div id="edit">
+        <div class="container-fluid p-5 bg-primary text-white text-center">
+            <h1>Twordle-dee!</h1>
+            <h3>Edit Account Details </h3>
+        </div>
+
+        <section class="p-5">
+            <div class="div container text-center">
+                <p>
+                <div class="input-group mb-3">
+                    <!--     -->
+                    <input type="password" class="form-control" id="oldPassword" placeholder="Current password">
+                </div>   
+
+                <p id="edit-passoword-feedback"></p>
+    
+                <div class="container-fluid p-3 bg-secondary text-white text-center mb-3">
+                    <h3>New Account Details </h3>
+                    <h5>Leave empty whichever field you do not want to change</h5>
+                </div>
+
+                <div class="input-group mb-3">
+                    <!--     -->
+                    <input type="text" class="form-control" id="newUsername" placeholder="New username">
+                </div>
+
+                <div class="input-group mb-3">
+                    <!--     -->
+                    <input type="password" class="form-control" id="newPassword" placeholder="New password">
+                </div>
+
+                <div class="input-group mb-3">
+                    <input id="passwordConfirm" type="password" class="form-control"
+                        placeholder="Confirm your new password" autofocus>
+                </div>
+
+                <div class="container text-center" id="name button">
+                    <p class="text-danger" id="rememberUser2"></p>
+                    <button class="btn btn-primary" role="button" onclick="editAccount()" id="Edit">Edit your
+                        account</button>
+                    <button class="btn btn-outline-danger" role="button" onclick="checkLogin()"
+                        id="Edit">Cancel</button>
+                </div>
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <div class="container">
+        <footer class="py-5">
+            <div class="d-flex justify-content-center py-4 my-4 border-top">
+                <p>© 2022 Twordle-dums <a href="/privacy">Privacy Policy</a></p>
+            </div>
+        </footer>
+    </div>
+
 
     <script>
         // data-bs-toggle="modal" data-bs-target="#Generator"
         let gameCode = ''
         let username = ''
+
+        const editAccount = async () => {
+            let newUsername = document.getElementById('newUsername').value
+            let newPassword = document.getElementById('newPassword').value
+            let passwordConfirm = document.getElementById('passwordConfirm').value
+            let password = document.getElementById('oldPassword').value
+
+            if (password.length === 0) {
+                document.getElementById("rememberUser2").innerHTML = "Please fill password"
+            }
+
+            else if (newUsername.length === 0 && newPassword.length === 0) {
+                document.getElementById("rememberUser2").innerHTML = "Please change at least one detail"
+            }
+
+            else if ((newPassword === '' && passwordConfirm !== '') || (newPassword !== '' && passwordConfirm === '')) {
+                document.getElementById("rememberUser2").innerHTML = "Please confirm your password"
+            }
+
+            else if (newPassword !== '' && passwordConfirm !== '' && (newPassword !== passwordConfirm)) {
+                document.getElementById("rememberUser2").innerHTML = "Passwords do not match please try again"
+            }
+            else {
+                let headers = new Headers();
+                headers.append("Content-Type", "application/json");
+                let raw = JSON.stringify({
+                    "password": password,
+                    "newUsername": newUsername,
+                    "newPassword": newPassword
+                });
+                let requestOptions = {
+                    method: 'POST',
+                    headers: headers,
+                    body: raw,
+                    redirect: 'follow'
+                };
+                fetch('api/changeDetails', requestOptions)
+                    .then(res => res.json())
+                    .then( async function(data) {
+                        if (data.code == 'ok') {
+                            document.getElementById("rememberUser2").classList.remove('text-danger')
+                            document.getElementById("rememberUser2").innerHTML = "Details changed successfully  <div class='spinner-border spinner-border-sm'></div>"
+                            await new Promise(resolve => setTimeout(resolve, 1000))
+                            window.location.reload()
+                        }
+                        else {
+                            console.log(data)
+                            document.getElementById("rememberUser2").innerHTML = data.message
+                        }
+
+                    }
+                    )
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+            }
+        }
+
+        let editAccountPage = () => {
+            $("#lobby").hide()
+            $("#welcome").hide()
+            $("#gameInfo").hide()
+            $("#edit").show()
+
+            document.getElementById('rememberUser2').innerHTML = ''
+            document.getElementById('oldUsername').value = ''
+            document.getElementById('oldPassword').value = ''
+            document.getElementById('newUsername').value = ''
+            document.getElementById('newPassword').value = ''
+            document.getElementById('passwordConfirm').value = ''
+        }
+
+
 
         let login = async () => {
             let username = document.getElementById('login-username').value
@@ -267,6 +383,9 @@
                     else {
                         console.log(data)
                         document.getElementById("login-message").innerHTML = "Your username or password is incorrect"
+                        document.getElementById("login-message").classList.add("text-danger")
+                        // document.getElementById('password').value = '';
+                    }
 
                     }
                 }
@@ -290,7 +409,7 @@
         }
 
         let checkWord = async () => {
-
+          
             let word = document.getElementById('custom-word').value
             console.log("typed " + word)
 
@@ -368,6 +487,7 @@
                         }
                         else {
                             // to do display feedback from server
+                            document.getElementById("reg-message").innerHTML = data.message
                             console.log(data)
                         }
                     }
@@ -466,6 +586,9 @@
             $("#page-loading").show()
             $("#login-reg").hide()
             $("#lobby").hide()
+            $("#edit").hide()
+            $("#welcome").show()
+            $("#gameInfo").show()
 
             let headers = {
                 'Accept': 'application/json',

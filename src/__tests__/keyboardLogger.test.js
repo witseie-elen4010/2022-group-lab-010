@@ -90,4 +90,25 @@ describe('Test Button component', () => {
       expect(letter.className).toContain('bg-' + colour[i])
     }
   })
+  it('Test keyboard colour updates of correct word', async () => {
+    const mockGuess = 'BEECH' // must be a vaid word
+    const colour = ['yellow', 'yellow', 'gray', 'gray', 'gray']
+
+    for (let i = 0; i < colour.length; i++) {
+      const letterID = 'button' + mockGuess.charAt(i).toUpperCase()
+      const btn = document.createElement('btn')
+      btn.id = letterID
+      document.body.appendChild(btn)
+    }
+    keyboard.updateKeyboardColour(mockGuess, colour)
+
+    for (let i = 0; i < colour.length; i++) {
+      const letterID = 'button' + mockGuess.charAt(i).toUpperCase()
+      const letter = document.getElementById(letterID)
+
+      if (i === 2) {
+        expect(letter.className).toContain('bg-' + 'yellow') // both letters must be yellow, not gray
+      } else { expect(letter.className).toContain('bg-' + colour[i]) }
+    }
+  })
 })

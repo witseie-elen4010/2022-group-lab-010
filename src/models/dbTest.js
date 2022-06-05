@@ -12,7 +12,7 @@ module.exports.connect = async () => {
 }
 
 module.exports.seed = async () => {
-  const dict = ['mouse', 'house', 'smart', 'pizza']
+  const dict = ['mouse', 'house', 'smart', 'pizza', 'mamba', 'beets', 'meter', 'abbey', 'banal', 'abaca', 'abase']
 
   const wordDict = []
   dict.forEach(element => {
@@ -27,8 +27,16 @@ module.exports.seed = async () => {
     token: '$2b$10$hXwKJf8/kHUVdfqA8jkH5ueJPYXbadAw0nYU3ZF9oDiKbok3aYxKO' // 1234
   }
   await User.create(user)
+
+  const user2 = {
+    username: 'TestUser2',
+    password: '$2b$10$hXwKJf8/kHUVdfqA8jkH5ueJPYXbadAw0nYU3ZF9oDiKbok3aYxKO', // 1234
+    token: '$2b$10$hXwKJf8/kHUVdfqA8jkH5ueJPYXbadAw0nYU3ZF9oDiKbok3aYxKO' // 1234
+  }
+  await User.create(user2)
 }
 
+/* istanbul ignore next */
 module.exports.close = async () => {
   await mongoose.connection.dropDatabase()
   await mongoose.connection.close()

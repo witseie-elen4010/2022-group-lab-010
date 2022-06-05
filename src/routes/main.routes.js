@@ -1,5 +1,9 @@
 'use strict'
 
+// ignore file for jest coverage because the server is simulated
+/// with super test
+/* istanbul ignore file */
+
 // const middleWare = require('../middleware/player.middleware')
 const handlers = require('../controllers/routes.controllers')
 const controllers = require('../controllers/game.controllers')
@@ -13,6 +17,7 @@ const auth = userMiddleware.auth
 // Static routes
 router.get('/game', auth, controllers.validatedGame, handlers.game)
 router.get('/', handlers.splash)
+router.get('/privacy', handlers.privacy)
 // API routes
 router.post('/api/guess', auth, handlers.guessController.colourCodeGuess)
 router.post('/api/correct', auth, handlers.guessController.revealWord)
@@ -24,6 +29,8 @@ router.get('/api/user', auth, function (req, res) { // to test authentication
     username: req.user.username
   })
 })
+
+router.post('/api/changeDetails', auth, users.changeUserDetails)
 
 router.post('/api/login', users.login)
 
