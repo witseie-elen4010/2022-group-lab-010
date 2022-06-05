@@ -7,6 +7,9 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    env:
+      NODE_COVERALLS_DEBUG: 1
+      COVERALLS_DEBUG: 1
     steps:
 
     - uses: actions/checkout@v1
@@ -28,3 +31,4 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ./src/coverage/lcov.info
+        
