@@ -100,3 +100,41 @@ describe('Testing user login', function () {
     expect(req.message).toBe('Invalid credentials')
   })
 })
+
+describe('Testing user can change details', function () {
+  it('tests username can be changed', async () => {
+    const res = await request(app)
+      .post('/api/changeDetails')
+      .set('Accept', 'application/json')
+      .set('Cookie', ['username=TestUser2', 'token=1234'])
+      .send({ username: 'TestUser2', newUsername: 'TestUser3', newPassword: '', password: '1234', token: '1234' })
+      .expect(200)
+      .expect('Content-Type', /json/)
+    const req = res.body
+    expect(req.code).toBe('ok')
+  })
+
+  it('tests password can be changed', async () => {
+    const res = await request(app)
+      .post('/api/changeDetails')
+      .set('Accept', 'application/json')
+      .set('Cookie', ['username=TestUser3', 'token=1234'])
+      .send({ username: 'TestUser3', newPassword: '1234', password: '1234', token: '1234' })
+      .expect(200)
+      .expect('Content-Type', /json/)
+    const req = res.body
+    expect(req.code).toBe('ok')
+  })
+
+  it('username cannot be changed to existing username', async () => {
+    const res = await request(app)
+      .post('/api/changeDetails')
+      .set('Accept', 'application/json')
+      .set('Cookie', ['username=TestUser3', 'token=1234'])
+      .send({ username: 'TestUser3', newUsername: 'TestUser3', newPassword: '', password: '1234', token: '1234' })
+      .expect(200)
+      .expect('Content-Type', /json/)
+    const req = res.body
+    expect(req.code).toBe('error')
+  })
+})
