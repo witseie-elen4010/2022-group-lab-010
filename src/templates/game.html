@@ -722,6 +722,7 @@
             const g = mstate.guesses.filter(obj => obj.player === username)
             guesses = 0
             score = mstate.score
+            changebuttonName()
             // replay all guesses
             g.forEach(guess => {
                 updateKeyboardColour(guess.guess, guess.colours)
@@ -748,7 +749,7 @@
             mstate.players.forEach((player, index) => {
 
                 miniHolder.innerHTML += `<div class="d-inline-block text-center player-mini-board">
-                    <h5 class="text-truncate">${player.username}</h5>
+                    <h5 class="text-truncate d-inline">${player.username}  </h5><p class="d-inline"><span class='badge rounded-pill text-bg-secondary'>${player.score}</span></p>
                     <div class="px-2" id="player-board-${index + 2}"></div>
                 </div>`
 

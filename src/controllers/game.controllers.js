@@ -146,7 +146,7 @@ const getGamePlayers = async (gameId) => {
   const game = await Game.findOne({ code: gameId }).populate('players.player')
   const players = []
   game.players.forEach(player => {
-    players.push({ username: player.player.username })
+    players.push({ username: player.player.username, score: player.score })
   })
 
   return players
@@ -260,7 +260,7 @@ const getMultiplayerState = async (userId, gameId) => {
   const players = []
   game.players.forEach(player => {
     if (player.player._id.toString() !== userId.toString()) {
-      players.push({ username: player.player.username })
+      players.push({ username: player.player.username, score: player.score })
     }
   })
 
