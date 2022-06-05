@@ -32,9 +32,9 @@ const scoreFunction = (guessesMade, colours) => {
   let score = 0
   for (let i = 0; i < colours.length; i++) {
     if (colours[i] === 'green') {
-      score = score + 4 * (6 - guessesMade) ** 3
+      score = score + 4 * (6 - guessesMade) ** 2
     } else if (colours[i] === 'yellow') {
-      score = score + (6 - guessesMade) ** 3
+      score = score + (6 - guessesMade) ** 2
     }
   }
   return score
