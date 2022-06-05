@@ -32,8 +32,7 @@
 
     <section class="pt-5 px-5 pb-2" id="gameInfo">
         <div class="div container text-center">
-            <p>We're so glad you're here, why don't you go watch this video to learn more about
-                <a href="https://www.youtube.com/watch?v=lv4Zg-209MY">it over here</a>
+            <p>We're so glad you're here. Follow the prompts to get started.
             </p>
         </div>
     </section>
@@ -49,12 +48,10 @@
             <div class="div container text-center">
                 <h4>Login</h4>
                 <div class="input-group mb-3">
-                    <input id="login-username" type="text" class="form-control" placeholder="Enter your username"
-                        autofocus>
+                    <input id="login-username" type="text" class="form-control" placeholder="Username" autofocus>
                 </div>
                 <div class="input-group mb-3">
-                    <input id="login-password" type="password" class="form-control" placeholder="Enter your password"
-                        autofocus>
+                    <input id="login-password" type="password" class="form-control" placeholder="Password" autofocus>
                 </div>
 
             </div>
@@ -69,8 +66,7 @@
             <div class="div container text-center">
                 <h4>Register</h4>
                 <div class="input-group mb-3">
-                    <input id="reg-username" type="text" class="form-control" placeholder="Enter your username"
-                        autofocus>
+                    <input id="reg-username" type="text" class="form-control" placeholder="Username" autofocus>
                 </div>
 
 
@@ -78,15 +74,7 @@
                     <input type="password" class="form-control" id="reg-password" placeholder="Password">
                 </div>
                 <div class="input-group mb-3">
-                    <input id="reg-passwordConfirm" type="password" class="form-control"
-                        placeholder="Confirm your password" autofocus>
-                </div>
-                <div class="input-group mb-3">
-                    <input id="reg-email" type="text" class="form-control" placeholder="Enter your email" autofocus>
-                    <!--  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                </div>
-                <div class="input-group mb-3">
-                    <input id="reg-phone number" type="text" class="form-control" placeholder="Enter your phone number"
+                    <input id="reg-passwordConfirm" type="password" class="form-control" placeholder="Confirm password"
                         autofocus>
                 </div>
             </div>
@@ -107,9 +95,9 @@
     <div id="lobby">
         <div class="div container text-center mb-4">
             <h4><span id="rememberUser"></span>&nbsp;&nbsp;</h4>
-                <button onclick="logout()"
-                    class="ml-2 btn-sm btn btn-outline-danger">Logout <i class="bi bi-box-arrow-right"></i></button>
-                    <button onclick="editAccountPage()" class="ml-2 btn-sm btn btn-outline-danger">Edit Account</button>
+            <button onclick="logout()" class="ml-2 btn-sm btn btn-outline-danger">Logout <i
+                    class="bi bi-box-arrow-right"></i></button>
+            <button onclick="editAccountPage()" class="ml-2 btn-sm btn btn-outline-danger">Edit Account</button>
         </div>
 
 
@@ -181,11 +169,13 @@
 
                         </div>
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" onchange="updateCustomWord()" class="custom-control-input" id="customWord">
+                            <input type="checkbox" onchange="updateCustomWord()" class="custom-control-input"
+                                id="customWord">
                             <label class="custom-control-label" for="customWord">Custom Word Gamemode</label>
                         </div>
-                        <input type="text" oninput="checkWord()" class="form-control" id="custom-word" placeholder="Enter word">
-                        <p id = "custom-word-feedback">  </p>
+                        <input type="text" oninput="checkWord()" class="form-control" id="custom-word"
+                            placeholder="Enter word">
+                        <p id="custom-word-feedback"> </p>
 
                         <h5>Players:</h5>
                         <ul class="list-group" id="player-list-host">
@@ -212,7 +202,7 @@
                     </div>
                     <div class="modal-body">
                         <input type="text" class="form-control" id="game-code-enter" placeholder="Enter Code">
-                        
+
                         <div id="player-list-title-join" class="my-3" style="display: none">
                             <h5>Players:</h5>
                             <p>Waiting for host to start the game...</p>
@@ -237,7 +227,7 @@
             <h1>Twordle-dee!</h1>
             <h3>Edit Account Details </h3>
         </div>
-    
+
         <section class="p-5">
             <div class="div container text-center">
                 <p>
@@ -252,30 +242,40 @@
                     <h3>New Account Details </h3>
                     <h5>Leave empty whichever field you do not want to change</h5>
                 </div>
-    
+
                 <div class="input-group mb-3">
                     <!--     -->
                     <input type="text" class="form-control" id="newUsername" placeholder="New username">
                 </div>
-    
+
                 <div class="input-group mb-3">
                     <!--     -->
                     <input type="password" class="form-control" id="newPassword" placeholder="New password">
                 </div>
-    
+
                 <div class="input-group mb-3">
-                    <input id="passwordConfirm" type="password" class="form-control" placeholder="Confirm your new password"
-                        autofocus>
+                    <input id="passwordConfirm" type="password" class="form-control"
+                        placeholder="Confirm your new password" autofocus>
                 </div>
-                
-            <div class="container text-center" id="name button">
-                <p class="text-danger" id="rememberUser2"></p>
-                <button class="btn btn-primary" role="button" onclick="editAccount()" id="Edit">Edit your account</button>
-                <button class="btn btn-outline-danger" role="button" onclick="checkLogin()" id="Edit">Cancel</button>
-            </div>
-            </p>
+
+                <div class="container text-center" id="name button">
+                    <p class="text-danger" id="rememberUser2"></p>
+                    <button class="btn btn-primary" role="button" onclick="editAccount()" id="Edit">Edit your
+                        account</button>
+                    <button class="btn btn-outline-danger" role="button" onclick="checkLogin()"
+                        id="Edit">Cancel</button>
+                </div>
+                </p>
             </div>
         </section>
+    </div>
+
+    <div class="container">
+        <footer class="py-5">
+            <div class="d-flex justify-content-center py-4 my-4 border-top">
+                <p>© 2022 Twordle-dums <a href="/privacy">Privacy Policy</a></p>
+            </div>
+        </footer>
     </div>
 
 
@@ -382,6 +382,7 @@
                     else {
                         console.log(data)
                         document.getElementById("login-message").innerHTML = "Your username or password is incorrect"
+                        document.getElementById("login-message").classList.add("text-danger")
                         // document.getElementById('password').value = '';
                     }
 
@@ -393,43 +394,43 @@
         }
 
 
-        let checkWord = async() =>{
-            
+        let checkWord = async () => {
+
             let word = document.getElementById('custom-word').value
             console.log("typed " + word)
-            
-            if(word.length == 5){
-            
+
+            if (word.length == 5) {
+
                 let headers = new Headers();
-            headers.append("Content-Type", "application/json");
-            let raw = JSON.stringify({
-                "word": word ,
-                game : gameCode
-            });
-            let requestOptions = {
-                method: 'POST',
-                headers: headers,
-                body: raw,
-                redirect: 'follow'
-            };
-            fetch('api/game/word', requestOptions)
-                .then(res => res.json())
-                .then(function (data) {
-                    if (data.code == 'ok') {
-                        document.getElementById('custom-word-feedback')
-                        .innerHTML = "The word is set: " + word
+                headers.append("Content-Type", "application/json");
+                let raw = JSON.stringify({
+                    "word": word,
+                    game: gameCode
+                });
+                let requestOptions = {
+                    method: 'POST',
+                    headers: headers,
+                    body: raw,
+                    redirect: 'follow'
+                };
+                fetch('api/game/word', requestOptions)
+                    .then(res => res.json())
+                    .then(function (data) {
+                        if (data.code == 'ok') {
+                            document.getElementById('custom-word-feedback')
+                                .innerHTML = "The word is set: " + word
+                        }
+                        else {
+                            document.getElementById('custom-word-feedback')
+                                .innerHTML = data.message
+                        }
                     }
-                    else {
-                        document.getElementById('custom-word-feedback')
-                        .innerHTML = data.message
-                    }
-                }
-                )
-                .catch(function (error) {
-                    console.log(error)
-                })
-        
-            }else{
+                    )
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+
+            } else {
 
             }
         }
@@ -687,7 +688,7 @@
                     waitOtherPlayers()
                 })
 
-            
+
         }
 
         const practiceMode = async () => {

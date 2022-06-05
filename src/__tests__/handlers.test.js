@@ -22,4 +22,12 @@ describe('Test Handlers', function () {
 
     expect(res.text.replace(/\\/g, '/')).toContain('templates/splash.html')
   })
+  test('privacy handler works', () => {
+    const req = {}
+    const res = { sendFile: function (input) { this.text = input } }
+
+    handlers.privacy(req, res)
+
+    expect(res.text.replace(/\\/g, '/')).toContain('templates/privacy.html')
+  })
 })

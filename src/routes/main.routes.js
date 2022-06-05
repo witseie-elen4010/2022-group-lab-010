@@ -17,6 +17,7 @@ const auth = userMiddleware.auth
 // Static routes
 router.get('/game', auth, controllers.validatedGame, handlers.game)
 router.get('/', handlers.splash)
+router.get('/privacy', handlers.privacy)
 // API routes
 router.post('/api/guess', auth, handlers.guessController.colourCodeGuess)
 router.post('/api/correct', auth, handlers.guessController.revealWord)
