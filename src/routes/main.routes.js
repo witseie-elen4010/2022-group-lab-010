@@ -1,5 +1,9 @@
 'use strict'
 
+// ignore file for jest coverage because the server is simulated
+/// with super test
+/* istanbul ignore file */
+
 // const middleWare = require('../middleware/player.middleware')
 const handlers = require('../controllers/routes.controllers')
 const controllers = require('../controllers/game.controllers')

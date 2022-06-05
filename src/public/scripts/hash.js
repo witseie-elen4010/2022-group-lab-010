@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 const __hash = (s) => {
   let h = 0; const l = s.length; let i = 0
   if (l > 0) {

@@ -12,7 +12,7 @@ module.exports.connect = async () => {
 }
 
 module.exports.seed = async () => {
-  const dict = ['mouse', 'house', 'smart', 'pizza']
+  const dict = ['mouse', 'house', 'smart', 'pizza', 'mamba', 'beets', 'meter', 'abbey', 'banal', 'abaca', 'abase']
 
   const wordDict = []
   dict.forEach(element => {
@@ -36,6 +36,7 @@ module.exports.seed = async () => {
   await User.create(user2)
 }
 
+/* istanbul ignore next */
 module.exports.close = async () => {
   await mongoose.connection.dropDatabase()
   await mongoose.connection.close()

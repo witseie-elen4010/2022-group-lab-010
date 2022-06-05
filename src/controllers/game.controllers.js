@@ -5,17 +5,9 @@ const hash = require('../public/scripts/hash')
 
 const getGameLog = async (req, res) => {
   const post = req.body
-  if (!post) {
-    res.status(400).send({
-      message: 'Invalid Request Body',
-      code: 'error'
-    })
-    res.end()
-    return
-  }
 
   let gameObj
-  if (!(gameObj = await getGame(req.user, post.game))) {
+  if (!post || !post.game || !(gameObj = await getGame(req.user, post.game))) {
     res.status(400).send({
       message: "The 'game' parameter is invalid.",
       code: 'error'
@@ -82,13 +74,9 @@ const generateGame = async (owner, gameMode = 'practice') => {
 
 const multiplayerStart = async (req, res) => {
   const post = req.body
-  if (!post || !post.game) {
-    res.status(400).json({ code: 'error', message: 'Invalid Game' })
-    return
-  }
 
   let game
-  if (!(game = await Game.findOne({ code: post.game }).exec())) {
+  if (!post || !post.game || !(game = await Game.findOne({ code: post.game }).exec())) {
     res.status(400).json({ code: 'error', message: 'Invalid Game' })
     return
   }
@@ -98,6 +86,9 @@ const multiplayerStart = async (req, res) => {
     res.status(400).json({ code: 'error', message: 'Not the owner' })
     return
   }
+
+  game.started = true
+  await game.save()
 
   // notify players of game begin
   global.events.emit('multiplayerLobby' + game.code,
@@ -112,13 +103,9 @@ const multiplayerStart = async (req, res) => {
 
 const multiplayerJoin = async (req, res) => {
   const post = req.body
-  if (!post || !post.game) {
-    res.status(400).json({ code: 'error', message: 'Invalid Game' })
-    return
-  }
 
   let game
-  if (!(game = await Game.findOne({ code: post.game }).exec())) {
+  if (!post || !post.game || !(game = await Game.findOne({ code: post.game }).exec())) {
     res.status(400).json({ code: 'error', message: 'Invalid Game' })
     return
   }
@@ -158,13 +145,9 @@ const getGamePlayers = async (gameId) => {
 
 const multiplayerLobby = async (req, res) => {
   const post = req.body
-  if (!post || !post.game) {
-    res.status(400).json({ code: 'error', message: 'Invalid Game' })
-    return
-  }
 
   let game
-  if (!(game = await Game.findOne({ code: post.game }).exec())) {
+  if (!post || !post.game || !(game = await Game.findOne({ code: post.game }).exec())) {
     res.status(400).json({ code: 'error', message: 'Invalid Game' })
     return
   }
@@ -207,10 +190,7 @@ const multiplayerLobby = async (req, res) => {
 }
 
 const getGame = async (user, gameId) => {
-  const game = await Game
-    .findOne({ code: gameId, player: user._id })
-    .populate('word')
-    .catch(() => false)
+  const game = await Game.findOne({ code: gameId, player: user._id }).populate('word').catch(() => false)
   if (game) {
     return game
   }
@@ -236,12 +216,8 @@ const invalidGame = (req, res) => {
 }
 
 const validatedGame = async (req, res, next) => {
-  if (!req.query.code) {
-    return invalidGame(req, res)
-  }
-
   let game
-  if (!(game = await Game.findOne({ code: req.query.code }).exec())) {
+  if (!req.query || !req.query.code || !(game = await Game.findOne({ code: req.query.code }).exec())) {
     return invalidGame(req, res)
   }
 
@@ -284,25 +260,11 @@ const getMultiplayerState = async (userId, gameId) => {
 
 const gameChannel = async (req, res) => {
   const post = req.body
-  if (!post || !post.game) {
-    res.status(400).json({ code: 'error', message: 'Invalid Game' })
-    return
-  }
-
   let game
-  if (!(game = await Game.findOne({ code: post.game }).exec())) {
+  if (!post || !post.game || !(game = await getGame(req.user._id, post.game))) {
     res.status(400).json({ code: 'error', message: 'Invalid Game' })
     return
   }
-
-  // // check if player is out of guesses
-  // const guesses = game.guesses.filter(guess => guess.player.toString() === req.user._id.toString())
-  // if (guesses.length === 6) {
-  //   res.status(200).json({
-  //     code: 'ok',
-  //     status: 'wait'
-  //   })
-  // }
 
   // check hash against database
   if (typeof post.hash !== 'undefined') {

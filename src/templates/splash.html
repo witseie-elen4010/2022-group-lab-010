@@ -231,17 +231,13 @@
         <section class="p-5">
             <div class="div container text-center">
                 <p>
-
-                <div class="input-group mb-3">
-                    <!--     -->
-                    <input type="text" class="form-control" id="oldUsername" placeholder="Current username">
-                </div>
-
                 <div class="input-group mb-3">
                     <!--     -->
                     <input type="password" class="form-control" id="oldPassword" placeholder="Current password">
-                </div>
+                </div>   
 
+                <p id="edit-passoword-feedback"></p>
+    
                 <div class="container-fluid p-3 bg-secondary text-white text-center mb-3">
                     <h3>New Account Details </h3>
                     <h5>Leave empty whichever field you do not want to change</h5>
@@ -291,17 +287,15 @@
         const editAccount = async () => {
             let newUsername = document.getElementById('newUsername').value
             let newPassword = document.getElementById('newPassword').value
-            let username = document.getElementById('oldUsername').value
             let passwordConfirm = document.getElementById('passwordConfirm').value
             let password = document.getElementById('oldPassword').value
 
-            console.log(typeof (email))
-            if (username.length === 0 || password.length === 0) {
-                document.getElementById("rememberUser2").innerHTML = "Please fill password and username"
+            if (password.length === 0) {
+                document.getElementById("rememberUser2").innerHTML = "Please fill password"
             }
 
             else if (newUsername.length === 0 && newPassword.length === 0) {
-                document.getElementById("rememberUser2").innerHTML = "Plese change at least one detail"
+                document.getElementById("rememberUser2").innerHTML = "Please change at least one detail"
             }
 
             else if ((newPassword === '' && passwordConfirm !== '') || (newPassword !== '' && passwordConfirm === '')) {
@@ -311,14 +305,10 @@
             else if (newPassword !== '' && passwordConfirm !== '' && (newPassword !== passwordConfirm)) {
                 document.getElementById("rememberUser2").innerHTML = "Passwords do not match please try again"
             }
-
-            else if (!await checkDetails()) {
-                document.getElementById("rememberUser2").innerHTML = "Incorrect username or password please try again"
-            } else {
+            else {
                 let headers = new Headers();
                 headers.append("Content-Type", "application/json");
                 let raw = JSON.stringify({
-                    "username": username,
                     "password": password,
                     "newUsername": newUsername,
                     "newPassword": newPassword
@@ -331,28 +321,16 @@
                 };
                 fetch('api/changeDetails', requestOptions)
                     .then(res => res.json())
-                    .then(function (data) {
+                    .then( async function(data) {
                         if (data.code == 'ok') {
-                            alert('Details changed successfuly')
-                            if (newUsername !== '' && newPassword !== '') {
-                                document.getElementById('login-username').value = newUsername
-                                document.getElementById('login-password').value = newPassword
-                            } else if (newUsername === '' && newPassword !== '') {
-                                document.getElementById('login-username').value = username
-                                document.getElementById('login-password').value = newPassword
-                            } else {
-                                document.getElementById('login-username').value = newUsername
-                                document.getElementById('login-password').value = password
-                            }
-                            $("#welcome").show()
-                            $("#gameInfo").show()
-                            $("#edit").hide()
-                            login()
+                            document.getElementById("rememberUser2").classList.remove('text-danger')
+                            document.getElementById("rememberUser2").innerHTML = "Details changed successfully  <div class='spinner-border spinner-border-sm'></div>"
+                            await new Promise(resolve => setTimeout(resolve, 1000))
+                            window.location.reload()
                         }
                         else {
                             console.log(data)
                             document.getElementById("rememberUser2").innerHTML = data.message
-                            // document.getElementById('password').value = '';
                         }
 
                     }
@@ -377,46 +355,7 @@
             document.getElementById('passwordConfirm').value = ''
         }
 
-        let checkDetails = function () {
-            return new Promise((resolve, reject) => {
-                let x = false
-                let username = document.getElementById('oldUsername').value
-                let password = document.getElementById('oldPassword').value
 
-                let headers = new Headers();
-                headers.append("Content-Type", "application/json");
-                let raw = JSON.stringify({
-                    "username": username,
-                    "password": password
-                });
-                let requestOptions = {
-                    method: 'POST',
-                    headers: headers,
-                    body: raw,
-                    redirect: 'follow'
-                };
-                fetch('api/login', requestOptions)
-                    .then(res => res.json())
-                    .then(function (data) {
-                        if (data.code == 'ok') {
-                            x = true
-                            resolve(x)
-                        }
-                        else {
-                            console.log(data)
-                            document.getElementById("login-message").innerHTML = "Your username or password is incorrect"
-                            resolve(x)
-                            // document.getElementById('password').value = '';
-                        }
-
-                    }
-                    )
-                    .catch(function (error) {
-                        console.log(error)
-                        resolve(x)
-                    })
-            })
-        }
 
         let login = async () => {
             let username = document.getElementById('login-username').value
