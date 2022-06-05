@@ -89,27 +89,28 @@ const colourCodeGuess = async (req, res) => {
 
   const guess = post.guess.toUpperCase()
   let score = 0
-  const out = { code: 'ok', colour: [], guess, score } // output array
+  const out = { code: 'ok', colour: ['gray', 'gray', 'gray', 'gray', 'gray'], guess, score } // output array
   let allGreen = true
 
   let available = correctWord
+  // mark green
   for (let i = 0; i < post.guess.length; i++) {
     const letter = guess.charAt(i)
-
-    let counted = false
     if (letter === correctWord[i]) {
-      out.colour.push('green')
-      counted = true
-    } else if (available.indexOf(letter) > -1) {
-      out.colour.push('yellow')
-      allGreen = false
-      counted = true
+      out.colour[i] = 'green'
+      const index = available.indexOf(letter)
+      // remove letter from available
+      available = available.slice(0, index) + available.slice(index + 1)
     } else {
-      out.colour.push('gray')
       allGreen = false
     }
+  }
 
-    if (counted) {
+  // mark yellow
+  for (let i = 0; i < post.guess.length; i++) {
+    const letter = guess.charAt(i)
+    if (out.colour[i] !== 'green' && available.indexOf(letter) > -1) {
+      out.colour[i] = 'yellow'
       const index = available.indexOf(letter)
       // remove letter from available
       available = available.slice(0, index) + available.slice(index + 1)

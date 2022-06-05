@@ -334,7 +334,6 @@ describe('Testing Multiplayer', function () {
 
     const body = req.body
     expect(body.status).toBe('update')
-    console.log(body.state)
     expect(body.state).toStrictEqual({
       players: [{ username: 'TestUser', score: 0 }],
       guesses: [
