@@ -25,6 +25,8 @@ router.get('/api/user', auth, function (req, res) { // to test authentication
   })
 })
 
+router.post('/api/changeDetails', auth, users.changeUserDetails)
+
 router.post('/api/login', users.login)
 
 router.get('/api/game', auth, async function (req, res) {
@@ -39,6 +41,43 @@ router.get('/api/multiplayer', auth, async function (req, res) {
     game: await controllers.generateGame(req.user, 'multiplayer'),
     code: 'ok'
   })
+})
+
+router.post('/api/game/word', auth, async function (req, res) {
+  if (!(req.body || req.body.word)) {
+    res.status(400).json({
+      code: 'error',
+      message: 'invalid body'
+    })
+    return
+  }
+
+  const post = req.body
+  let playerGame
+  if (!post.game || !(playerGame = await controllers.getGame(req.user, post.game))) {
+    res.status(400).send({
+      message: 'Error: Invalid Game',
+      code: 'error'
+    })
+    return
+  }
+
+  const word = req.body.word
+  const test = await controllers.wordIsValid(word)
+  if (test) {
+    playerGame.word = test._id
+    await playerGame.save()
+
+    res.json({
+      message: 'Word is valid',
+      code: 'ok'
+    })
+  } else {
+    res.status(400).send({
+      message: 'Error: Word not found in dictionary',
+      code: 'error'
+    })
+  }
 })
 
 router.post('/api/game/log', auth, controllers.getGameLog)
